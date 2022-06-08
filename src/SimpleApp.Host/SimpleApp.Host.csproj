@@ -1,0 +1,20 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\SimpleApp.Common\SimpleApp.Common.csproj" />
+    <ProjectReference Include="..\SimpleApp.EntitiyFrameworkCore.Migrations\SimpleApp.EntitiyFrameworkCore.Migrations.csproj" />
+    <ProjectReference Include="..\SimpleApp.Services\SimpleApp.Services.csproj" />
+    <ProjectReference Include="..\SimpleApp.WebApi\SimpleApp.WebApi.csproj" />
+  </ItemGroup>
+
+</Project>

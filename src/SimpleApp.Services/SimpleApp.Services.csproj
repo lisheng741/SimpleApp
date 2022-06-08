@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\SimpleApp.Common\SimpleApp.Common.csproj" />
+    <ProjectReference Include="..\SimpleApp.Model\SimpleApp.Model.csproj" />
+    <ProjectReference Include="..\SimpleApp.Services.Contracts\SimpleApp.Services.Contracts.csproj" />
+  </ItemGroup>
+
+</Project>
