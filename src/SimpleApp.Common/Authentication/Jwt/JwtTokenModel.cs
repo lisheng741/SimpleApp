@@ -1,20 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿namespace SimpleApp.Common.Authentication.Jwt;
 
-namespace SimpleApp.Common.Authentication.Jwt
+public class JwtTokenModel
 {
-    public class JwtTokenModel
-    {
-        public string Username { get; set; }
-        public string[] Roles { get; set; }
+    public string Username { get; private set; }
+    public string[] Roles { get; private set; }
+    public int Expiration { get; private set; } = 1800;
 
-        public JwtTokenModel(string username, string[] roles)
-        {
-            Username = username;
-            Roles = roles;
-        }
+    public JwtTokenModel(string username, params string[] roles)
+    {
+        Username = username;
+        Roles = roles;
+    }
+
+    public JwtTokenModel(string username, int expiration, string[] roles)
+        : this(username, roles)
+    {
+        Expiration = expiration;
     }
 }

@@ -2,12 +2,14 @@
 using System.Runtime.Loader;
 
 var builder = WebApplication.CreateBuilder(args);
+var configuration = builder.Configuration;
 
 //使用 Autofac 替换默认 DI 容器
 builder.Host.UseAutofacProviderFactory();
 
 // Add services to the container.
-
+builder.Services.AddSingletonServices(configuration);
+builder.Services.AddCommonServices();
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
@@ -24,6 +26,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();

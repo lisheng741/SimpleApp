@@ -9,4 +9,6 @@ namespace SimpleApp.Services.Contracts;
 public interface ITestService
 {
     string Get();
+
+    string GetToken();
 }

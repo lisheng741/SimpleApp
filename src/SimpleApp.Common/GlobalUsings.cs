@@ -5,3 +5,4 @@ global using System.Text;
 global using System.Threading.Tasks;
 global using Microsoft.Extensions.DependencyInjection;
 global using SimpleApp.Common.Configuration;
+global using SimpleApp.Common.Helpers;

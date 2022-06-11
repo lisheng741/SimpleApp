@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace SimpleApp.Common.Authentication.Jwt;
+﻿namespace SimpleApp.Common.Authentication.Jwt;
 
 public static class JwtClaimTypes
 {
@@ -19,9 +13,11 @@ public static class JwtClaimTypes
 
     public const string Issuer = "iss";
 
-    public const string Expiration = "exp";
+    public const string IssuedAt = "iat";
 
     public const string NotBefore = "nbf";
+
+    public const string Expiration = "exp";
 
 
     public const string Name = "name";

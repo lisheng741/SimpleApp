@@ -4,7 +4,7 @@ using SimpleApp.Host.DependencyInjection.Autofac;
 
 namespace Microsoft.Extensions.Hosting;
 
-public static class IHostBuilderExtensions
+public static class HostBuilderExtensions
 {
     public static IHostBuilder UseAutofacProviderFactory(this IHostBuilder builder)
     {

@@ -1,21 +1,22 @@
-﻿using System.IdentityModel.Tokens.Jwt;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Http;
 using Microsoft.IdentityModel.Tokens;
+using SimpleApp.Common.Authentication.Jwt;
 
-namespace SimpleApp.Common.Authentication.Jwt;
+namespace Microsoft.Extensions.DependencyInjection;
 
 public static class JwtServiceCollectionExtensions
 {
-    public static IServiceCollection AddJwt(this IServiceCollection services)
+    public static IServiceCollection AddJwtAuthentication(this IServiceCollection services)
     {
         if (services == null) throw new ArgumentNullException(nameof(services));
 
-        //配置
-        var symmetricKeyAsBase64 = AppSettingsConfig.JwtSecretKey;
-        var issuer = AppSettingsConfig.JwtIssuer;
-        var audience = AppSettingsConfig.JwtAudience;
+        // 读取配置
+        var symmetricKeyAsBase64 = AppSettings.JwtSecretKey;
+        var issuer = AppSettings.JwtIssuer;
+        var audience = AppSettings.JwtAudience;
 
+        // 获取密钥
         var keyByteArray = Encoding.UTF8.GetBytes(symmetricKeyAsBase64);
         var signingKey = new SymmetricSecurityKey(keyByteArray);
         var signingCredentials = new SigningCredentials(signingKey, SecurityAlgorithms.HmacSha256);
@@ -36,6 +37,24 @@ public static class JwtServiceCollectionExtensions
             RoleClaimType = JwtClaimTypes.Role,
         };
 
+        // events
+        var jwtBearerEvents = new JwtBearerEvents()
+        {
+            OnChallenge = async context =>
+            {
+                context.Response.StatusCode = StatusCodes.Status401Unauthorized;
+                context.Response.ContentType = "application/json";
+                await context.Response.WriteAsync("401");
+                context.HandleResponse();
+            },
+            OnForbidden = async context =>
+            {
+                context.Response.StatusCode = StatusCodes.Status403Forbidden;
+                context.Response.ContentType = "application/json";
+                await context.Response.WriteAsync("403");
+            }
+        };
+
         // 开启Bearer认证
         services.AddAuthentication(options =>
         {
@@ -46,17 +65,7 @@ public static class JwtServiceCollectionExtensions
         .AddJwtBearer(options =>
         {
             options.TokenValidationParameters = tokenValidationParameters;
-            options.Events = new JwtBearerEvents()
-            {
-                OnChallenge = async context =>
-                {
-                    await context.Response.WriteAsync("401");
-                },
-                OnForbidden = async context =>
-                {
-                    await context.Response.WriteAsync("403");
-                }
-            };
+            options.Events = jwtBearerEvents;
         });
 
         return services;

@@ -1,25 +1,34 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Extensions.Configuration;
 
 namespace SimpleApp.Common.Configuration;
 
-public class AppSettingsConfig
+/// <summary>
+/// 全局静态配置
+/// </summary>
+public static class AppSettings
 {
-    public static IConfiguration Configuration { get; private set; }
+    private static IConfiguration? _configuration;
 
-    public AppSettingsConfig(IConfiguration configuration)
+    /// <summary>
+    /// get or set singleton configuration
+    /// </summary>
+    public static IConfiguration Configuration
     {
-        Configuration = configuration;
+        get
+        {
+            if (_configuration == null) throw new ArgumentNullException(nameof(Configuration));
+            return _configuration;
+        }
+        set
+        {
+            _configuration = value;
+        }
     }
 
     #region Jwt 配置
-    public static readonly string JwtSecretKey = Configuration!["Jwt:SecretKey"];
-    public static readonly string JwtIssuer = Configuration!["Jwt:Issuer"];
-    public static readonly string JwtAudience = Configuration!["Jwt:Audience"];
+    public static string JwtSecretKey => Configuration["Jwt:SecretKey"];
+    public static string JwtIssuer => Configuration["Jwt:Issuer"];
+    public static string JwtAudience => Configuration["Jwt:Audience"];
     #endregion
 
 }
