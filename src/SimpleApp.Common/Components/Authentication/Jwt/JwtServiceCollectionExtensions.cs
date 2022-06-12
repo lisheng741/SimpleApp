@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Http;
 using Microsoft.IdentityModel.Tokens;
-using SimpleApp.Common.Authentication.Jwt;
+using SimpleApp.Common.Components.Authentication.Jwt;
 
 namespace Microsoft.Extensions.DependencyInjection;
 
@@ -42,6 +42,9 @@ public static class JwtServiceCollectionExtensions
         {
             OnChallenge = async context =>
             {
+                // refresh token
+
+                // 
                 context.Response.StatusCode = StatusCodes.Status401Unauthorized;
                 context.Response.ContentType = "application/json";
                 await context.Response.WriteAsync("401");

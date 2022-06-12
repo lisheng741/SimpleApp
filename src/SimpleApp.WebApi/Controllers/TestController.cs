@@ -1,6 +1,8 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using SimpleApp.Model;
 using SimpleApp.Services.Contracts;
 
 namespace SimpleApp.WebApi.Controllers
@@ -10,10 +12,12 @@ namespace SimpleApp.WebApi.Controllers
     public class TestController : ControllerBase
     {
         private readonly ITestService _testService;
+        private readonly IMapper _mapper;
 
-        public TestController(ITestService testService)
+        public TestController(ITestService testService, IMapper mapper)
         {
             _testService = testService;
+            _mapper = mapper;
         }
 
         [HttpGet]
@@ -28,5 +32,12 @@ namespace SimpleApp.WebApi.Controllers
         [HttpGet]
         public string Auth()
             => "auth";
+
+        [HttpGet]
+        public TestDto GetDto(string name)
+        {
+            TestModel testModel = new TestModel(name);
+            return _mapper.Map<TestModel, TestDto>(testModel);
+        }
     }
 }

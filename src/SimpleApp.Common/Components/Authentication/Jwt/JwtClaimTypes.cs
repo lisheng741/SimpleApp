@@ -1,4 +1,4 @@
-﻿namespace SimpleApp.Common.Authentication.Jwt;
+﻿namespace SimpleApp.Common.Components.Authentication.Jwt;
 
 public static class JwtClaimTypes
 {

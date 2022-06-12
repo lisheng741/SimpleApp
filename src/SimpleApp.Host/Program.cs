@@ -1,5 +1,5 @@
 ﻿global using SimpleApp.Common.Configuration;
-using System.Runtime.Loader;
+global using SimpleApp.Common.Helpers;
 
 var builder = WebApplication.CreateBuilder(args);
 var configuration = builder.Configuration;

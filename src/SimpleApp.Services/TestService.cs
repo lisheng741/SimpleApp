@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using SimpleApp.Common.Authentication.Jwt;
+using SimpleApp.Common.Components.Authentication.Jwt;
 using SimpleApp.Services.Contracts;
 
 namespace SimpleApp.Services;

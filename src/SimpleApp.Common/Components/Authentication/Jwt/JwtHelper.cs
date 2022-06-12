@@ -2,7 +2,7 @@
 using System.Security.Claims;
 using Microsoft.IdentityModel.Tokens;
 
-namespace SimpleApp.Common.Authentication.Jwt;
+namespace SimpleApp.Common.Components.Authentication.Jwt;
 
 public class JwtHelper
 {
