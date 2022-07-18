@@ -11,10 +11,10 @@ public class MemoryCacheService : MemoryDistributedCache, ICacheService
 
     public MemoryCacheService(IOptions<MemoryDistributedCacheOptions> optionsAccessor,
                               IDistributedCache cache,
-                              IOptions<JsonSerializerOptions> jsonOptions)
+                              IOptions<JsonSerializerOptions> jsonOptionsAccessor)
         : base(optionsAccessor)
     {
-        _jsonOptions = jsonOptions.Value;
+        _jsonOptions = jsonOptionsAccessor.Value;
     }
 
     public virtual async Task<TCacheItem?> GetAsync<TCacheItem>(string key, CancellationToken token = default)

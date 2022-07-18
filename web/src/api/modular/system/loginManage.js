@@ -20,7 +20,7 @@ export function login (parameter) {
   parameter.password = encryptData
 
   return axios({
-    url: '/login',
+    url: '/account/login',
     method: 'post',
     data: parameter
   })

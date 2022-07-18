@@ -1,6 +1,8 @@
 ﻿using System.Text.Encodings.Web;
 using System.Text.Json;
 using System.Text.Unicode;
+using Simple.Common.Components.Json;
+using Simple.Common.Components.Json.SystemTextJson;
 
 namespace Microsoft.Extensions.DependencyInjection;
 
@@ -13,14 +15,33 @@ public static class SystemTextJsonServiceCollectionExtensions
     /// <returns></returns>
     public static IServiceCollection AddJsonOptions(this IServiceCollection services)
     {
-        services.Configure<JsonSerializerOptions>(config =>
+        var serializerOptions = new JsonSerializerOptions();
+
+        // 驼峰命名
+        serializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
+
+        // Unicode 编码
+        serializerOptions.Encoder = JavaScriptEncoder.Create(UnicodeRanges.All); 
+
+        // 自定义 Converter
+        serializerOptions.Converters.Add(new DateTimeJsonConverter());
+
+        JsonHelper.SerializerOptions = serializerOptions;
+
+
+        // 注入服务
+        services.Configure<JsonSerializerOptions>(options =>
         {
-            config.PropertyNamingPolicy = JsonNamingPolicy.CamelCase; // 驼峰命名
-            config.Encoder = JavaScriptEncoder.Create(UnicodeRanges.All); // Unicode 编码
+            options.PropertyNamingPolicy = serializerOptions.PropertyNamingPolicy;
+            options.Encoder = serializerOptions.Encoder;
 
             // 自定义 Converter
-            config.Converters.AddDateTimeJsonConverter();
+            foreach(var converter in serializerOptions.Converters)
+            {
+                options.Converters.Add(converter);
+            }
         });
+
 
         return services;
     }

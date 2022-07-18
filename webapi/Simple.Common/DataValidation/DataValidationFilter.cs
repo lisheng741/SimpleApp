@@ -7,7 +7,7 @@ namespace Simple.Common.DataValidation;
 
 public class DataValidationFilter : IActionFilter
 {
-    public void OnActionExecuted(ActionExecutedContext context)
+    public void OnActionExecuting(ActionExecutingContext context)
     {
         // 如果其他过滤器已经设置了结果，则跳过验证
         if (context.Result != null) return;
@@ -31,7 +31,7 @@ public class DataValidationFilter : IActionFilter
         context.Result = new BadRequestObjectResult(result);
     }
 
-    public void OnActionExecuting(ActionExecutingContext context)
+    public void OnActionExecuted(ActionExecutedContext context)
     {
     }
 }

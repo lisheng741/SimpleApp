@@ -10,10 +10,10 @@ public class RedisCacheService : RedisCache, ICacheService
     private readonly JsonSerializerOptions _jsonOptions;
 
     public RedisCacheService(IOptions<RedisCacheOptions> optionsAccessor,
-                             IOptions<JsonSerializerOptions> jsonOptions)
+                             IOptions<JsonSerializerOptions> jsonOptionsAccessor)
         : base(optionsAccessor)
     {
-        _jsonOptions = jsonOptions.Value;
+        _jsonOptions = jsonOptionsAccessor.Value;
     }
 
     public virtual async Task<TCacheItem?> GetAsync<TCacheItem>(string key, CancellationToken token = default)

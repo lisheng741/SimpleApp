@@ -2,5 +2,5 @@
 
 public interface ISimpleDbContext
 {
-    DbSet<SysRole> SysRole { get; set; }
+    //DbSet<SysRole> SysRole { get; set; }
 }

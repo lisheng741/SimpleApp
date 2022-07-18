@@ -1,4 +1,8 @@
-﻿namespace Simple.Repository.Data;
+﻿using System.Linq.Expressions;
+using System.Reflection;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
+
+namespace Simple.Repository.Data;
 
 public class SimpleDbContext : DbContext, ISimpleDbContext
 {
@@ -6,10 +10,22 @@ public class SimpleDbContext : DbContext, ISimpleDbContext
         : base(options)
     { }
 
-    public virtual DbSet<SysRole> SysRole { get; set; } = default!;
-
     protected override void OnModelCreating(ModelBuilder builder)
     {
-        builder.Entity<SysRole>();
+        List<Type> entityTypes = Assembly.GetExecutingAssembly().GetTypes()
+                                        .Where(t => !t.IsAbstract && t.IsSubclassOf(typeof(EntityBase)))
+                                        .ToList();
+
+        // 注册 Entity
+        foreach (var entityType in entityTypes)
+        {
+            EntityTypeBuilder entityTypeBuilder = builder.Entity(entityType);
+
+            // 注释
+            FieldInfo[] fieldInfos = entityType.GetFields();
+            foreach (var fieldInfo in fieldInfos)
+            {
+            }
+        }
     }
 }

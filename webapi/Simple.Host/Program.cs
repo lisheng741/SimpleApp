@@ -9,19 +9,21 @@ AppSettings.Configuration = configuration;
 // Add services to the container.
 builder.Services.AddControllers();
 
+// 跨域
+builder.Services.AddCors(options =>
+{
+    options.AddDefaultPolicy(policy =>
+    {
+        policy.WithOrigins(AppSettings.AllowCors);
+    });
+});
+
 // Swagger
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 // JsonOptions
 builder.Services.AddJsonOptions();
-
-// 模型验证
-builder.Services.AddDataValidation();
-
-// 对象映射 AutoMapper
-var profileAssemblies = AssemblyHelper.GetAssemblies("Simple.Services");
-builder.Services.AddAutoMapper(profileAssemblies);
 
 // 仓储
 builder.Services.AddRepository(configuration["ConnectionStrings:SqlServer"]);
@@ -33,6 +35,13 @@ builder.Services.AddServices("Simple.Services");
 builder.Services.AddCookieAuthentication();
 // 授权
 builder.Services.AddSimpleAuthorization();
+
+// 模型验证
+builder.Services.AddDataValidation();
+
+// 对象映射 AutoMapper
+var profileAssemblies = AssemblyHelper.GetAssemblies("Simple.Services");
+builder.Services.AddAutoMapper(profileAssemblies);
 
 // 缓存
 builder.Services.AddCache();
@@ -47,6 +56,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseCors();
 
 app.UseAuthentication();
 app.UseAuthorization();

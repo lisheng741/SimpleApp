@@ -10,6 +10,8 @@ function resolve (dir) {
 
 const isProd = process.env.NODE_ENV === 'production'
 
+console.log('1:', process.env.VUE_APP_API_BASE_URL)
+
 const assetsCDN = {
   // webpack build externals
   externals: {

@@ -10,7 +10,7 @@ public static class AppSettings
     private static IConfiguration? _configuration;
 
     /// <summary>
-    /// get or set singleton configuration
+    /// 获取 Configuration 的单例
     /// </summary>
     public static IConfiguration Configuration
     {
@@ -21,9 +21,12 @@ public static class AppSettings
         }
         set
         {
+            if (_configuration != null) throw new Exception($"{nameof(Configuration)}只能设置一次");
             _configuration = value ?? throw new ArgumentNullException(nameof(value));
         }
     }
+
+    public static string[] AllowCors => Configuration.GetSection("AllowCors").Get<string[]>();
 
     #region Jwt 配置
     public static string JwtSecretKey => Configuration["Jwt:SecretKey"];
