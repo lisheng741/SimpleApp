@@ -27,4 +27,18 @@ public static class JsonHelper
             _serializerOptions = value ?? throw new ArgumentNullException(nameof(value));
         }
     }
+
+    public static byte[] Serialize<T>(T obj)
+    {
+        return Encoding.UTF8.GetBytes(JsonSerializer.Serialize(obj, SerializerOptions));
+    }
+
+    public static T? Deserialize<T>(byte[] bytes)
+    {
+        if (bytes == null)
+        {
+            return default(T);
+        }
+        return JsonSerializer.Deserialize<T>(Encoding.UTF8.GetString(bytes), SerializerOptions);
+    }
 }

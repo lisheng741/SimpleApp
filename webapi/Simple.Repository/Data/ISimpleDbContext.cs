@@ -1,4 +1,4 @@
-﻿namespace Simple.Repository.Data;
+﻿namespace Simple.Repository;
 
 public interface ISimpleDbContext
 {

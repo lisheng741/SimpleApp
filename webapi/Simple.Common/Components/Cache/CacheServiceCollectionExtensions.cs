@@ -1,6 +1,4 @@
-﻿using Simple.Common.Components.Cache;
-
-namespace Microsoft.Extensions.DependencyInjection;
+﻿namespace Microsoft.Extensions.DependencyInjection;
 
 public static class CacheServiceCollectionExtensions
 {
@@ -19,14 +17,10 @@ public static class CacheServiceCollectionExtensions
                 options.Configuration = AppSettings.RedisConnectionString;
                 options.InstanceName = AppSettings.RedisInstance;
             });
-
-            services.AddSingleton<ICacheService, RedisCacheService>();
         }
         else
         {
             services.AddDistributedMemoryCache();
-
-            services.AddSingleton<ICacheService, MemoryCacheService>();
         }
 
         return services;

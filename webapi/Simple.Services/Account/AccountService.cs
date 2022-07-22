@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using Simple.Common.Components.Authentication.Jwt;
 using Simple.Services.Account;
 using SimpleApp.Common;
@@ -11,16 +12,16 @@ namespace Simple.Services.Account;
 
 public class AccountService
 {
-    private readonly SimpleDbContext _db;
+    private readonly SimpleDbContext _context;
 
-    public AccountService(SimpleDbContext db)
+    public AccountService(SimpleDbContext context)
     {
-        _db = db;
+        _context = context;
     }
 
     public Task<ApiResult<string>> LoginAsync(LoginInput input)
     {
-        _db.SysRole.ToList();
+        _context.Set<SysUserRole>().Include(t => t.Role);
 
         var jwtTokenModel = new JwtTokenModel(input.Account, "admin");
         var token = JwtHelper.Create(jwtTokenModel);

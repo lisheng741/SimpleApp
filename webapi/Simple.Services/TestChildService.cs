@@ -4,26 +4,25 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Caching.Distributed;
-using Simple.Common.Components.Cache;
 
 namespace Simple.Services;
 
 public class TestChildService : TestService
 {
-    private readonly ICacheService _cacheService;
+    private readonly IDistributedCache _cache;
 
-    public TestChildService(ICacheService cacheService)
+    public TestChildService(IDistributedCache cache)
     {
-        _cacheService = cacheService;
+        _cache = cache;
     }
 
     public async Task Test()
     {
-        await _cacheService.SetAsync("test", 
+        await _cache.SetAsync("test", 
                 new SysRole() { Id = Guid.NewGuid(), Name = "TestRole" },
                 new DistributedCacheEntryOptions()
             );
 
-        var role = await _cacheService.GetAsync<SysRole>("test");
+        var role = await _cache.GetAsync<SysRole>("test");
     }
 }
