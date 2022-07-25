@@ -2,9 +2,15 @@
 
 namespace Simple.Repository.Models;
 
-public abstract class EntityBase 
+public abstract class EntityBase
 {
-    public abstract void ConfigureEntity(EntityTypeBuilder builder);
+    /// <summary>
+    /// 使用 Fluent API 配置实体
+    /// </summary>
+    /// <param name="builder"></param>
+    public virtual void ConfigureEntity(ModelBuilder builder)
+    {
+    }
 }
 
 public abstract class EntityBase<TKey> : EntityBase

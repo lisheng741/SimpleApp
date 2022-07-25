@@ -60,12 +60,41 @@ public class SimpleDbContext : DbContext
         // 遍历注册的实体
         foreach (var entityType in builder.Model.GetEntityTypes())
         {
-            // 通过 Invoke 调用 ConfigureEntity，对实体进行配置（基本属性、筛选器等配置）
+            // 通过 Invoke 调用 ConfigureEntity，对实体进行通用配置（基本属性、筛选器等配置）
             configureEntity
                 .MakeGenericMethod(entityType.ClrType)
                 .Invoke(this, new object[] { builder, entityType });
+
+            // 创建实体实例，调用实例的 ConfigureEntity 对实体进行专有配置
+            var entityConfigure = Activator.CreateInstance(entityType.ClrType) as EntityBase;
+            if (entityConfigure != null)
+            {
+                entityConfigure.ConfigureEntity(builder);
+            }
         }
     }
+
+    #region SaveChanges 方法重写
+
+    public override int SaveChanges()
+        => SaveChanges(acceptAllChangesOnSuccess: true);
+
+    public override int SaveChanges(bool acceptAllChangesOnSuccess)
+    {
+        return base.SaveChanges(acceptAllChangesOnSuccess);
+    }
+
+    public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
+        => SaveChangesAsync(acceptAllChangesOnSuccess: true, cancellationToken: cancellationToken);
+
+    public override Task<int> SaveChangesAsync(bool acceptAllChangesOnSuccess, CancellationToken cancellationToken = default)
+    {
+        return base.SaveChangesAsync(acceptAllChangesOnSuccess, cancellationToken);
+    }
+
+    #endregion
+
+    #region ChangeTracker 跟踪实体状态变化，集中统一的业务逻辑
 
     private void ChangeTracker_Tracked(object? sender, EntityTrackedEventArgs e)
     {
@@ -95,6 +124,11 @@ public class SimpleDbContext : DbContext
 
     protected virtual void EntityStateAdded(EntityEntry entry)
     {
+        // 主键检查
+
+        // 并发控制字段检查
+
+        // 其他字段自动赋值
         if (entry.Entity is ICreatedTime createdTime)
         {
             createdTime.CreatedTime = DateTime.Now;
@@ -103,6 +137,7 @@ public class SimpleDbContext : DbContext
 
     protected virtual void EntityStateModified(EntityEntry entry)
     {
+        // 字段自动赋值
         if (entry.Entity is IUpdatedTime updatedTime)
         {
             updatedTime.UpdatedTime = DateTime.Now;
@@ -126,7 +161,7 @@ public class SimpleDbContext : DbContext
         //// 从数据库重载实体，这样做有个问题，每删一个实体访问一次数据库，效率得不到保证
         //entry.Reload();
 
-        // 设置软删
+        // 设置软删字段
         softDelete.IsDeleted = true;
 
         // 先将状态置为修改（会触发修改的事件）
@@ -145,6 +180,10 @@ public class SimpleDbContext : DbContext
             property.IsModified = false;
         }
     }
+
+    #endregion
+
+    #region 实体配置
 
     /// <summary>
     /// 自动配置实体
@@ -247,4 +286,6 @@ public class SimpleDbContext : DbContext
             return base.Visit(node)!;
         }
     }
+
+    #endregion
 }

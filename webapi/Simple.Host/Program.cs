@@ -22,9 +22,6 @@ builder.Services.AddCors(options =>
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-// JsonOptions
-builder.Services.AddJsonOptions();
-
 // 仓储
 builder.Services.AddRepository(configuration["ConnectionStrings:SqlServer"]);
 
@@ -45,6 +42,9 @@ builder.Services.AddAutoMapper(profileAssemblies);
 
 // 缓存
 builder.Services.AddCache();
+
+// JsonOptions
+builder.Services.AddJsonOptions();
 
 var app = builder.Build();
 

@@ -5,8 +5,12 @@ using SimpleApp.Common;
 
 namespace Simple.Common.DataValidation;
 
-public class DataValidationFilter : IActionFilter
+public class DataValidationFilter : IActionFilter, IOrderedFilter
 {
+    internal const int FilterOrder = -2000;
+
+    public int Order => FilterOrder;
+
     public void OnActionExecuting(ActionExecutingContext context)
     {
         // 如果其他过滤器已经设置了结果，则跳过验证
@@ -28,7 +32,7 @@ public class DataValidationFilter : IActionFilter
         var result = ApiResult<string[]>.Status400BadRequest(errors, "数据验证不通过！");
 
         // 设置结果
-        context.Result = new BadRequestObjectResult(result);
+        context.Result = new BadRequestObjectResult(result); // ObjectResult(result);
     }
 
     public void OnActionExecuted(ActionExecutedContext context)
