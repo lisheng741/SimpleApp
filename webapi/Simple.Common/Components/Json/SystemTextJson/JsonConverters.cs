@@ -1,7 +1,7 @@
 ﻿using System.Text.Json;
 using System.Text.Json.Serialization;
 
-namespace Simple.Common.Components.Json.SystemTextJson;
+namespace Simple.Common.Json.SystemTextJson;
 
 /// <summary>
 /// DateTime 格式转换

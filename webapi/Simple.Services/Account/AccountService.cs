@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
-using Simple.Common.Components.Authentication.Jwt;
+using Simple.Common.Authentication.Jwt;
 using Simple.Services.Account;
 using SimpleApp.Common;
 

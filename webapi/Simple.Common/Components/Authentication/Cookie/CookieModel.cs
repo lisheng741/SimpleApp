@@ -1,6 +1,6 @@
 ﻿using System.Security.Claims;
 
-namespace Simple.Common.Components.Authentication.Cookie;
+namespace Simple.Common.Authentication.Cookie;
 
 public class CookieModel
 {

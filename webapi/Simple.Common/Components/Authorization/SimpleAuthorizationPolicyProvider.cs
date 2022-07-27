@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Options;
 
-namespace Simple.Common.Components.Authorization;
+namespace Simple.Common.Authorization;
 
 public class SimpleAuthorizationPolicyProvider : DefaultAuthorizationPolicyProvider, IAuthorizationPolicyProvider
 {

@@ -7,7 +7,7 @@ public static class CacheServiceCollectionExtensions
     /// </summary>
     /// <param name="services"></param>
     /// <returns></returns>
-    public static IServiceCollection AddCache(this IServiceCollection services)
+    public static IServiceCollection AddSimpleCache(this IServiceCollection services)
     {
         // 根据情况，启用 Redis 或 DistributedMemoryCache
         if (AppSettings.RedisEnabled)

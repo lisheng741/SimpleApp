@@ -1,4 +1,4 @@
-﻿namespace Simple.Common.Components.Authentication.Jwt;
+﻿namespace Simple.Common.Authentication.Jwt;
 
 public class JwtTokenModel
 {

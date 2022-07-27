@@ -1,7 +1,4 @@
-﻿using System.Text.Json;
-using Simple.Common.Components.Json;
-
-namespace Microsoft.Extensions.Caching.Distributed;
+﻿namespace Microsoft.Extensions.Caching.Distributed;
 
 public static class DistributedCacheEextensions
 {

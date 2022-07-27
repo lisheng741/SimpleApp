@@ -1,4 +1,4 @@
-﻿namespace Simple.Common.Components.Authentication.Cookie;
+﻿namespace Simple.Common.Authentication.Cookie;
 
 public static class CookieClaimTypes
 {

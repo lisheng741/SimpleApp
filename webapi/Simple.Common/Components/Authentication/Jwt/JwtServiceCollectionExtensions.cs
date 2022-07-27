@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Http;
 using Microsoft.IdentityModel.Tokens;
-using Simple.Common.Components.Authentication.Jwt;
+using Simple.Common.Authentication.Jwt;
 
 namespace Microsoft.Extensions.DependencyInjection;
 

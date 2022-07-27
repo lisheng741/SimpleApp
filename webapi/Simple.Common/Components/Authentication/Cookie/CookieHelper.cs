@@ -1,7 +1,7 @@
 ﻿using System.Security.Claims;
 using Microsoft.AspNetCore.Authentication.Cookies;
 
-namespace Simple.Common.Components.Authentication.Cookie;
+namespace Simple.Common.Authentication.Cookie;
 
 public static class CookieHelper
 {

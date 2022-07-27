@@ -1,6 +1,6 @@
 ﻿using System.Security.Claims;
 using Microsoft.AspNetCore.Http;
-using Simple.Common.Components.Authentication.Cookie;
+using Simple.Common.Authentication.Cookie;
 
 namespace Microsoft.AspNetCore.Authentication;
 

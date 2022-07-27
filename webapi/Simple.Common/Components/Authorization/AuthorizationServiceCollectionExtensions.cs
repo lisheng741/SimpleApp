@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
-using Simple.Common.Components.Authorization;
+using Simple.Common.Authorization;
 
 namespace Microsoft.Extensions.DependencyInjection;
 

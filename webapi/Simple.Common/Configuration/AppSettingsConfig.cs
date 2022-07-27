@@ -19,11 +19,21 @@ public static class AppSettings
             if (_configuration == null) throw new ArgumentNullException(nameof(Configuration));
             return _configuration;
         }
-        set
+    }
+
+    /// <summary>
+    /// 设置 Configuration 的实例
+    /// </summary>
+    /// <param name="configuration"></param>
+    /// <exception cref="Exception"></exception>
+    /// <exception cref="ArgumentNullException"></exception>
+    public static void Configure(IConfiguration configuration)
+    {
+        if (_configuration != null)
         {
-            if (_configuration != null) throw new Exception($"{nameof(Configuration)}只能设置一次");
-            _configuration = value ?? throw new ArgumentNullException(nameof(value));
+            throw new Exception($"{nameof(Configuration)}不可修改！");
         }
+        _configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
     }
 
     public static string[] AllowCors => Configuration.GetSection("AllowCors").Get<string[]>();

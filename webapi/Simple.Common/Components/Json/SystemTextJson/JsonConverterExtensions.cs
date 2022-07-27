@@ -1,5 +1,5 @@
 ﻿using System.Text.Json.Serialization;
-using Simple.Common.Components.Json.SystemTextJson;
+using Simple.Common.Json.SystemTextJson;
 
 namespace System.Text.Json;
 

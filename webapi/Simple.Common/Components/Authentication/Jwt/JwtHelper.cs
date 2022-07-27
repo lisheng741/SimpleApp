@@ -2,7 +2,7 @@
 using System.Security.Claims;
 using Microsoft.IdentityModel.Tokens;
 
-namespace Simple.Common.Components.Authentication.Jwt;
+namespace Simple.Common.Authentication.Jwt;
 
 public static class JwtHelper
 {
@@ -22,9 +22,9 @@ public static class JwtHelper
         {
             new Claim(JwtClaimTypes.Username, tokenModel.Username),
             new Claim(JwtClaimTypes.JwtId, tokenModel.Username),
-            new Claim(JwtClaimTypes.IssuedAt, DateTimeHelper.ToUnixTimeSeconds().ToString(), ClaimValueTypes.Integer64),
-            new Claim(JwtClaimTypes.NotBefore, DateTimeHelper.ToUnixTimeSeconds().ToString(), ClaimValueTypes.Integer64),
-            new Claim(JwtClaimTypes.Expiration, DateTimeHelper.ToUnixTimeSeconds(DateTime.Now.AddSeconds(tokenModel.Expiration)).ToString(), ClaimValueTypes.Integer64),
+            new Claim(JwtClaimTypes.IssuedAt, DateTime.Now.ToUnixTimeSeconds().ToString(), ClaimValueTypes.Integer64),
+            new Claim(JwtClaimTypes.NotBefore, DateTime.Now.ToUnixTimeSeconds().ToString(), ClaimValueTypes.Integer64),
+            new Claim(JwtClaimTypes.Expiration, DateTime.Now.AddSeconds(tokenModel.Expiration).ToUnixTimeSeconds().ToString(), ClaimValueTypes.Integer64),
             new Claim(JwtClaimTypes.Issuer, issuer),
             new Claim(JwtClaimTypes.Audience, audience),
         };
@@ -47,7 +47,7 @@ public static class JwtHelper
         var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
         // 生成 token
-        var jwt = new JwtSecurityToken(claims: claims,signingCredentials: creds);
+        var jwt = new JwtSecurityToken(claims: claims, signingCredentials: creds);
         var jwtHandler = new JwtSecurityTokenHandler();
         var encodedJwt = jwtHandler.WriteToken(jwt);
 

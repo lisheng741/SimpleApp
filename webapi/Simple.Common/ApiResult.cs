@@ -10,50 +10,35 @@ public class ApiResult
 
     public ApiResult() { }
 
-    public static ApiResult Status200OK()
-    {
-        return new ApiResult() { Code = StatusCodes.Status200OK };
-    }
+    public static ApiResult Status200OK() => Status200OK(null);
 
     public static ApiResult Status200OK(string? message)
     {
         return new ApiResult() { Code = StatusCodes.Status200OK, Message = message };
     }
 
-    public static ApiResult Status400BadRequest()
-    {
-        return new ApiResult() { Code = StatusCodes.Status400BadRequest };
-    }
+    public static ApiResult Status400BadRequest() => Status400BadRequest(null);
 
     public static ApiResult Status400BadRequest(string? message)
     {
         return new ApiResult() { Code = StatusCodes.Status400BadRequest, Message = message };
     }
 
-    public static ApiResult Status401Unauthorized()
-    {
-        return new ApiResult() { Code = StatusCodes.Status401Unauthorized };
-    }
+    public static ApiResult Status401Unauthorized() => Status401Unauthorized(null);
 
     public static ApiResult Status401Unauthorized(string? message)
     {
         return new ApiResult() { Code = StatusCodes.Status401Unauthorized, Message = message };
     }
 
-    public static ApiResult Status403Forbidden()
-    {
-        return new ApiResult() { Code = StatusCodes.Status403Forbidden };
-    }
+    public static ApiResult Status403Forbidden() => Status403Forbidden(null);
 
     public static ApiResult Status403Forbidden(string? message)
     {
         return new ApiResult() { Code = StatusCodes.Status403Forbidden, Message = message };
     }
 
-    public static ApiResult Status404NotFound()
-    {
-        return new ApiResult() { Code = StatusCodes.Status404NotFound };
-    }
+    public static ApiResult Status404NotFound() => Status404NotFound(null);
 
     public static ApiResult Status404NotFound(string? message)
     {
@@ -67,50 +52,35 @@ public class ApiResult<TData> : ApiResult
 
     public ApiResult() { }
 
-    public static ApiResult<TData> Status200OK(TData data)
-    {
-        return new ApiResult<TData>() { Code = StatusCodes.Status200OK, Data = data };
-    }
+    public static ApiResult<TData> Status200OK(TData data) => Status200OK(data, null);
 
     public static ApiResult<TData> Status200OK(TData data, string? message)
     {
         return new ApiResult<TData>() { Code = StatusCodes.Status200OK, Data = data, Message = message };
     }
 
-    public static ApiResult<TData> Status400BadRequest(TData data)
-    {
-        return new ApiResult<TData>() { Code = StatusCodes.Status400BadRequest, Data = data };
-    }
+    public static ApiResult<TData> Status400BadRequest(TData data) => Status400BadRequest(data, null);
 
     public static ApiResult<TData> Status400BadRequest(TData data, string? message)
     {
         return new ApiResult<TData>() { Code = StatusCodes.Status400BadRequest, Data = data, Message = message };
     }
 
-    public static ApiResult<TData> Status401Unauthorized(TData data)
-    {
-        return new ApiResult<TData>() { Code = StatusCodes.Status401Unauthorized, Data = data };
-    }
+    public static ApiResult<TData> Status401Unauthorized(TData data) => Status401Unauthorized(data, null);
 
     public static ApiResult<TData> Status401Unauthorized(TData data, string? message)
     {
         return new ApiResult<TData>() { Code = StatusCodes.Status401Unauthorized, Data = data, Message = message };
     }
 
-    public static ApiResult<TData> Status403Forbidden(TData data)
-    {
-        return new ApiResult<TData>() { Code = StatusCodes.Status403Forbidden, Data = data };
-    }
+    public static ApiResult<TData> Status403Forbidden(TData data) => Status403Forbidden(data, null);
 
     public static ApiResult<TData> Status403Forbidden(TData data, string? message)
     {
         return new ApiResult<TData>() { Code = StatusCodes.Status403Forbidden, Data = data, Message = message };
     }
 
-    public static ApiResult<TData> Status404NotFound(TData data)
-    {
-        return new ApiResult<TData>() { Code = StatusCodes.Status404NotFound, Data = data };
-    }
+    public static ApiResult<TData> Status404NotFound(TData data) => Status404NotFound(data, null);
 
     public static ApiResult<TData> Status404NotFound(TData data, string? message)
     {

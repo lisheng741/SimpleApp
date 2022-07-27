@@ -1,6 +1,6 @@
 ﻿using System.Security.Claims;
 
-namespace Simple.Common.Components.Authorization;
+namespace Simple.Common.Authorization;
 
 public class PermissionChecker : IPermissionChecker
 {

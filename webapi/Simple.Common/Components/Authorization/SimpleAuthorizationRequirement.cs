@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 
-namespace Simple.Common.Components.Authorization;
+namespace Simple.Common.Authorization;
 
 public class SimpleAuthorizationRequirement : IAuthorizationRequirement
 {
