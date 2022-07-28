@@ -18,7 +18,7 @@ public static class JsonHelper
     {
         get
         {
-            if (_serializerOptions == null) throw new ArgumentNullException(nameof(SerializerOptions));
+            if (_serializerOptions == null) throw new NullReferenceException(nameof(SerializerOptions));
             return _serializerOptions;
         }
     }
@@ -38,17 +38,27 @@ public static class JsonHelper
         _serializerOptions = serializerOptions ?? throw new ArgumentNullException(nameof(serializerOptions));
     }
 
-    public static byte[] Serialize<T>(T obj)
+    public static string Serialize<TValue>(TValue value)
     {
-        return Encoding.UTF8.GetBytes(JsonSerializer.Serialize(obj, SerializerOptions));
+        return JsonSerializer.Serialize(value, _serializerOptions);
     }
 
-    public static T? Deserialize<T>(byte[] bytes)
+    public static byte[] SerializeToUtf8Bytes<TValue>(TValue value)
     {
-        if (bytes == null)
+        return JsonSerializer.SerializeToUtf8Bytes(value, _serializerOptions);
+    }
+
+    public static TValue? Deserialize<TValue>(string json)
+    {
+        return JsonSerializer.Deserialize<TValue>(json, SerializerOptions);
+    }
+
+    public static TValue? Deserialize<TValue>(ReadOnlySpan<byte> utf8Json)
+    {
+        if (utf8Json == null)
         {
-            return default(T);
+            return default(TValue);
         }
-        return JsonSerializer.Deserialize<T>(Encoding.UTF8.GetString(bytes), SerializerOptions);
+        return JsonSerializer.Deserialize<TValue>(utf8Json, SerializerOptions);
     }
 }

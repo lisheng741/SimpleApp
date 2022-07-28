@@ -11,9 +11,9 @@ public enum LifecycleType
 }
 
 /// <summary>
-/// 自动注入规则（只能注释类，不允许相同标签，不允许继承）
+/// 自动注入规则（只能注释类/接口，不允许相同标签，不允许继承）
 /// </summary>
-[AttributeUsage(AttributeTargets.Class, AllowMultiple = false, Inherited = false)]
+[AttributeUsage(AttributeTargets.Class | AttributeTargets.Interface, AllowMultiple = false, Inherited = false)]
 public class AutoInjectionAttribute : Attribute
 {
     /// <summary>

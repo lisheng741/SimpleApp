@@ -23,34 +23,50 @@ public static class InjectionServiceCollectionExtensions
         // 遍历，将服务默认注册为瞬态服务（生命周期：Transient）
         foreach (var serviceType in serviceTypes)
         {
-            var lifecyleType = LifecycleType.Transient;
+            // 注册自身
+            RegistrationType(services, serviceType, serviceType);
 
-            var autoInjection = serviceType.GetCustomAttribute<AutoInjectionAttribute>();
-
-            if (autoInjection != null)
+            // 注册所有实现的实例（!Problem：子类也会实现父类的接口，可能导致父类对接口的实现被覆盖）
+            var serviceInterfaces = serviceType.GetInterfaces();
+            foreach(var serviceInterface in serviceInterfaces)
             {
-                if (!autoInjection.AutoRegister)
-                {
-                    continue;
-                }
-                lifecyleType = autoInjection.Lifecycle;
-            }
-
-            switch (lifecyleType)
-            {
-                case LifecycleType.Singleton:
-                    services.AddSingleton(serviceType);
-                    break;
-                case LifecycleType.Scoped:
-                    services.AddScoped(serviceType);
-                    break;
-                case LifecycleType.Transient:
-                default:
-                    services.AddTransient(serviceType);
-                    break;
+                RegistrationType(services, serviceInterface, serviceType);
             }
         }
 
         return services;
+
+        // AddAutoServices() 内部静态函数
+        static void RegistrationType(IServiceCollection services, Type serviceType, Type implementationType)
+        {
+            // 设置默认生命周期为 Transient
+            var lifecyleType = LifecycleType.Transient;
+
+            // 获取服务自动注入标签（AutoInject）
+            var autoInjection = serviceType.GetCustomAttribute<AutoInjectionAttribute>();
+            if (autoInjection != null)
+            {
+                if (!autoInjection.AutoRegister)
+                {
+                    return;
+                }
+                lifecyleType = autoInjection.Lifecycle;
+            }
+
+            // 注册服务
+            switch (lifecyleType)
+            {
+                case LifecycleType.Singleton:
+                    services.AddSingleton(serviceType, implementationType);
+                    break;
+                case LifecycleType.Scoped:
+                    services.AddScoped(serviceType, implementationType);
+                    break;
+                case LifecycleType.Transient:
+                default:
+                    services.AddTransient(serviceType, implementationType);
+                    break;
+            }
+        }
     }
 }

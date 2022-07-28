@@ -1,12 +1,17 @@
 ﻿global using Simple.Common.Configuration;
 global using Simple.Common.Helpers;
 using Microsoft.OpenApi.Models;
+using NLog.Web;
 using Simple.Common;
 
 var builder = WebApplication.CreateBuilder(args);
 
 var configuration = builder.Configuration;
 AppSettings.Configure(configuration);
+
+// 日志
+builder.Logging.ClearProviders().AddConsole();
+builder.Host.UseNLog();
 
 // API
 builder.Services.AddControllers();
@@ -55,6 +60,9 @@ var app = builder.Build();
 SimpleStartup.Configure(app);
 
 // 配置 HTTP 请求管道
+// 全局异常处理
+app.UseApiException();
+
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();

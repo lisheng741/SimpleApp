@@ -20,13 +20,13 @@ public static class JwtHelper
 
         var claims = new List<Claim>()
         {
-            new Claim(JwtClaimTypes.Username, tokenModel.Username),
-            new Claim(JwtClaimTypes.JwtId, tokenModel.Username),
-            new Claim(JwtClaimTypes.IssuedAt, DateTime.Now.ToUnixTimeSeconds().ToString(), ClaimValueTypes.Integer64),
-            new Claim(JwtClaimTypes.NotBefore, DateTime.Now.ToUnixTimeSeconds().ToString(), ClaimValueTypes.Integer64),
-            new Claim(JwtClaimTypes.Expiration, DateTime.Now.AddSeconds(tokenModel.Expiration).ToUnixTimeSeconds().ToString(), ClaimValueTypes.Integer64),
-            new Claim(JwtClaimTypes.Issuer, issuer),
-            new Claim(JwtClaimTypes.Audience, audience),
+            new Claim(SimpleClaimTypes.Username, tokenModel.Username),
+            new Claim(SimpleClaimTypes.JwtId, tokenModel.Username),
+            new Claim(SimpleClaimTypes.IssuedAt, DateTime.Now.ToUnixTimeSeconds().ToString(), ClaimValueTypes.Integer64),
+            new Claim(SimpleClaimTypes.NotBefore, DateTime.Now.ToUnixTimeSeconds().ToString(), ClaimValueTypes.Integer64),
+            new Claim(SimpleClaimTypes.Expiration, DateTime.Now.AddSeconds(tokenModel.Expiration).ToUnixTimeSeconds().ToString(), ClaimValueTypes.Integer64),
+            new Claim(SimpleClaimTypes.Issuer, issuer),
+            new Claim(SimpleClaimTypes.Audience, audience),
         };
 
         //var claims = new List<Claim>()
@@ -39,7 +39,7 @@ public static class JwtHelper
         foreach (var role in tokenModel.Roles)
         {
             if (string.IsNullOrEmpty(role)) continue;
-            claims.Add(new Claim(JwtClaimTypes.Role, role));
+            claims.Add(new Claim(SimpleClaimTypes.Role, role));
         }
 
         // 密钥

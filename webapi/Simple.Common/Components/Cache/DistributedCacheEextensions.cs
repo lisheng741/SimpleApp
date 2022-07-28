@@ -21,7 +21,7 @@ public static class DistributedCacheEextensions
             CancellationToken token = default)
         where TCacheItem : class
     {
-        var bytes = JsonHelper.Serialize(value);
+        var bytes = JsonHelper.SerializeToUtf8Bytes(value);
         await cache.SetAsync(key, bytes, options, token);
     }
 }

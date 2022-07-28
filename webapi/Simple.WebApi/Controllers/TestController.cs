@@ -1,10 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Simple.Services;
 
-namespace SimpleApp.WebApi.Controllers
+namespace Simple.WebApi.Controllers
 {
     [Route("api/[controller]/[action]")]
     [ApiController]
@@ -13,7 +10,7 @@ namespace SimpleApp.WebApi.Controllers
         private readonly TestService _testService;
         private readonly IMapper _mapper;
 
-        public TestController(TestService testService, IMapper mapper)
+        public TestController(TestService testService, IMapper mapper, IEnumerable<ITestService> testServices, ITestService test)
         {
             _testService = testService;
             _mapper = mapper;
@@ -30,6 +27,12 @@ namespace SimpleApp.WebApi.Controllers
         [Authorize]
         [HttpGet]
         public string Auth()
-            => "auth";
+            => _testService.Get();
+
+        [HttpGet]
+        public string Throw()
+        {
+            throw new Exception("测试异常");
+        }
     }
 }

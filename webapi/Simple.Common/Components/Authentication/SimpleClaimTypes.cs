@@ -1,6 +1,6 @@
-﻿namespace Simple.Common.Authentication.Jwt;
+﻿namespace Simple.Common.Authentication;
 
-public static class JwtClaimTypes
+public static class SimpleClaimTypes
 {
     public const string Username = "username";
 

@@ -6,26 +6,33 @@ using System.Threading.Tasks;
 using Simple.Common.DependencyInjection;
 using Simple.Common.Services;
 
-namespace Simple.Services
+namespace Simple.Services;
+
+
+public interface ITestService
 {
-    [AutoInjection(true)]
-    public class TestService
+    string Get();
+
+    string GetToken();
+}
+
+[AutoInjection(true)]
+public class TestService : ITestService
+{
+    private ICurrentUserService _currentUser;
+
+    public TestService(ICurrentUserService currentUser)
     {
-        private ICurrentUserService _currentUser;
+        _currentUser = currentUser;
+    }
 
-        public TestService(ICurrentUserService currentUser)
-        {
-            _currentUser = currentUser;
-        }
+    public string Get()
+    {
+        return _currentUser.Username;
+    }
 
-        public string Get()
-        {
-            return _currentUser.Username;
-        }
-
-        public string GetToken()
-        {
-            return "";
-        }
+    public string GetToken()
+    {
+        return "";
     }
 }

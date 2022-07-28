@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Simple.Common.Authentication.Jwt;
 using Simple.Services.Account;
-using SimpleApp.Common;
 
 namespace Simple.Services.Account;
 
@@ -21,7 +20,7 @@ public class AccountService
 
     public Task<ApiResult<string>> LoginAsync(LoginInput input)
     {
-        _context.Set<SysUserRole>().Include(t => t.Role);
+        //_context.Set<SysUserRole>().Include(t => t.Role);
 
         var jwtTokenModel = new JwtTokenModel(input.Account, "admin");
         var token = JwtHelper.Create(jwtTokenModel);

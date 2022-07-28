@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Http;
 using Microsoft.IdentityModel.Tokens;
+using Simple.Common.Authentication;
 using Simple.Common.Authentication.Jwt;
 
 namespace Microsoft.Extensions.DependencyInjection;
@@ -33,8 +34,8 @@ public static class JwtServiceCollectionExtensions
             ValidateLifetime = true, // 是否验证失效时间
             ClockSkew = TimeSpan.FromSeconds(30), // 过期时间容错值，解决服务器端时间不同步问题（秒）
             RequireExpirationTime = true,
-            NameClaimType = JwtClaimTypes.Username,
-            RoleClaimType = JwtClaimTypes.Role,
+            NameClaimType = SimpleClaimTypes.Username,
+            RoleClaimType = SimpleClaimTypes.Role,
         };
 
         // events

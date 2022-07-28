@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Simple.Common.DataValidation;
+using Simple.Common.Filters;
 
 namespace Microsoft.Extensions.DependencyInjection;
 

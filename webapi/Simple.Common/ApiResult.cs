@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Simple.Common.DependencyInjection;
 
-namespace SimpleApp.Common;
+namespace Simple.Common;
 
 public class ApiResult
 {
@@ -44,6 +44,13 @@ public class ApiResult
     {
         return new ApiResult() { Code = StatusCodes.Status404NotFound, Message = message };
     }
+
+    public static ApiResult Status500InternalServerError() => Status500InternalServerError(null);
+
+    public static ApiResult Status500InternalServerError(string? message)
+    {
+        return new ApiResult() { Code = StatusCodes.Status500InternalServerError, Message = message };
+    }
 }
 
 public class ApiResult<TData> : ApiResult
@@ -85,5 +92,12 @@ public class ApiResult<TData> : ApiResult
     public static ApiResult<TData> Status404NotFound(TData data, string? message)
     {
         return new ApiResult<TData>() { Code = StatusCodes.Status404NotFound, Data = data, Message = message };
+    }
+
+    public static ApiResult<TData> Status500InternalServerError(TData data) => Status500InternalServerError(data, null);
+
+    public static ApiResult<TData> Status500InternalServerError(TData data, string? message)
+    {
+        return new ApiResult<TData>() { Code = StatusCodes.Status500InternalServerError, Data = data, Message = message };
     }
 }

@@ -5,5 +5,6 @@ global using System.Text;
 global using System.Threading.Tasks;
 global using System.Reflection;
 global using Microsoft.Extensions.DependencyInjection;
+global using Simple.Common;
 global using Simple.Common.Configuration;
 global using Simple.Common.Helpers;

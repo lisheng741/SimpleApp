@@ -16,7 +16,7 @@ public static class AppSettings
     {
         get
         {
-            if (_configuration == null) throw new ArgumentNullException(nameof(Configuration));
+            if (_configuration == null) throw new NullReferenceException(nameof(Configuration));
             return _configuration;
         }
     }
