@@ -1,8 +1,8 @@
-﻿global using Simple.Common.Configuration;
+﻿global using Simple.Common;
+global using Simple.Common.Configuration;
 global using Simple.Common.Helpers;
 using Microsoft.OpenApi.Models;
 using NLog.Web;
-using Simple.Common;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,7 +10,7 @@ var configuration = builder.Configuration;
 AppSettings.Configure(configuration);
 
 // 日志
-builder.Logging.ClearProviders().AddConsole();
+//builder.Logging.ClearProviders(); // .AddConsole()
 builder.Host.UseNLog();
 
 // API
