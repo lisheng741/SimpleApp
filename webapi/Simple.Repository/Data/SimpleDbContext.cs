@@ -32,22 +32,31 @@ public class SimpleDbContext : DbContext
                                         .Where(t => !t.IsAbstract && t.IsSubclassOf(typeof(EntityBase)))
                                         .ToList();
 
-        // 注册 Entity
+        // 通用注册
         foreach (var entityType in entityTypes)
         {
+            // 注册 Entity
             EntityTypeBuilder entityTypeBuilder = builder.Entity(entityType);
 
             // 表名注释
             string entitySummary = entityType.GetSummary();
             entityTypeBuilder.HasComment(entitySummary);
 
-            // 属性注释
+            // 遍历实体属性
             PropertyInfo[] propertyInfos = entityType.GetProperties();
             foreach (var propertyInfo in propertyInfos)
             {
                 string propertyName = propertyInfo.Name;
+
+                // 属性注释
                 string propertySummary = propertyInfo.GetSummary();
                 entityTypeBuilder.Property(propertyName).HasComment(propertySummary);
+
+                // Guid 处理为 char(36), 这样不论是 SqlServer 还是 MySql 都可以按字符串来处理 Guid，解决数据库排序方式不一致的问题
+                if(propertyInfo.PropertyType.FullName == "System.Guid")
+                {
+                    entityTypeBuilder.Property(propertyName).HasColumnType("char(36)");
+                }
             }
         }
 

@@ -14,7 +14,7 @@ public abstract class EntityBase
 }
 
 public abstract class EntityBase<TKey> : EntityBase
-    where TKey : struct
+    where TKey : struct, IEquatable<TKey>
 {
     /// <summary>
     /// 主键
@@ -23,7 +23,7 @@ public abstract class EntityBase<TKey> : EntityBase
 }
 
 public abstract class BusinessEntityBase<TKey> : EntityBase<TKey>, ISoftDelete, ICreatedInfo, IUpdatedInfo
-    where TKey : struct
+    where TKey : struct, IEquatable<TKey>
 {
     /// <summary>
     /// 软删标记
@@ -50,37 +50,3 @@ public abstract class BusinessEntityBase<TKey> : EntityBase<TKey>, ISoftDelete, 
     /// </summary>
     public virtual Guid? UpdatedUserId { get; set; }
 }
-
-public interface ISoftDelete
-{
-    public bool IsDeleted { get; set; }
-}
-
-public interface ITenant
-{
-    public Guid TenantId { get; set; }
-}
-
-public interface ICreatedTime
-{
-    public DateTime? CreatedTime { get; set; }
-}
-
-public interface ICreatedUser
-{
-    public Guid? CreatedUserId { get; set; }
-}
-
-public interface ICreatedInfo : ICreatedTime, ICreatedUser { }
-
-public interface IUpdatedTime
-{
-    public DateTime? UpdatedTime { get; set; }
-}
-
-public interface IUpdatedUser
-{
-    public Guid? UpdatedUserId { get; set; }
-}
-
-public interface IUpdatedInfo : IUpdatedTime, IUpdatedUser { }
