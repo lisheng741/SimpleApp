@@ -33,3 +33,13 @@ public interface IUpdatedUser
 }
 
 public interface IUpdatedInfo : IUpdatedTime, IUpdatedUser { }
+
+public interface IConcurrency
+{
+    public long RowVersion { get; set; }
+}
+
+public interface IRowVersion
+{
+    public byte[] RowVersion { get; set; }
+}

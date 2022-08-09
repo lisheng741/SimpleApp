@@ -4,7 +4,7 @@ namespace System.Reflection;
 
 public static class SummaryExtensions
 {
-    private const string summaryXPathTemplate = "doc/members/member[@name='{0}']/summary";
+    private const string SummaryXPathTemplate = "doc/members/member[@name='{0}']/summary";
 
     private static readonly Dictionary<Assembly, XmlDocument> _cache = new Dictionary<Assembly, XmlDocument>();
 
@@ -17,7 +17,13 @@ public static class SummaryExtensions
     /// <returns></returns>
     public static string GetSummary(this Type type)
     {
-        return GetSummary(type, $"T:{type.FullName}");
+        // 不能用 FullName
+        // 因为可能出现如：Simple.Repository.Models.BusinessEntityBase`1[[System.Guid, System.Private.CoreLib, Version=6.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]
+        // 实际上有用的为 Simple.Repository.Models.BusinessEntityBase`1 这一部分
+        //return GetSummary(type, $"T:{type.FullName}");
+
+        // 拼凑如这样的字符串：T:Simple.Repository.Models.BusinessEntityBase`1
+        return GetSummary(type, $"T:{type.Namespace}.{type.Name}");
     }
 
     /// <summary>
@@ -27,8 +33,14 @@ public static class SummaryExtensions
     /// <returns></returns>
     public static string GetSummary(this MemberInfo info)
     {
+        // 前缀，如：P、M
         char prefix = info.MemberType.ToString()[0];
-        return GetSummary(info.DeclaringType!, $"{prefix}:{info.DeclaringType!.FullName}.{info.Name}");
+
+        // 不能用 FullName 理由同 Type 的 GetSummary
+        //return GetSummary(info.DeclaringType!, $"{prefix}:{info.DeclaringType!.FullName}.{info.Name}");
+
+        // 拼凑如这样的字符串： P:Simple.Repository.Models.BusinessEntityBase`1.IsDeleted
+        return GetSummary(info.DeclaringType!, $"{prefix}:{info.DeclaringType!.Namespace}.{info.DeclaringType!.Name}.{info.Name}");
     }
 
     /// <summary>
@@ -45,7 +57,7 @@ public static class SummaryExtensions
             return "";
         }
 
-        XmlNode? node = xmlDocument.SelectSingleNode(string.Format(summaryXPathTemplate, name));
+        XmlNode? node = xmlDocument.SelectSingleNode(string.Format(SummaryXPathTemplate, name));
         if (node == null)
         {
             return "";

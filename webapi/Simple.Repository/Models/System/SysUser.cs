@@ -1,7 +1,6 @@
 ﻿namespace Simple.Repository.Models.System;
 
-public class SysUser : EntityBase
+public class SysUser : BusinessEntityBase<Guid>
 {
-    public Guid Id { get; set; }
     public string Name { get; set; }
 }

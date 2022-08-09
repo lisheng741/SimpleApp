@@ -1,4 +1,5 @@
-﻿using System.Linq.Expressions;
+﻿using System.ComponentModel.DataAnnotations.Schema;
+using System.Linq.Expressions;
 using System.Reflection;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Metadata;
@@ -8,9 +9,14 @@ namespace Simple.Repository;
 
 public class SimpleDbContext : DbContext
 {
-    public SimpleDbContext(DbContextOptions<SimpleDbContext> options)
+    private readonly ICurrentUserService _currentUser;
+
+    public SimpleDbContext(DbContextOptions<SimpleDbContext> options,
+        ICurrentUserService currentUser)
         : base(options)
     {
+        _currentUser = currentUser;
+
         Initialize();
     }
 
@@ -32,43 +38,66 @@ public class SimpleDbContext : DbContext
                                         .Where(t => !t.IsAbstract && t.IsSubclassOf(typeof(EntityBase)))
                                         .ToList();
 
-        // 通用注册
+        // 注册 Entity
         foreach (var entityType in entityTypes)
         {
-            // 注册 Entity
-            EntityTypeBuilder entityTypeBuilder = builder.Entity(entityType);
-
-            // 表名注释
-            string entitySummary = entityType.GetSummary();
-            entityTypeBuilder.HasComment(entitySummary);
-
-            // 遍历实体属性
-            PropertyInfo[] propertyInfos = entityType.GetProperties();
-            foreach (var propertyInfo in propertyInfos)
-            {
-                string propertyName = propertyInfo.Name;
-
-                // 属性注释
-                string propertySummary = propertyInfo.GetSummary();
-                entityTypeBuilder.Property(propertyName).HasComment(propertySummary);
-
-                // Guid 处理为 char(36), 这样不论是 SqlServer 还是 MySql 都可以按字符串来处理 Guid，解决数据库排序方式不一致的问题
-                if(propertyInfo.PropertyType.FullName == "System.Guid")
-                {
-                    entityTypeBuilder.Property(propertyName).HasColumnType("char(36)");
-                }
-            }
+            builder.Entity(entityType);
         }
 
         // 因为 ConfigureEntity 是一个泛型方法，需要先将其获取为 MethodInfo
         MethodInfo configureEntity = typeof(SimpleDbContext).GetMethod(
             nameof(ConfigureEntity),
             BindingFlags.Instance | BindingFlags.NonPublic
-        ) ?? throw new ArgumentNullException(nameof(configureEntity));
+        ) ?? throw new NullReferenceException(nameof(configureEntity));
 
-        // 遍历注册的实体
+        // 遍历注册的实体进行配置
         foreach (var entityType in builder.Model.GetEntityTypes())
         {
+            EntityTypeBuilder entityTypeBuilder = builder.Entity(entityType.ClrType);
+
+            // Guid 主键默认不自动设置
+            if (typeof(EntityBase<Guid>).IsAssignableFrom(entityType.ClrType))
+            {
+                PropertyBuilder idPropertyBuilder = entityTypeBuilder.Property(nameof(EntityBase<Guid>.Id));
+                if (!idPropertyBuilder.Metadata.PropertyInfo!.IsDefined(typeof(DatabaseGeneratedAttribute), true))
+                {
+                    idPropertyBuilder.ValueGeneratedNever();
+                }
+            }
+
+            // 表名注释
+            string entitySummary = entityType.ClrType.GetSummary();
+            if (!string.IsNullOrEmpty(entitySummary))
+            {
+                entityTypeBuilder.HasComment(entitySummary);
+            }
+
+            // 遍历实体属性
+            PropertyInfo[] propertyInfos = entityType.ClrType.GetProperties();
+            foreach (var propertyInfo in propertyInfos)
+            {
+                string propertyName = propertyInfo.Name;
+
+                // 属性注释
+                string propertySummary = propertyInfo.GetSummary();
+                if (!string.IsNullOrEmpty(propertySummary))
+                {
+                    entityTypeBuilder.Property(propertyName).HasComment(propertySummary);
+                }
+
+                // Guid 处理为 char(36), 这样不论是 SqlServer 还是 MySql 都可以按字符串来处理 Guid，解决数据库排序方式不一致的问题
+                if (propertyInfo.PropertyType.FullName == "System.Guid")
+                {
+                    entityTypeBuilder.Property(propertyName).HasColumnType("char(36)");
+                }
+            }
+
+            // 设置级联删除
+            foreach (var foreignKeys in entityType.GetForeignKeys())
+            {
+                foreignKeys.DeleteBehavior = DeleteBehavior.Cascade;
+            }
+
             // 通过 Invoke 调用 ConfigureEntity，对实体进行通用配置（基本属性、筛选器等配置）
             configureEntity
                 .MakeGenericMethod(entityType.ClrType)
@@ -85,23 +114,63 @@ public class SimpleDbContext : DbContext
 
     #region SaveChanges 方法重写
 
-    public override int SaveChanges()
-        => SaveChanges(acceptAllChangesOnSuccess: true);
-
     public override int SaveChanges(bool acceptAllChangesOnSuccess)
     {
-        return base.SaveChanges(acceptAllChangesOnSuccess);
+        try
+        {
+            HandleBeforeSave();
+
+            var result = base.SaveChanges(acceptAllChangesOnSuccess);
+
+            return result;
+        }
+        catch(DbUpdateConcurrencyException ex)
+        {
+            return 0;
+        }
+        finally
+        {
+
+        }
     }
 
-    public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
-        => SaveChangesAsync(acceptAllChangesOnSuccess: true, cancellationToken: cancellationToken);
-
-    public override Task<int> SaveChangesAsync(bool acceptAllChangesOnSuccess, CancellationToken cancellationToken = default)
+    public override async Task<int> SaveChangesAsync(bool acceptAllChangesOnSuccess, CancellationToken cancellationToken = default)
     {
-        return base.SaveChangesAsync(acceptAllChangesOnSuccess, cancellationToken);
+        try
+        {
+            HandleBeforeSave();
+
+            var result = await base.SaveChangesAsync(acceptAllChangesOnSuccess, cancellationToken);
+
+            return result;
+        }
+        catch (DbUpdateConcurrencyException ex)
+        {
+            return 0;
+        }
+        finally
+        {
+
+        }
     }
 
     #endregion
+
+    protected virtual void HandleBeforeSave()
+    {
+        foreach(var entry in ChangeTracker.Entries().ToList())
+        {
+            if(entry.State.IsIn(EntityState.Modified, EntityState.Deleted))
+            {
+                // 并发控制字段赋新值（ConcurrencyCheck）
+                if (entry.Entity is IConcurrency concurrency)
+                {
+                    Entry(concurrency).Property(c => c.RowVersion).OriginalValue = concurrency.RowVersion;
+                    concurrency.RowVersion = DateTimeOffset.UtcNow.Ticks;
+                }
+            }
+        }
+    }
 
     #region ChangeTracker 跟踪实体状态变化，集中统一的业务逻辑
 
@@ -133,9 +202,24 @@ public class SimpleDbContext : DbContext
 
     protected virtual void EntityStateAdded(EntityEntry entry)
     {
-        // 主键检查
+        // 主键检查及设置
+        if(entry.Entity is EntityBase<Guid> entityWithGuidId)
+        {
+            if(entityWithGuidId.Id == default)
+            {
+                Guid id = GuidHelper.Next();
+                entry.Property(nameof(EntityBase<Guid>.Id)).CurrentValue = id;
+            }
+        }
 
-        // 并发控制字段检查
+        // 并发控制字段检查（ConcurrencyCheck）
+        if (entry.Entity is IConcurrency concurrency)
+        {
+            if(concurrency.RowVersion == default)
+            {
+                concurrency.RowVersion = DateTimeOffset.UtcNow.Ticks;
+            }
+        }
 
         // 其他字段自动赋值
         if (entry.Entity is ICreatedTime createdTime)
@@ -209,7 +293,8 @@ public class SimpleDbContext : DbContext
             return;
         }
 
-        // 配置其他
+        // 尝试配置默认属性
+        builder.Entity<TEntity>().TryConfigureDefault();
 
         // 配置全局数据筛选器
         ConfigureGlobalFilters<TEntity>(builder);

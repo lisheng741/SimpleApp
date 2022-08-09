@@ -8,3 +8,4 @@ global using Microsoft.Extensions.DependencyInjection;
 global using Simple.Common;
 global using Simple.Common.Configuration;
 global using Simple.Common.Helpers;
+global using Simple.Common.Services;

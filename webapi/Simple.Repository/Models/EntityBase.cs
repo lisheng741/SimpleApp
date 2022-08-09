@@ -22,6 +22,10 @@ public abstract class EntityBase<TKey> : EntityBase
     public virtual TKey Id { get; set; }
 }
 
+/// <summary>
+/// 业务基础
+/// </summary>
+/// <typeparam name="TKey"></typeparam>
 public abstract class BusinessEntityBase<TKey> : EntityBase<TKey>, ISoftDelete, ICreatedInfo, IUpdatedInfo
     where TKey : struct, IEquatable<TKey>
 {

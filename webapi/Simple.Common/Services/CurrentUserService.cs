@@ -11,8 +11,18 @@ namespace Simple.Common.Services;
 
 public interface ICurrentUserService
 {
-    public ClaimsPrincipal User { get; }
-    public string? Username { get; }
+    ClaimsPrincipal User { get; }
+    bool IsAuthenticated { get; }
+    string? Username { get; }
+    string[] Roles { get; }
+    string? Name { get; }
+    string? Email { get; }
+    Guid? TenantId { get; }
+
+    bool IsInRole(string roleName);
+    Claim? FindClaim(string claimType);
+    Claim[] FindClaims(string claimType);
+    string? FindClaimValue(string claimType);
 }
 
 public class CurrentUserService : ICurrentUserService
@@ -44,6 +54,21 @@ public class CurrentUserService : ICurrentUserService
     public virtual string[] Roles => FindClaims(SimpleClaimTypes.Role).Select(c => c.Value).ToArray();
 
     public virtual string? Name => FindClaimValue(SimpleClaimTypes.Name);
+
+    public virtual Guid? TenantId
+    {
+        get
+        {
+            if (Guid.TryParse(FindClaimValue(SimpleClaimTypes.Tenant), out Guid result))
+            {
+                return result;
+            }
+            else
+            {
+                return null;
+            }
+        }
+    }
 
     public virtual string? Email => FindClaimValue(SimpleClaimTypes.Email);
 

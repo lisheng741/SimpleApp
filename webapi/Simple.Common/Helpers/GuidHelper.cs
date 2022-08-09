@@ -1,6 +1,6 @@
 ﻿using System.Security.Cryptography;
 
-namespace Simple.Common.Guids;
+namespace Simple.Common.Helpers;
 
 public enum SequentialGuidType
 {
@@ -89,7 +89,8 @@ public static class GuidHelper
 
                 // 16位数组：前8位为随机数，后8位为时间戳
                 Buffer.BlockCopy(randomBytes, 0, guidBytes, 0, 8);
-                Buffer.BlockCopy(timestampBytes, 0, guidBytes, 8, 8);
+                Buffer.BlockCopy(timestampBytes, 6, guidBytes, 8, 2);
+                Buffer.BlockCopy(timestampBytes, 0, guidBytes, 10, 6);
                 break;
         }
 
@@ -115,7 +116,7 @@ public static class GuidHelper
         var randomBytes = new byte[8];
         _randomNumberGenerator.GetBytes(randomBytes);
 
-        long timestamp = DateTime.UtcNow.Ticks;
+        long timestamp = DateTimeOffset.UtcNow.Ticks;
 
         byte[] timestampBytes = BitConverter.GetBytes(timestamp);
         if (BitConverter.IsLittleEndian)
