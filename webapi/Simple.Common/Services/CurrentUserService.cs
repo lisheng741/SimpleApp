@@ -49,7 +49,7 @@ public class CurrentUserService : ICurrentUserService
 
     public virtual bool IsAuthenticated => User.Identity!.IsAuthenticated;
 
-    public virtual string? Username => FindClaimValue(SimpleClaimTypes.Username); // User.Identity!.Name;
+    public virtual string? Username => FindClaimValue(SimpleClaimTypes.UserName); // User.Identity!.Name;
 
     public virtual string[] Roles => FindClaims(SimpleClaimTypes.Role).Select(c => c.Value).ToArray();
 

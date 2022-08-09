@@ -9,7 +9,7 @@ public static class CookieHelper
     {
         var claims = new List<Claim>()
         {
-            new Claim(SimpleClaimTypes.Username, cookieModel.Username),
+            new Claim(SimpleClaimTypes.UserName, cookieModel.Username),
         };
 
         foreach (var role in cookieModel.Roles)
@@ -25,7 +25,7 @@ public static class CookieHelper
 
         var claimsIdentity = new ClaimsIdentity(claims,
             CookieAuthenticationDefaults.AuthenticationScheme,
-            SimpleClaimTypes.Username,
+            SimpleClaimTypes.UserName,
             SimpleClaimTypes.Role
         );
 

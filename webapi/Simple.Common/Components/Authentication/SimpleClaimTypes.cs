@@ -2,7 +2,7 @@
 
 public static class SimpleClaimTypes
 {
-    public const string Username = "username";
+    public const string UserName = "username";
 
     public const string Role = "role";
 

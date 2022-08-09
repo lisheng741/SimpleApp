@@ -20,7 +20,7 @@ public static class JwtHelper
 
         var claims = new List<Claim>()
         {
-            new Claim(SimpleClaimTypes.Username, tokenModel.Username),
+            new Claim(SimpleClaimTypes.UserName, tokenModel.Username),
             new Claim(SimpleClaimTypes.JwtId, tokenModel.Username),
             new Claim(SimpleClaimTypes.IssuedAt, DateTime.Now.ToUnixTimeSeconds().ToString(), ClaimValueTypes.Integer64),
             new Claim(SimpleClaimTypes.NotBefore, DateTime.Now.ToUnixTimeSeconds().ToString(), ClaimValueTypes.Integer64),

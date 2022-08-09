@@ -34,7 +34,7 @@ public static class JwtServiceCollectionExtensions
             ValidateLifetime = true, // 是否验证失效时间
             ClockSkew = TimeSpan.FromSeconds(30), // 过期时间容错值，解决服务器端时间不同步问题（秒）
             RequireExpirationTime = true,
-            NameClaimType = SimpleClaimTypes.Username,
+            NameClaimType = SimpleClaimTypes.UserName,
             RoleClaimType = SimpleClaimTypes.Role,
         };
 
