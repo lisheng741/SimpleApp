@@ -1,7 +1,7 @@
 ﻿namespace Simple.Repository.Models.System;
 
 /// <summary>
-/// 用户
+/// 用户表
 /// </summary>
 [Index(nameof(UserName), IsUnique = true)]
 public class SysUser : BusinessEntityBase<Guid>
@@ -28,4 +28,9 @@ public class SysUser : BusinessEntityBase<Guid>
     /// 性别：1-男，2-女
     /// </summary>
     public GenderType Gender { get; set; } = GenderType.Unknown;
+
+    /// <summary>
+    /// 用户角色
+    /// </summary>
+    public List<SysUserRole> UserRoles { get; set; } = new List<SysUserRole>();
 }

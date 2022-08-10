@@ -1,3 +1,4 @@
+#!/bin/bash
 
 # 变量设置
 settings=" -s ../Simple.Host "

@@ -78,17 +78,23 @@ public class SimpleDbContext : DbContext
             {
                 string propertyName = propertyInfo.Name;
 
-                // 属性注释
+                // 属性注释: 如果是导航属性，则不写入注释
                 string propertySummary = propertyInfo.GetSummary();
-                if (!string.IsNullOrEmpty(propertySummary))
+                if (!string.IsNullOrEmpty(propertySummary) &&
+                    !typeof(EntityBase).IsAssignableFrom(propertyInfo.PropertyType) &&
+                    !typeof(IEnumerable<EntityBase>).IsAssignableFrom(propertyInfo.PropertyType))
                 {
                     entityTypeBuilder.Property(propertyName).HasComment(propertySummary);
                 }
 
                 // Guid 处理为 char(36), 这样不论是 SqlServer 还是 MySql 都可以按字符串来处理 Guid，解决数据库排序方式不一致的问题
-                if (propertyInfo.PropertyType.FullName == "System.Guid")
+                if (propertyInfo.PropertyType == typeof(Guid))
                 {
                     entityTypeBuilder.Property(propertyName).HasColumnType("char(36)");
+                }
+                if (propertyInfo.PropertyType == typeof(Nullable<Guid>))
+                {
+                    entityTypeBuilder.Property(propertyName).HasColumnType("char(36)").IsRequired(false);
                 }
             }
 
@@ -104,7 +110,7 @@ public class SimpleDbContext : DbContext
                 .Invoke(this, new object[] { builder, entityType });
 
             // 创建实体实例，调用实例的 ConfigureEntity 对实体进行专有配置
-            var entityConfigure = Activator.CreateInstance(entityType.ClrType) as EntityBase;
+            var entityConfigure = ActivatorHelper.CreateInstance(entityType.ClrType) as EntityBase;
             if (entityConfigure != null)
             {
                 entityConfigure.ConfigureEntity(builder);
@@ -124,7 +130,7 @@ public class SimpleDbContext : DbContext
 
             return result;
         }
-        catch(DbUpdateConcurrencyException ex)
+        catch (DbUpdateConcurrencyException ex)
         {
             return 0;
         }
@@ -158,9 +164,9 @@ public class SimpleDbContext : DbContext
 
     protected virtual void HandleBeforeSave()
     {
-        foreach(var entry in ChangeTracker.Entries().ToList())
+        foreach (var entry in ChangeTracker.Entries().ToList())
         {
-            if(entry.State.IsIn(EntityState.Modified, EntityState.Deleted))
+            if (entry.State.IsIn(EntityState.Modified, EntityState.Deleted))
             {
                 // 并发控制字段赋新值（ConcurrencyCheck）
                 if (entry.Entity is IConcurrency concurrency)
@@ -203,9 +209,9 @@ public class SimpleDbContext : DbContext
     protected virtual void EntityStateAdded(EntityEntry entry)
     {
         // 主键检查及设置
-        if(entry.Entity is EntityBase<Guid> entityWithGuidId)
+        if (entry.Entity is EntityBase<Guid> entityWithGuidId)
         {
-            if(entityWithGuidId.Id == default)
+            if (entityWithGuidId.Id == default)
             {
                 Guid id = GuidHelper.Next();
                 entry.Property(nameof(EntityBase<Guid>.Id)).CurrentValue = id;
@@ -215,7 +221,7 @@ public class SimpleDbContext : DbContext
         // 并发控制字段检查（ConcurrencyCheck）
         if (entry.Entity is IConcurrency concurrency)
         {
-            if(concurrency.RowVersion == default)
+            if (concurrency.RowVersion == default)
             {
                 concurrency.RowVersion = DateTimeOffset.UtcNow.Ticks;
             }

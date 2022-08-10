@@ -1,9 +1,9 @@
 ﻿namespace Simple.Repository.Models.System;
 
 /// <summary>
-/// 角色表
+/// 岗位表
 /// </summary>
-public class SysRole : BusinessEntityBase<Guid>
+public class SysPosition : BusinessEntityBase<Guid>
 {
     /// <summary>
     /// 编码
@@ -28,12 +28,7 @@ public class SysRole : BusinessEntityBase<Guid>
     [MaxLength(2048)]
     public string? Remark { get; set; }
 
-    /// <summary>
-    /// 用户角色
-    /// </summary>
-    public List<SysUserRole> UserRoles { get; set; } = new List<SysUserRole>();
-
-    public SysRole(string code, string name)
+    public SysPosition(string code, string name)
     {
         Code = code;
         Name = name;

@@ -2,6 +2,9 @@
 
 namespace Simple.Repository.Models;
 
+/// <summary>
+/// 基础实体.
+/// </summary>
 public abstract class EntityBase
 {
     /// <summary>
@@ -13,6 +16,10 @@ public abstract class EntityBase
     }
 }
 
+/// <summary>
+/// 带主键的基础实体.
+/// </summary>
+/// <typeparam name="TKey"></typeparam>
 public abstract class EntityBase<TKey> : EntityBase
     where TKey : struct, IEquatable<TKey>
 {
@@ -23,7 +30,7 @@ public abstract class EntityBase<TKey> : EntityBase
 }
 
 /// <summary>
-/// 业务基础
+/// 业务基础.
 /// </summary>
 /// <typeparam name="TKey"></typeparam>
 public abstract class BusinessEntityBase<TKey> : EntityBase<TKey>, ISoftDelete, ICreatedInfo, IUpdatedInfo

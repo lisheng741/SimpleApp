@@ -21,7 +21,7 @@ public class TestChildService : TestService
     public async Task Test()
     {
         await _cache.SetAsync("test", 
-                new SysRole() { Id = Guid.NewGuid(), Name = "TestRole" },
+                new SysRole("code", "name") { Id = Guid.NewGuid(), Name = "TestRole" },
                 new DistributedCacheEntryOptions()
             );
 
