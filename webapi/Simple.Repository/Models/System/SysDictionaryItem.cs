@@ -1,5 +1,59 @@
 ﻿namespace Simple.Repository.Models.System;
 
-public class SysDictionaryItem : BusinessEntityBase<Guid>
+/// <summary>
+/// 字典子项表
+/// </summary>
+public class SysDictionaryItem : EntityBase<Guid>
 {
+    /// <summary>
+    /// 字典Id
+    /// </summary>
+    public Guid DictionaryId { get; set; }
+
+    /// <summary>
+    /// 字典
+    /// </summary>
+    public SysDictionary Dictionary { get; set; } = default!;
+
+    /// <summary>
+    /// 编码
+    /// </summary>
+    [MaxLength(128)]
+    public string Code { get; set; }
+
+    /// <summary>
+    /// 显示名称
+    /// </summary>
+    [MaxLength(128)]
+    public string Name { get; set; }
+
+    /// <summary>
+    /// 排序
+    /// </summary>
+    public int Sort { get; set; }
+
+    /// <summary>
+    /// 备注
+    /// </summary>
+    [MaxLength(2048)]
+    public string? Remark { get; set; }
+
+    /// <summary>
+    /// 启用状态
+    /// </summary>
+    public bool IsEnabled { get; set; } = true;
+
+    public SysDictionaryItem(string code, string name)
+    {
+        Code = code;
+        Name = name;
+    }
+
+    public override void ConfigureEntity(ModelBuilder builder)
+    {
+        builder.Entity<SysDictionaryItem>()
+            .HasOne(i => i.Dictionary)
+            .WithMany(d => d.DictionaryItems)
+            .IsRequired(false);
+    }
 }

@@ -13,7 +13,8 @@ public interface ICurrentUserService
 {
     ClaimsPrincipal User { get; }
     bool IsAuthenticated { get; }
-    string? Username { get; }
+    Guid? UserId { get; }
+    string? UserName { get; }
     string[] Roles { get; }
     string? Name { get; }
     string? Email { get; }
@@ -49,11 +50,26 @@ public class CurrentUserService : ICurrentUserService
 
     public virtual bool IsAuthenticated => User.Identity!.IsAuthenticated;
 
-    public virtual string? Username => FindClaimValue(SimpleClaimTypes.UserName); // User.Identity!.Name;
+    public virtual string? UserName => FindClaimValue(SimpleClaimTypes.UserName); // User.Identity!.Name;
 
     public virtual string[] Roles => FindClaims(SimpleClaimTypes.Role).Select(c => c.Value).ToArray();
 
     public virtual string? Name => FindClaimValue(SimpleClaimTypes.Name);
+
+    public virtual Guid? UserId
+    {
+        get
+        {
+            if (Guid.TryParse(FindClaimValue(SimpleClaimTypes.UserId), out Guid result))
+            {
+                return result;
+            }
+            else
+            {
+                return null;
+            }
+        }
+    }
 
     public virtual Guid? TenantId
     {

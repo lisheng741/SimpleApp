@@ -18,12 +18,12 @@ public class SysUserRole : EntityBase
     /// <summary>
     /// 用户
     /// </summary>
-    public SysUser User { get; set; } = default!;
+    public SysUser? User { get; set; }
 
     /// <summary>
     /// 角色
     /// </summary>
-    public SysRole Role { get; set; } = default!;
+    public SysRole? Role { get; set; }
 
     public override void ConfigureEntity(ModelBuilder builder)
     {
@@ -35,5 +35,15 @@ public class SysUserRole : EntityBase
         builder.Entity<SysUserRole>()
             .HasIndex(e => new { e.RoleId, e.UserId })
             .IsUnique(false);
+
+        // 关系配置
+        builder.Entity<SysUserRole>()
+            .HasOne(ur => ur.User)
+            .WithMany(u => u.UserRoles)
+            .IsRequired(false);
+        builder.Entity<SysUserRole>()
+            .HasOne(ur => ur.Role)
+            .WithMany(r => r.UserRoles)
+            .IsRequired(false);
     }
 }

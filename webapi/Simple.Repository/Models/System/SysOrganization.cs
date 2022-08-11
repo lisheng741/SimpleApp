@@ -31,4 +31,15 @@ public class SysOrganization : BusinessEntityBase<Guid>
     /// 排序
     /// </summary>
     public int Sort { get; set; }
+
+    /// <summary>
+    /// 启用状态
+    /// </summary>
+    public bool IsEnabled { get; set; } = true;
+
+    public SysOrganization(string code, string name)
+    {
+        Code = code;
+        Name = name;
+    }
 }

@@ -28,7 +28,7 @@ public class TestService : ITestService
 
     public string Get()
     {
-        return _currentUser.Username;
+        return _currentUser.UserName;
     }
 
     public string GetToken()

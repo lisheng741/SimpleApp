@@ -28,6 +28,11 @@ public class SysPosition : BusinessEntityBase<Guid>
     [MaxLength(2048)]
     public string? Remark { get; set; }
 
+    /// <summary>
+    /// 启用状态
+    /// </summary>
+    public bool IsEnabled { get; set; } = true;
+
     public SysPosition(string code, string name)
     {
         Code = code;

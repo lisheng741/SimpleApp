@@ -74,25 +74,23 @@ public class SimpleDbContext : DbContext
 
             // 遍历实体属性
             PropertyInfo[] propertyInfos = entityType.ClrType.GetProperties();
-            foreach (var propertyInfo in propertyInfos)
+            foreach (var mutableProperty in entityType.GetProperties())
             {
-                string propertyName = propertyInfo.Name;
+                string propertyName = mutableProperty.Name;
 
-                // 属性注释: 如果是导航属性，则不写入注释
-                string propertySummary = propertyInfo.GetSummary();
-                if (!string.IsNullOrEmpty(propertySummary) &&
-                    !typeof(EntityBase).IsAssignableFrom(propertyInfo.PropertyType) &&
-                    !typeof(IEnumerable<EntityBase>).IsAssignableFrom(propertyInfo.PropertyType))
+                // 字段注释
+                string? propertySummary = mutableProperty.PropertyInfo?.GetSummary();
+                if (!string.IsNullOrEmpty(propertySummary))
                 {
                     entityTypeBuilder.Property(propertyName).HasComment(propertySummary);
                 }
 
                 // Guid 处理为 char(36), 这样不论是 SqlServer 还是 MySql 都可以按字符串来处理 Guid，解决数据库排序方式不一致的问题
-                if (propertyInfo.PropertyType == typeof(Guid))
+                if (mutableProperty.ClrType == typeof(Guid))
                 {
                     entityTypeBuilder.Property(propertyName).HasColumnType("char(36)");
                 }
-                if (propertyInfo.PropertyType == typeof(Nullable<Guid>))
+                if (mutableProperty.ClrType == typeof(Nullable<Guid>))
                 {
                     entityTypeBuilder.Property(propertyName).HasColumnType("char(36)").IsRequired(false);
                 }
@@ -232,6 +230,10 @@ public class SimpleDbContext : DbContext
         {
             createdTime.CreatedTime = DateTime.Now;
         }
+        if(entry.Entity is ICreatedUser createdUser)
+        {
+            createdUser.CreatedUserId = _currentUser.UserId;
+        }
     }
 
     protected virtual void EntityStateModified(EntityEntry entry)
@@ -240,6 +242,10 @@ public class SimpleDbContext : DbContext
         if (entry.Entity is IUpdatedTime updatedTime)
         {
             updatedTime.UpdatedTime = DateTime.Now;
+        }
+        if(entry.Entity is IUpdatedUser updatedUser)
+        {
+            updatedUser.UpdatedUserId = _currentUser.UserId;
         }
     }
 

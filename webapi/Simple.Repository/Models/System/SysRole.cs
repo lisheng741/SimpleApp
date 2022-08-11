@@ -3,7 +3,7 @@
 /// <summary>
 /// 角色表
 /// </summary>
-public class SysRole : BusinessEntityBase<Guid>
+public class SysRole : BusinessEntityBase<Guid>, IConcurrency
 {
     /// <summary>
     /// 编码
@@ -29,9 +29,16 @@ public class SysRole : BusinessEntityBase<Guid>
     public string? Remark { get; set; }
 
     /// <summary>
+    /// 启用状态
+    /// </summary>
+    public bool IsEnabled { get; set; } = true;
+
+    /// <summary>
     /// 用户角色
     /// </summary>
     public List<SysUserRole> UserRoles { get; set; } = new List<SysUserRole>();
+
+    public long RowVersion { get; set; }
 
     public SysRole(string code, string name)
     {
