@@ -18,7 +18,7 @@ public class AccountService
         _context = context;
     }
 
-    public Task<ApiResult<string>> LoginAsync(LoginInput input)
+    public Task<ApiResult<string>> LoginAsync(LoginModel input)
     {
         //_context.Set<SysUserRole>().Include(t => t.Role);
 

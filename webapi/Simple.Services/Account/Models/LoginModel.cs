@@ -3,10 +3,10 @@
 /// <summary>
 /// 登录信息
 /// </summary>
-public class LoginInput
+public class LoginModel
 {
     /// <summary>
-    /// 用户名
+    /// 账号
     /// </summary>
     [Required(ErrorMessage = "账号不能为空！")]
     public string Account { get; set; }
@@ -17,7 +17,7 @@ public class LoginInput
     [Required(ErrorMessage = "密码不能为空！")]
     public string Password { get; set; }
 
-    public LoginInput(string account, string password)
+    public LoginModel(string account, string password)
     {
         Account = account;
         Password = password;
