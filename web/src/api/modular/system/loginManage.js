@@ -46,9 +46,9 @@ export function logout (parameter) {
  * @author yubaoshan
  * @date 2020/5/26 19:08
  */
-export function getLoginUser (parameter) {
+export function getUserInfo (parameter) {
   return axios({
-    url: '/getLoginUser',
+    url: '/account/getUserInfo',
     method: 'get',
     params: parameter
   })

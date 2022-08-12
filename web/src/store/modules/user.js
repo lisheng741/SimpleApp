@@ -1,5 +1,5 @@
 import Vue from 'vue'
-import { login, getLoginUser, logout } from '@/api/modular/system/loginManage'
+import { login, getUserInfo, logout } from '@/api/modular/system/loginManage'
 import { sysDictTypeTree } from '@/api/modular/system/dictManage'
 import { sysMenuChange } from '@/api/modular/system/menuManage'
 import { ACCESS_TOKEN, ALL_APPS_MENU, DICT_TYPE_TREE_DATA } from '@/store/mutation-types'
@@ -65,7 +65,7 @@ const user = {
     // 获取用户信息
     GetInfo ({ commit }) {
       return new Promise((resolve, reject) => {
-        getLoginUser().then(response => {
+        getUserInfo().then(response => {
           if (response.success) {
             const data = response.data
             commit('SET_ADMINTYPE', data.adminType)
