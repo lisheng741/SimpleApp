@@ -12,7 +12,7 @@ public class SimpleDbContext : DbContext
     private readonly ICurrentUserService _currentUser;
 
     public SimpleDbContext(DbContextOptions<SimpleDbContext> options,
-        ICurrentUserService currentUser)
+                           ICurrentUserService currentUser)
         : base(options)
     {
         _currentUser = currentUser;

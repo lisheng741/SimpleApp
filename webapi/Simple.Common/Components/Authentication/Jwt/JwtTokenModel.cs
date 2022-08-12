@@ -1,10 +1,13 @@
-﻿namespace Simple.Common.Authentication.Jwt;
+﻿using System.Security.Claims;
+
+namespace Simple.Common.Authentication.Jwt;
 
 public class JwtTokenModel
 {
     public string Username { get; private set; }
     public string[] Roles { get; private set; }
-    public int Expiration { get; private set; } = 1800;
+    public List<Claim> Claims { get; set; } = new List<Claim>();
+    public int Expiration { get; set; } = 1800;
 
     public JwtTokenModel(string username, params string[] roles)
     {
@@ -12,8 +15,14 @@ public class JwtTokenModel
         Roles = roles;
     }
 
-    public JwtTokenModel(string username, int expiration, string[] roles)
+    public JwtTokenModel(string username, List<Claim> claims, params string[] roles)
         : this(username, roles)
+    {
+        Claims = claims;
+    }
+
+    public JwtTokenModel(string username, List<Claim> claims, int expiration, params string[] roles)
+        : this(username, claims, roles)
     {
         Expiration = expiration;
     }

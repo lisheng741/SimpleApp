@@ -18,13 +18,13 @@ public class AccountService
         _context = context;
     }
 
-    public Task<ApiResult<string>> LoginAsync(LoginModel input)
+    public Task<ApiResult> LoginAsync(LoginModel login)
     {
         //_context.Set<SysUserRole>().Include(t => t.Role);
 
-        var jwtTokenModel = new JwtTokenModel(input.Account, "admin");
-        var token = JwtHelper.Create(jwtTokenModel);
+        var jwtTokenModel = new JwtTokenModel(login.Account, "admin");
+        string token = JwtHelper.Create(jwtTokenModel);
 
-        return Task.FromResult(ApiResult<string>.Status200OK(data: token));
+        return Task.FromResult(ApiResult.Status200OK("成功", token));
     }
 }

@@ -15,6 +15,6 @@ public class AccountController : ControllerBase
     }
 
     [HttpPost]
-    public Task<ApiResult<string>> Login([Required] LoginModel input)
+    public Task<ApiResult> Login([Required] LoginModel input)
         => _accountService.LoginAsync(input);
 }

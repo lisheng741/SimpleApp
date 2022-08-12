@@ -42,6 +42,11 @@ public static class JwtHelper
             claims.Add(new Claim(SimpleClaimTypes.Role, role));
         }
 
+        if(tokenModel.Claims.Count > 0)
+        {
+            claims.AddRange(tokenModel.Claims);
+        }
+
         // 密钥
         var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secret));
         var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
