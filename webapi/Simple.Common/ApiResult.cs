@@ -15,7 +15,8 @@ public partial class ApiResult
 
     public ApiResult(int code, string? message) : this(code, message, null) { }
 
-    public ApiResult(int code, string? message, object? data)    {
+    public ApiResult(int code, string? message, object? data)
+    {
         Code = code;
         Message = message;
         Data = data;

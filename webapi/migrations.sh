@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # 变量设置
-settings=" -s ../Simple.Host "
+settings=" -s ../Simple.WebApi "
 
 # 确保脚本抛出遇到的异常
 set -e
@@ -45,6 +45,6 @@ echo "迁移完成，按下回车关闭窗口……"
 read ending
 
 # # 删除迁移
-# dotnet ef migrations remove -s ../Simple.Host
+# dotnet ef migrations remove -s ../Simple.WebApi
 # # 更新数据库
 # dotnet ef database update

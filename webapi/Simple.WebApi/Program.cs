@@ -1,6 +1,9 @@
-﻿global using Simple.Common;
+﻿global using Microsoft.AspNetCore.Http;
+global using Microsoft.AspNetCore.Mvc;
+global using Simple.Common;
 global using Simple.Common.Configuration;
 global using Simple.Common.Helpers;
+global using Simple.Services;
 using Microsoft.OpenApi.Models;
 using NLog;
 using NLog.Web;
