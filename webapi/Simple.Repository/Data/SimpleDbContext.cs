@@ -130,7 +130,7 @@ public class SimpleDbContext : DbContext
         }
         catch (DbUpdateConcurrencyException ex)
         {
-            return 0;
+            throw CreateResultException(ex);
         }
         finally
         {
@@ -150,7 +150,7 @@ public class SimpleDbContext : DbContext
         }
         catch (DbUpdateConcurrencyException ex)
         {
-            return 0;
+            throw CreateResultException(ex);
         }
         finally
         {
@@ -174,6 +174,12 @@ public class SimpleDbContext : DbContext
                 }
             }
         }
+    }
+
+    protected virtual AppResultException CreateResultException(DbUpdateConcurrencyException exception)
+    {
+        var appResult = new AppResult(StatusCodes.Status409Conflict, "数据已被其他人操作，你的操作没有生效！");
+        return new AppResultException(appResult, exception);
     }
 
     #region ChangeTracker 跟踪实体状态变化，集中统一的业务逻辑

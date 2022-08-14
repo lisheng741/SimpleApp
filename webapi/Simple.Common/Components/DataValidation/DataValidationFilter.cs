@@ -28,7 +28,7 @@ public class DataValidationFilter : IActionFilter, IOrderedFilter
                                .ToArray();
 
         // 统一返回
-        var result = ApiResult.Status400BadRequest("数据验证不通过！", errors);
+        var result = AppResult.Status400BadRequest("数据验证不通过！", errors);
 
         // 设置结果
         context.Result = new BadRequestObjectResult(result); // ObjectResult(result);

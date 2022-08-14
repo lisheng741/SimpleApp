@@ -1,5 +1,4 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using Simple.Services.Account;
 
 namespace Simple.WebApi.Controllers;
 
@@ -20,8 +19,12 @@ public class AccountController : ControllerBase
     /// <param name="login"></param>
     /// <returns></returns>
     [HttpPost]
-    public Task<ApiResult> Login([Required] LoginModel login)
-        => _accountService.LoginAsync(login);
+    public async Task<AppResult> Login([FromBody] LoginModel login)
+    {
+        string token = await _accountService.CreateTokenAsync(login);
+
+        return AppResult.Status200OK("成功", token);
+    }
 
     [HttpGet]
     public string GetUserInfo()

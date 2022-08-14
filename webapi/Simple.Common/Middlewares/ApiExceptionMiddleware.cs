@@ -62,7 +62,7 @@ public class ApiExceptionMiddleware
         context.Response.Headers.ETag = default;
 
         // 响应
-        var result = ApiResult.Status500InternalServerError("系统异常，请联系管理员");
+        var result = AppResult.Status500InternalServerError("系统异常，请联系管理员");
         await context.Response.WriteAsync(result);
     }
 }

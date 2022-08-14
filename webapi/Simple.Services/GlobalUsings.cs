@@ -6,4 +6,3 @@ global using Simple.Repository;
 global using Simple.Repository.Models;
 global using Simple.Repository.Models.System;
 global using Simple.Services;
-global using Simple.Services.System;

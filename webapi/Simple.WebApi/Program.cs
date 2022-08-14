@@ -23,7 +23,9 @@ try
     builder.Host.UseNLog();
 
     // API
-    builder.Services.AddControllers();
+    builder.Services.AddControllers()
+        .AddDataValidation()
+        .AddAppResult();
     builder.Services.AddEndpointsApiExplorer();
 
     // Swagger
@@ -46,9 +48,6 @@ try
     builder.Services.AddJwtAuthentication();
     // 授权
     builder.Services.AddSimpleAuthorization();
-
-    // 模型验证
-    builder.Services.AddDataValidation();
 
     // 对象映射 AutoMapper
     var profileAssemblies = AssemblyHelper.GetAssemblies("Simple.Services");

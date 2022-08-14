@@ -23,11 +23,6 @@ public class SysOrganization : BusinessEntityBase<Guid>
     public string Name { get; set; }
 
     /// <summary>
-    /// 层级
-    /// </summary>
-    public int Level { get; set; }
-
-    /// <summary>
     /// 排序
     /// </summary>
     public int Sort { get; set; }

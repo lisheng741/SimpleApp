@@ -1,4 +1,4 @@
-﻿namespace Simple.Services.Account;
+﻿namespace Simple.Services;
 
 /// <summary>
 /// 登录信息

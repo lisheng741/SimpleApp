@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Simple.Services.System;
+﻿namespace Simple.Services;
 
 /// <summary>
 /// 组织
@@ -19,22 +13,19 @@ public class OrganizationModel
     /// <summary>
     /// 父级Id
     /// </summary>
-    public Guid ParentId { get; set; }
+    public Guid Pid { get; set; }
 
     /// <summary>
     /// 编码
     /// </summary>
+    [Required(ErrorMessage = "编码是必输的")]
     public string Code { get; set; }
 
     /// <summary>
     /// 名称
     /// </summary>
+    [Required(ErrorMessage = "机构名称是必输的")]
     public string Name { get; set; }
-
-    /// <summary>
-    /// 层级
-    /// </summary>
-    public int Level { get; set; }
 
     /// <summary>
     /// 排序
