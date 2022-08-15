@@ -25,7 +25,22 @@ try
     // API
     builder.Services.AddControllers()
         .AddDataValidation()
-        .AddAppResult();
+        .AddAppResult(options =>
+        {
+            options.ResultFactory = resultException =>
+            {
+                // Api 结果
+                IActionResult result = new ContentResult()
+                {
+                    // AppResultException 都返回 200 状态码
+                    StatusCode = StatusCodes.Status200OK,
+                    ContentType = "application/json; charset=utf-8",
+                    Content = JsonHelper.Serialize(resultException.AppResult)
+                };
+
+                return result;
+            };
+        });
     builder.Services.AddEndpointsApiExplorer();
 
     // Swagger
@@ -92,7 +107,7 @@ try
 
     app.Run();
 }
-catch(Exception ex)
+catch (Exception ex)
 {
     logger.Error(ex, "由于发生异常，导致程序中止！");
     throw;

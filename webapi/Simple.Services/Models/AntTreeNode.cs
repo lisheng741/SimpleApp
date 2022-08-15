@@ -3,16 +3,13 @@
 public class AntTreeNode
 {
     public virtual Guid Id { get; set; }
-    public virtual string Value { get; set; }
     public virtual Guid? ParentId { get; set; }
-    public virtual Guid? Pid { get; set; }
     public virtual string Title { get; set; }
     public virtual List<AntTreeNode> Children { get; set; } = new List<AntTreeNode>();
 
     public AntTreeNode(Guid id, string title, Guid? parentId = null)
     {
         Id = id;
-        Value = Id.ToString();
         Title = title;
         ParentId = parentId;
     }

@@ -32,6 +32,12 @@ public class SysOrganization : BusinessEntityBase<Guid>
     /// </summary>
     public bool IsEnabled { get; set; } = true;
 
+    /// <summary>
+    /// 备注
+    /// </summary>
+    [MaxLength(2048)] 
+    public string? Remark { get; set; }
+
     public SysOrganization(string code, string name)
     {
         Code = code;

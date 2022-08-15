@@ -23,13 +23,16 @@ public class OrganizationService
         var query = _context.Set<SysOrganization>().AsQueryable();
 
         // 根据条件查询
-        if(input.ParentId.HasValue)
+        if (input.Pid.HasValue)
         {
-            query = query.Where(o => o.ParentId == input.ParentId);
+            query = query.Where(o => o.Id == input.Pid || o.ParentId == input.Pid);
         }
         if (!string.IsNullOrEmpty(input.Name))
         {
-            query = query.Where(o => o.Name.Contains(input.Name));
+            // AND ((@__input_Name_0 LIKE N'') OR (CHARINDEX(@__input_Name_0, [s].[Name]) > 0))
+            //query = query.Where(o => o.Name.Contains(input.Name));
+
+            // AND ([s].[Name] LIKE @__Format_1)
             query = query.Where(o => EF.Functions.Like(o.Name, $"%{input.Name}%"));
         }
 
@@ -37,7 +40,7 @@ public class OrganizationService
         result.TotalRows = await query.CountAsync();
 
         // 分页查询
-        query = query.Page(input.PageNo, input.PageSize);
+        query = query.OrderBy(o => o.Sort).Page(input.PageNo, input.PageSize);
         var organizations = await query.ToListAsync();
         result.Rows = _services.Mapper.Map<List<OrganizationModel>>(organizations);
 
@@ -56,19 +59,23 @@ public class OrganizationService
         return builder.Build();
     }
 
-    public async Task<AppResult> AddAsync(OrganizationModel model)
+    public async Task<int> AddAsync(OrganizationModel model)
     {
+        if (await _context.Set<SysOrganization>().AnyAsync(o => o.Code == model.Code))
+        {
+            throw AppResultException.Status409Conflict("存在相同编码的组织");
+        }
+
         var organization = _services.Mapper.Map<SysOrganization>(model);
         await _context.AddAsync(organization);
-        await _context.SaveChangesAsync();
-        return AppResult.Status200OK("新增成功");
+        return await _context.SaveChangesAsync();
     }
 
-    public async Task<AppResult> UpdateAsync(OrganizationModel model)
+    public async Task<int> UpdateAsync(OrganizationModel model)
     {
-        if(await _context.Set<SysOrganization>().AnyAsync(o => o.Id != model.Id && o.Code == model.Code))
+        if (await _context.Set<SysOrganization>().AnyAsync(o => o.Id != model.Id && o.Code == model.Code))
         {
-            return AppResult.Status409Conflict("存在相同编码的组织");
+            throw AppResultException.Status409Conflict("存在相同编码的组织");
         }
 
         var organization = await _context.Set<SysOrganization>()
@@ -77,35 +84,28 @@ public class OrganizationService
 
         if (organization == null)
         {
-            return AppResult.Status404NotFound("找不到组织，更新失败");
+            throw AppResultException.Status404NotFound("找不到组织，更新失败");
         }
 
-        organization.Name = model.Name;
-        organization.Code = model.Code;
-        organization.ParentId = model.Pid;
-        organization.Sort = model.Sort;
-        //organization.Remark = model.Remark;
-
+        _services.Mapper.Map<OrganizationModel, SysOrganization>(model, organization);
         _context.Update(organization);
-        int count = await _context.SaveChangesAsync();
+        int ret = await _context.SaveChangesAsync();
 
-        if(count == 0)
+        if (ret == 0)
         {
-            return AppResult.Status200OK("更新记录数为0");
+            throw AppResultException.Status200OK("更新记录数为0");
         }
 
-        return AppResult.Status200OK("更新成功");
+        return ret;
     }
 
-    public async Task<AppResult> DeleteAsync(List<OrganizationModel> models) // List<Guid> ids
+    public async Task<int> DeleteAsync(IEnumerable<Guid> ids) // List<Guid> ids
     {
         var organizations = await _context.Set<SysOrganization>()
-            .Where(o => models.Select(m => m.Id).Contains(o.Id))
+            .Where(o => ids.Contains(o.Id))
             .ToListAsync();
 
         _context.RemoveRange(organizations);
-        await _context.SaveChangesAsync();
-
-        return AppResult.Status200OK("删除成功");
+        return await _context.SaveChangesAsync();
     }
 }

@@ -1,19 +1,14 @@
 ﻿namespace Simple.Services;
 
 /// <summary>
-/// 组织
+/// 岗位
 /// </summary>
-public class OrganizationModel
+public class PositionModel
 {
     /// <summary>
     /// 主键
     /// </summary>
     public Guid? Id { get; set; }
-
-    /// <summary>
-    /// 父级Id
-    /// </summary>
-    public Guid Pid { get; set; }
 
     /// <summary>
     /// 编码
@@ -25,7 +20,7 @@ public class OrganizationModel
     /// <summary>
     /// 名称
     /// </summary>
-    [Required(ErrorMessage = "机构名称是必输的"),
+    [Required(ErrorMessage = "岗位名称是必输的"), 
         MaxLength(128, ErrorMessage = "名称长度不能超过128个字符")]
     public string Name { get; set; }
 
@@ -35,17 +30,17 @@ public class OrganizationModel
     public int Sort { get; set; }
 
     /// <summary>
+    /// 备注
+    /// </summary>
+    [MaxLength(2048, ErrorMessage = "备注长度不能超过2048个字符")]
+    public string? Remark { get; set; }
+
+    /// <summary>
     /// 启用状态
     /// </summary>
     public bool IsEnabled { get; set; } = true;
 
-    /// <summary>
-    /// 备注
-    /// </summary>
-    [MaxLength(2048, ErrorMessage = "备注长度不能超过2048个字符")] 
-    public string? Remark { get; set; }
-
-    public OrganizationModel(string code, string name)
+    public PositionModel(string code, string name)
     {
         Code = code;
         Name = name;

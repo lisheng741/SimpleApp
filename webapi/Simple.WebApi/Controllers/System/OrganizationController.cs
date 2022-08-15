@@ -37,13 +37,22 @@ public class OrganizationController : ControllerBase
 
     [HttpPost]
     public async Task<AppResult> Add([FromBody] OrganizationModel model)
-        => await _organizationService.AddAsync(model);
+    {
+        await _organizationService.AddAsync(model);
+        return AppResult.Status200OK("新增成功");
+    }
 
     [HttpPost]
     public async Task<AppResult> Edit([FromBody] OrganizationModel model)
-        => await _organizationService.UpdateAsync(model);
+    {
+        await _organizationService.UpdateAsync(model);
+        return AppResult.Status200OK("更新成功");
+    }
 
     [HttpPost]
-    public async Task<AppResult> Delete([FromBody] List<OrganizationModel> models)
-        => await _organizationService.DeleteAsync(models);
+    public async Task<AppResult> Delete([FromBody] List<DeleteInputModel> models)
+    {
+        await _organizationService.DeleteAsync(models.Select(m => m.Id));
+        return AppResult.Status200OK("删除成功");
+    }
 }

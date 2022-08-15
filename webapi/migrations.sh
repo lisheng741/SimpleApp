@@ -47,4 +47,4 @@ read ending
 # # 删除迁移
 # dotnet ef migrations remove -s ../Simple.WebApi
 # # 更新数据库
-# dotnet ef database update
+# dotnet ef database update -s ../Simple.WebApi
