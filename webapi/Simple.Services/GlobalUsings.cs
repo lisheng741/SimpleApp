@@ -1,4 +1,5 @@
-﻿global using Microsoft.EntityFrameworkCore;
+﻿global using AutoMapper;
+global using Microsoft.EntityFrameworkCore;
 global using System.ComponentModel.DataAnnotations;
 global using Simple.Common;
 global using Simple.Common.Services;

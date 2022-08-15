@@ -1,16 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using AutoMapper;
+﻿namespace Simple.Services;
 
-namespace Simple.Services;
-
-public abstract class ModelBase
+public abstract class ModelBase : IConfigureMapper
 {
-    public virtual void ConfigureMapper()
+    public virtual void ConfigureMapper(Profile profile)
     {
-        
     }
 }

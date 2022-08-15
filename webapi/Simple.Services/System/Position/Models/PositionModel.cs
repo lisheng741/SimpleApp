@@ -3,7 +3,7 @@
 /// <summary>
 /// 岗位
 /// </summary>
-public class PositionModel
+public class PositionModel : ModelBase
 {
     /// <summary>
     /// 主键
@@ -44,5 +44,13 @@ public class PositionModel
     {
         Code = code;
         Name = name;
+    }
+
+    public override void ConfigureMapper(Profile profile)
+    {
+        profile.CreateMap<SysPosition, PositionModel>();
+
+        profile.CreateMap<PositionModel, SysPosition>()
+            .ForMember(d => d.Id, options => options.Ignore());
     }
 }

@@ -3,7 +3,7 @@
 /// <summary>
 /// 组织
 /// </summary>
-public class OrganizationModel
+public class OrganizationModel : ModelBase
 {
     /// <summary>
     /// 主键
@@ -49,5 +49,15 @@ public class OrganizationModel
     {
         Code = code;
         Name = name;
+    }
+
+    public override void ConfigureMapper(Profile profile)
+    {
+        profile.CreateMap<SysOrganization, OrganizationModel>()
+            .ForMember(d => d.Pid, options => options.MapFrom(s => s.ParentId));
+
+        profile.CreateMap<OrganizationModel, SysOrganization>()
+            .ForMember(d => d.Id, options => options.Ignore())
+            .ForMember(d => d.ParentId, options => options.MapFrom(s => s.Pid));
     }
 }
