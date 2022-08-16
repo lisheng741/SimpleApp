@@ -19,13 +19,13 @@ public class SysDictionaryItem : EntityBase<Guid>
     /// 编码
     /// </summary>
     [MaxLength(128)]
-    public string Code { get; set; }
+    public string Code { get; set; } = "";
 
     /// <summary>
     /// 显示名称
     /// </summary>
     [MaxLength(128)]
-    public string Name { get; set; }
+    public string Name { get; set; } = "";
 
     /// <summary>
     /// 排序
@@ -42,12 +42,6 @@ public class SysDictionaryItem : EntityBase<Guid>
     /// 启用状态
     /// </summary>
     public bool IsEnabled { get; set; } = true;
-
-    public SysDictionaryItem(string code, string name)
-    {
-        Code = code;
-        Name = name;
-    }
 
     public override void ConfigureEntity(ModelBuilder builder)
     {

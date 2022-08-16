@@ -1,11 +1,12 @@
-﻿namespace Simple.Repository.Models.System;
+﻿namespace Simple.Services;
 
-/// <summary>
-/// 用户表
-/// </summary>
-[Index(nameof(UserName), IsUnique = true)]
-public class SysUser : BusinessEntityBase<Guid>, IConcurrency
+public class UserModel : ModelBase
 {
+    /// <summary>
+    /// 主键
+    /// </summary>
+    public Guid? Id { get; set; }
+
     /// <summary>
     /// 用户名
     /// </summary>
@@ -42,11 +43,6 @@ public class SysUser : BusinessEntityBase<Guid>, IConcurrency
     public GenderType Gender { get; set; } = GenderType.Unknown;
 
     /// <summary>
-    /// 启用状态
-    /// </summary>
-    public bool IsEnabled { get; set; } = true;
-
-    /// <summary>
     /// 主岗位Id
     /// </summary>
     public Guid? PositionId { get; set; }
@@ -61,21 +57,17 @@ public class SysUser : BusinessEntityBase<Guid>, IConcurrency
     /// </summary>
     public Guid? OrganizationId { get; set; }
 
-    /// <summary>
-    /// 主部门
-    /// </summary>
-    public SysOrganization? Organization { get; set; }
-
-    /// <summary>
-    /// 用户角色
-    /// </summary>
-    public List<SysUserRole> UserRoles { get; set; } = new List<SysUserRole>();
-
-    public long RowVersion { get; set; }
-
-    public SysUser(string userName, string password)
+    public UserModel(string userName, string password)
     {
         UserName = userName;
         Password = password;
+    }
+
+    public override void ConfigureMapper(Profile profile)
+    {
+        profile.CreateMap<SysUser, UserModel>();
+
+        profile.CreateMap<UserModel, SysUser>()
+            .ForMember(d => d.Id, options => options.Ignore());
     }
 }
