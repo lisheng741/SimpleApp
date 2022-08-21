@@ -319,7 +319,7 @@
         linkRequired: true,
         linkDisabled: false,
         type: '',
-        pid: '',
+        pid: '00000000-0000-0000-0000-000000000000',
         appDisabled: false,
         form: this.$form.createForm(this)
       }
@@ -327,7 +327,7 @@
 
     watch: {
       pid (val) {
-        if (val === '0') {
+        if (val === '00000000-0000-0000-0000-000000000000') {
            // 再不能切换应用
           this.appDisabled = false
         } else {
@@ -427,11 +427,11 @@
           if (res.success) {
             this.form.resetFields(`pid`, [])
             this.menuTreeData = [{
-              'id': '-1',
-              'parentId': '0',
+              'id': '00000000-0000-0000-0000-000000000000',
+              'parentId': '00000000-0000-0000-0000-000000000000',
               'title': '顶级',
-              'value': '0',
-              'pid': '0',
+              'value': '00000000-0000-0000-0000-000000000000',
+              'pid': '00000000-0000-0000-0000-000000000000',
               'children': res.data
             }]
           } else {

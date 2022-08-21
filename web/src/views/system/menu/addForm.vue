@@ -371,11 +371,11 @@
           if (res.success) {
             this.form.resetFields(`pid`, [])
             this.menuTreeData = [{
-              'id': '-1',
-              'parentId': '0',
+              'id': '00000000-0000-0000-0000-000000000000',
+              'parentId': '00000000-0000-0000-0000-000000000000',
               'title': '顶级',
-              'value': '0',
-              'pid': '0',
+              'value': '00000000-0000-0000-0000-000000000000',
+              'pid': '00000000-0000-0000-0000-000000000000',
               'children': res.data
             }]
           } else {
@@ -420,7 +420,7 @@
           this.form.getFieldDecorator('component', { initialValue: 'PageView' })
           this.componentRequired = true
           // 父级初始化顶级，并将其隐藏
-          this.form.getFieldDecorator('pid', { initialValue: '0' })
+          this.form.getFieldDecorator('pid', { initialValue: '00000000-0000-0000-0000-000000000000' })
           this.pidShow = false
         } else {
           // eslint-disable-next-line eqeqeq
