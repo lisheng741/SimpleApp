@@ -17,7 +17,7 @@ public class PositionService
         return _services.Mapper.Map<List<PositionModel>>(positions);
     }
 
-    public async Task<PageResultModel<PositionModel>> GetPageAsync(PositionPageInputModel input)
+    public async Task<PageResultModel<PositionModel>> GetPageAsync(PageInputModel input)
     {
         var result = new PageResultModel<PositionModel>();
         var query = _context.Set<SysPosition>().AsQueryable();

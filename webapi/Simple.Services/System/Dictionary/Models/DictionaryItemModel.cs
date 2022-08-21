@@ -1,5 +1,8 @@
 ﻿namespace Simple.Services;
 
+/// <summary>
+/// 字典子项
+/// </summary>
 public class DictionaryItemModel : ModelBase
 {
     /// <summary>

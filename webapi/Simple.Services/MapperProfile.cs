@@ -10,6 +10,9 @@ public class MapperProfile : Profile
         // Organization
         CreateMap<SysOrganization, TreeNode>();
 
+        // Menu
+        CreateMap<SysMenu, TreeNode>();
+
         // 专有配置
         this.ConfigureMapper();
     }

@@ -2,16 +2,14 @@
 
 public class AntTreeNode
 {
-    public virtual Guid Id { get; set; }
-    public virtual Guid? ParentId { get; set; }
+    public virtual Guid Value { get; set; }
     public virtual string Title { get; set; }
     public virtual List<AntTreeNode> Children { get; set; } = new List<AntTreeNode>();
 
-    public AntTreeNode(Guid id, string title, Guid? parentId = null)
+    public AntTreeNode(Guid value, string title)
     {
-        Id = id;
+        Value = value;
         Title = title;
-        ParentId = parentId;
     }
 
     public static AntTreeBuilder CreateBuilder(List<TreeNode> nodes)
@@ -22,30 +20,30 @@ public class AntTreeNode
 
 public class AntTreeBuilder
 {
+    public Guid RootId { get; set; }
     public List<TreeNode> Nodes { get; }
-    public Guid ParentId { get; set; }
 
     public AntTreeBuilder(List<TreeNode> nodes)
         : this(nodes, Guid.Empty)
     {
     }
 
-    public AntTreeBuilder(List<TreeNode> nodes, Guid parentId)
+    public AntTreeBuilder(List<TreeNode> nodes, Guid rootId)
     {
         Nodes = nodes;
-        ParentId = parentId;
+        RootId = rootId;
     }
 
     public List<AntTreeNode> Build()
     {
-        List<AntTreeNode> parents = Convert(Nodes.Where(n => n.ParentId == ParentId));
-        parents.ForEach(p => BuildChildren(p));
-        return parents;
+        List<AntTreeNode> nodes = Convert(Nodes.Where(n => n.ParentId == RootId));
+        nodes.ForEach(n => BuildChildren(n));
+        return nodes;
     }
 
     private void BuildChildren(AntTreeNode parent)
     {
-        parent.Children = Convert(Nodes.Where(n => n.ParentId == parent.Id));
+        parent.Children = Convert(Nodes.Where(n => n.ParentId == parent.Value));
         parent.Children.ForEach(child => BuildChildren(child));
     }
 
@@ -61,6 +59,6 @@ public class AntTreeBuilder
 
     private AntTreeNode Convert(TreeNode node)
     {
-        return new AntTreeNode(node.Id, node.Name, node.ParentId);
+        return new AntTreeNode(node.Id, node.Name);
     }
 }

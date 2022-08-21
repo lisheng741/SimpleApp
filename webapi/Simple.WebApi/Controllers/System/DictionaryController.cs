@@ -17,12 +17,12 @@ public class DictionaryController : ControllerBase
     [HttpGet]
     public async Task<AppResult> List()
     {
-        List<DictionaryModel> dictionaries = await _dictionaryService.GetAsync();
-        return AppResult.Status200OK(data: dictionaries);
+        List<DictionaryModel> data = await _dictionaryService.GetAsync();
+        return AppResult.Status200OK(data: data);
     }
 
     [HttpGet]
-    public async Task<AppResult> Page([FromQuery] DictionaryPageInputModel model)
+    public async Task<AppResult> Page([FromQuery] PageInputModel model)
     {
         PageResultModel<DictionaryModel> data = await _dictionaryService.GetPageAsync(model);
         return AppResult.Status200OK(data: data);
@@ -43,7 +43,7 @@ public class DictionaryController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<AppResult> Delete([FromBody] List<DeleteInputModel> models)
+    public async Task<AppResult> Delete([FromBody] List<IdInputModel> models)
     {
         await _dictionaryService.DeleteAsync(models.Select(m => m.Id));
         return AppResult.Status200OK("删除成功");

@@ -46,3 +46,39 @@ public class DateTimeJsonConverter : JsonConverter<DateTime>
         writer.WriteStringValue(value.ToString(Format));
     }
 }
+
+/// <summary>
+/// 字典转换（Enum）
+/// </summary>
+public class DictionaryJsonConverter : JsonConverter<Enum>
+{
+    public override bool CanConvert(Type typeToConvert)
+    {
+        return typeToConvert.IsEnum;
+    }
+
+    public override Enum? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+    {
+        var value = reader.GetString();
+        if(value == null)
+        {
+            throw new ArgumentNullException(nameof(value));
+        }
+
+        if(Enum.TryParse(typeToConvert, value.ToString(), out var result))
+        {
+            return result as Enum;
+        }
+        throw new InvalidOperationException("值不在枚举范围中");
+    }
+
+    public override void Write(Utf8JsonWriter writer, Enum value, JsonSerializerOptions options)
+    {
+        // 字符串
+        //writer.WriteStringValue(value.ToString());
+        //writer.WriteStringValue(Enum.GetName(value.GetType(), value));
+
+        // 数字
+        writer.WriteNumberValue(Convert.ToInt32(value));
+    }
+}

@@ -2,6 +2,6 @@
 
 public class OrganizationPageInputModel : PageInputModel
 {
-    public string? Name { get; set; }
+    public override string? Name { get; set; }
     public Guid? Pid { get; set; }
 }

@@ -17,8 +17,8 @@ public class DictionaryItemController : ControllerBase
     [HttpGet]
     public async Task<AppResult> List()
     {
-        List<DictionaryItemModel> dictionaryItems = await _dictionaryItemService.GetAsync();
-        return AppResult.Status200OK(data: dictionaryItems);
+        List<DictionaryItemModel> data = await _dictionaryItemService.GetAsync();
+        return AppResult.Status200OK(data: data);
     }
 
     [HttpGet]
@@ -43,7 +43,7 @@ public class DictionaryItemController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<AppResult> Delete([FromBody] DeleteInputModel model)
+    public async Task<AppResult> Delete([FromBody] IdInputModel model)
     {
         await _dictionaryItemService.DeleteAsync(model.Id);
         return AppResult.Status200OK("删除成功");

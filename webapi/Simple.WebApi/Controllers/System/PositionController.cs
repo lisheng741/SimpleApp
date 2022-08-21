@@ -17,12 +17,12 @@ public class PositionController : ControllerBase
     [HttpGet]
     public async Task<AppResult> List()
     {
-        List<PositionModel> organizations = await _positionService.GetAsync();
-        return AppResult.Status200OK(data: organizations);
+        List<PositionModel> data = await _positionService.GetAsync();
+        return AppResult.Status200OK(data: data);
     }
 
     [HttpGet]
-    public async Task<AppResult> Page([FromQuery] PositionPageInputModel model)
+    public async Task<AppResult> Page([FromQuery] PageInputModel model)
     {
         PageResultModel<PositionModel> data = await _positionService.GetPageAsync(model);
         return AppResult.Status200OK(data: data);
@@ -43,7 +43,7 @@ public class PositionController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<AppResult> Delete([FromBody] List<DeleteInputModel> models)
+    public async Task<AppResult> Delete([FromBody] List<IdInputModel> models)
     {
         await _positionService.DeleteAsync(models.Select(m => m.Id));
         return AppResult.Status200OK("删除成功");

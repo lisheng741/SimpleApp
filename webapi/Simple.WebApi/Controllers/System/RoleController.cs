@@ -17,12 +17,12 @@ public class RoleController : ControllerBase
     [HttpGet]
     public async Task<AppResult> List()
     {
-        List<RoleModel> organizations = await _roleService.GetAsync();
-        return AppResult.Status200OK(data: organizations);
+        List<RoleModel> data = await _roleService.GetAsync();
+        return AppResult.Status200OK(data: data);
     }
 
     [HttpGet]
-    public async Task<AppResult> Page([FromQuery] RolePageInputModel model)
+    public async Task<AppResult> Page([FromQuery] PageInputModel model)
     {
         PageResultModel<RoleModel> data = await _roleService.GetPageAsync(model);
         return AppResult.Status200OK(data: data);
@@ -43,7 +43,7 @@ public class RoleController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<AppResult> Delete([FromBody] List<DeleteInputModel> models)
+    public async Task<AppResult> Delete([FromBody] List<IdInputModel> models)
     {
         await _roleService.DeleteAsync(models.Select(m => m.Id));
         return AppResult.Status200OK("删除成功");

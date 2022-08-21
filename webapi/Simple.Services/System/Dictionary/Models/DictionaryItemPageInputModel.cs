@@ -10,7 +10,7 @@ public class DictionaryItemPageInputModel : PageInputModel
     /// <summary>
     /// 编码
     /// </summary>
-    public string? Code { get; set; }
+    public override string? Code { get; set; }
 
     /// <summary>
     /// 字典值

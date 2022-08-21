@@ -17,7 +17,7 @@ public class DictionaryService
         return _services.Mapper.Map<List<DictionaryModel>>(dictionaries);
     }
 
-    public async Task<PageResultModel<DictionaryModel>> GetPageAsync(DictionaryPageInputModel input)
+    public async Task<PageResultModel<DictionaryModel>> GetPageAsync(PageInputModel input)
     {
         var result = new PageResultModel<DictionaryModel>();
         var query = _context.Set<SysDictionary>().AsQueryable();

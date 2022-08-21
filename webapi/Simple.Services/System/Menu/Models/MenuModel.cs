@@ -1,14 +1,19 @@
-﻿namespace Simple.Repository.Models.System;
+﻿namespace Simple.Services;
 
 /// <summary>
-/// 菜单表
+/// 菜单
 /// </summary>
-public class SysMenu : BusinessEntityBase<Guid>
+public class MenuModel : ModelBase
 {
+    /// <summary>
+    /// 主键
+    /// </summary>
+    public Guid? Id { get; set; }
+
     /// <summary>
     /// 父级Id
     /// </summary>
-    public Guid ParentId { get; set; }
+    public Guid Pid { get; set; }
 
     /// <summary>
     /// 编码
@@ -96,7 +101,20 @@ public class SysMenu : BusinessEntityBase<Guid>
     public string? Remark { get; set; }
 
     /// <summary>
-    /// 启用状态
+    /// 启用状态（1-启用，0-禁用）
     /// </summary>
-    public bool IsEnabled { get; set; } = true;
+    public int Status { get; set; } = 1;
+
+
+    public override void ConfigureMapper(Profile profile)
+    {
+        profile.CreateMap<SysMenu, MenuModel>()
+            .ForMember(d => d.Pid, options => options.MapFrom(s => s.ParentId))
+            .ForMember(d => d.Status, options => options.MapFrom(s => s.IsEnabled ? 1 : 0));
+
+        profile.CreateMap<MenuModel, SysMenu>()
+            .ForMember(d => d.Id, options => options.Ignore())
+            .ForMember(d => d.ParentId, options => options.MapFrom(s => s.Pid))
+            .ForMember(d => d.IsEnabled, options => options.MapFrom(s => s.Status == 1));
+    }
 }

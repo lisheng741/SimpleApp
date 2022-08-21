@@ -23,6 +23,11 @@ public class PageResultModel<T>
     /// </summary>
     public int CountTotalPage()
     {
+        if(PageSize == 0)
+        {
+            TotalPage = 0;
+            return -1;
+        }
         TotalPage = (int)Math.Ceiling(TotalRows / (double)PageSize);
         return TotalPage;
     }

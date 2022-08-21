@@ -1,9 +1,9 @@
 ﻿namespace Simple.Services;
 
 /// <summary>
-/// 字典
+/// 应用
 /// </summary>
-public class DictionaryModel : ModelBase
+public class ApplicationModel : ModelBase
 {
     /// <summary>
     /// 主键
@@ -38,14 +38,23 @@ public class DictionaryModel : ModelBase
     /// </summary>
     public int Status { get; set; } = 1;
 
+    /// <summary>
+    /// 是否激活（只能同时激活一个应用）。
+    /// 表示用户登录以后默认展示的应用。
+    /// 值为 Y 或 N
+    /// </summary>
+    public string Active { get; set; } = "Y";
+
 
     public override void ConfigureMapper(Profile profile)
     {
-        profile.CreateMap<SysDictionary, DictionaryModel>()
-            .ForMember(d => d.Status, options => options.MapFrom(s => s.IsEnabled ? 1 : 0));
+        profile.CreateMap<SysApplication, ApplicationModel>()
+            .ForMember(d => d.Status, options => options.MapFrom(s => s.IsEnabled ? 1 : 0))
+            .ForMember(d => d.Active, options => options.MapFrom(s => s.IsActive ? "Y" : "N"));
 
-        profile.CreateMap<DictionaryModel, SysDictionary>()
+        profile.CreateMap<ApplicationModel, SysApplication>()
             .ForMember(d => d.Id, options => options.Ignore())
-            .ForMember(d => d.IsEnabled, options => options.MapFrom(s => s.Status == 1));
+            .ForMember(d => d.IsEnabled, options => options.MapFrom(s => s.Status == 1))
+            .ForMember(d => d.IsActive, options => options.MapFrom(s => s.Active == "Y"));
     }
 }

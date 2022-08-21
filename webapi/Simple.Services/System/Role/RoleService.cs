@@ -17,7 +17,7 @@ public class RoleService
         return _services.Mapper.Map<List<RoleModel>>(roles);
     }
 
-    public async Task<PageResultModel<RoleModel>> GetPageAsync(RolePageInputModel input)
+    public async Task<PageResultModel<RoleModel>> GetPageAsync(PageInputModel input)
     {
         var result = new PageResultModel<RoleModel>();
         var query = _context.Set<SysRole>().AsQueryable();

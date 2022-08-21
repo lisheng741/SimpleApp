@@ -1,10 +1,19 @@
 #!/bin/bash
 
-# 变量设置
-settings=" -s ../Simple.WebApi "
-
 # 确保脚本抛出遇到的异常
 set -e
+
+
+# 创建迁移
+# dotnet ef migrations add  x ../Simple.WebApi
+# # 删除迁移
+# dotnet ef migrations remove -s ../Simple.WebApi
+# # 更新数据库
+# dotnet ef database update -s ../Simple.WebApi
+
+
+# 设置
+settings=" -s ../Simple.WebApi "
 
 # 进入仓储项目
 cd "./Simple.Repository"
@@ -40,11 +49,27 @@ echo "执行的迁移版本为: $version"
 # 执行迁移
 dotnet ef migrations add $version $settings
 
-# 读取字符串
-echo "迁移完成，按下回车关闭窗口……"
-read ending
+# 迁移后续操作：0/1-无动作，2-更新数据库，3-删除迁移
+echo "迁移完成，请输入数字继续操作"
+echo "（0/1-无动作，2-更新数据库，3-删除迁移）"
+echo "请输入:"
 
-# # 删除迁移
-# dotnet ef migrations remove -s ../Simple.WebApi
-# # 更新数据库
-# dotnet ef database update -s ../Simple.WebApi
+read input
+
+if [ -n "$input" ] && [ "$input" != "0" ] && [ "$input" != "1" ]
+then
+  # 2-更新数据库
+  if [ "$input" == "2" ]
+  then
+    dotnet ef database update $settings
+  fi
+
+  # 3-删除迁移
+  if [ "$input" == "3" ]
+  then
+    dotnet ef migrations remove $settings
+  fi
+
+  echo "迁移完成，按下回车关闭窗口……"
+  read ending
+fi

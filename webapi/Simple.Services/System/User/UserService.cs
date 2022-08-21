@@ -17,7 +17,7 @@ public class UserService
         return _services.Mapper.Map<List<UserModel>>(users);
     }
 
-    public async Task<PageResultModel<UserModel>> GetPageAsync(RolePageInputModel input)
+    public async Task<PageResultModel<UserModel>> GetPageAsync(PageInputModel input)
     {
         var result = new PageResultModel<UserModel>();
         var query = _context.Set<SysUser>().AsQueryable();
@@ -26,7 +26,7 @@ public class UserService
 
         if (!string.IsNullOrEmpty(input.Name))
         {
-            query = query.Where(p => EF.Functions.Like(p.Name, $"%{input.Name}%"));
+            query = query.Where(p => EF.Functions.Like(p.Name!, $"%{input.Name}%"));
         }
 
         // 获取总数量

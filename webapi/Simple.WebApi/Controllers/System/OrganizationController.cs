@@ -17,8 +17,8 @@ public class OrganizationController : ControllerBase
     [HttpGet]
     public async Task<AppResult> List()
     {
-        List<OrganizationModel> organizations = await _organizationService.GetAsync();
-        return AppResult.Status200OK(data: organizations);
+        List<OrganizationModel> data = await _organizationService.GetAsync();
+        return AppResult.Status200OK(data: data);
     }
 
     [HttpGet]
@@ -50,7 +50,7 @@ public class OrganizationController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<AppResult> Delete([FromBody] List<DeleteInputModel> models)
+    public async Task<AppResult> Delete([FromBody] List<IdInputModel> models)
     {
         await _organizationService.DeleteAsync(models.Select(m => m.Id));
         return AppResult.Status200OK("删除成功");

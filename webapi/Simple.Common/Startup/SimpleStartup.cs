@@ -1,5 +1,6 @@
 ﻿using System.Text.Json;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 
 namespace Simple.Common;
@@ -21,8 +22,14 @@ public static class SimpleStartup
     /// <param name="app"></param>
     public static void Configure(IApplicationBuilder app)
     {
+        // old
+        //// Json 配置
+        //var jsonSerializerOptions = app.ApplicationServices.GetService<IOptions<JsonSerializerOptions>>();
+        //JsonHelper.Configure(jsonSerializerOptions!.Value);
+
+        // new
         // Json 配置
-        var jsonSerializerOptions = app.ApplicationServices.GetService<IOptions<JsonSerializerOptions>>();
-        JsonHelper.Configure(jsonSerializerOptions!.Value);
+        var jsonOptions = app.ApplicationServices.GetService<IOptions<JsonOptions>>();
+        JsonHelper.Configure(jsonOptions!.Value.JsonSerializerOptions);
     }
 }
