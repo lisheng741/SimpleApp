@@ -10,13 +10,13 @@ public class SysUser : BusinessEntityBase<Guid>, IConcurrency
     /// 用户名
     /// </summary>
     [MaxLength(64)]
-    public string UserName { get; set; }
+    public string UserName { get; set; } = "";
 
     /// <summary>
     /// 密码
     /// </summary>
     [MaxLength(64)]
-    public string Password { get; set; }
+    public string Password { get; set; } = "";
 
     /// <summary>
     /// 姓名
@@ -73,9 +73,8 @@ public class SysUser : BusinessEntityBase<Guid>, IConcurrency
 
     public long RowVersion { get; set; }
 
-    public SysUser(string userName, string password)
+    public void SetPassword(string password)
     {
-        UserName = userName;
-        Password = password;
+        Password = HashHelper.Md5(password);
     }
 }

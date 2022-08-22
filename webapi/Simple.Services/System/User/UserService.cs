@@ -45,22 +45,24 @@ public class UserService
 
     public async Task<int> AddAsync(UserModel model)
     {
-        //if (await _context.Set<SysUser>().AnyAsync(p => p.Id != model.Id && p.Code == model.Code))
-        //{
-        //    throw AppResultException.Status409Conflict("存在相同编码");
-        //}
+        if (await _context.Set<SysUser>().AnyAsync(p => p.UserName == model.Account))
+        {
+            throw AppResultException.Status409Conflict("存在相同用户名");
+        }
 
         var user = _services.Mapper.Map<SysUser>(model);
+        user.SetPassword(model.Password);
+
         await _context.AddAsync(user);
         return await _context.SaveChangesAsync();
     }
 
     public async Task<int> UpdateAsync(UserModel model)
     {
-        //if (await _context.Set<SysUser>().AnyAsync(p => p.Id != model.Id && p.Code == model.Code))
-        //{
-        //    throw AppResultException.Status409Conflict("存在相同编码");
-        //}
+        if (await _context.Set<SysUser>().AnyAsync(p => p.Id != model.Id && p.UserName == model.Account))
+        {
+            throw AppResultException.Status409Conflict("存在相同用户名");
+        }
 
         var user = await _context.Set<SysUser>()
             .Where(p => model.Id == p.Id)
@@ -68,10 +70,12 @@ public class UserService
 
         if (user == null)
         {
-            throw AppResultException.Status404NotFound("找不到角色，更新失败");
+            throw AppResultException.Status404NotFound("找不到用户，更新失败");
         }
 
         _services.Mapper.Map<UserModel, SysUser>(model, user);
+        user.SetPassword(model.Password);
+
         _context.Update(user);
         int ret = await _context.SaveChangesAsync();
 

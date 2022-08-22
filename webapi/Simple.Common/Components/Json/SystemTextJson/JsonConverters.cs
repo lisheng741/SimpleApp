@@ -59,13 +59,19 @@ public class EnumJsonConverter : JsonConverter<Enum>
 
     public override Enum? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
-        var value = reader.GetString();
-        if(value == null)
+        string? value = reader.TokenType switch
+        {
+            JsonTokenType.Number => reader.GetInt32().ToString(),
+            JsonTokenType.String => reader.GetString(),
+            _ => "0",
+        };
+
+        if (value == null)
         {
             throw new ArgumentNullException(nameof(value));
         }
 
-        if(Enum.TryParse(typeToConvert, value.ToString(), out var result))
+        if (Enum.TryParse(typeToConvert, value, out var result))
         {
             return result as Enum;
         }
