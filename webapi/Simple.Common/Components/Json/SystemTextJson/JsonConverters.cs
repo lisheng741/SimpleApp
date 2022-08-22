@@ -48,9 +48,9 @@ public class DateTimeJsonConverter : JsonConverter<DateTime>
 }
 
 /// <summary>
-/// 字典转换（Enum）
+/// Enum 转换
 /// </summary>
-public class DictionaryJsonConverter : JsonConverter<Enum>
+public class EnumJsonConverter : JsonConverter<Enum>
 {
     public override bool CanConvert(Type typeToConvert)
     {

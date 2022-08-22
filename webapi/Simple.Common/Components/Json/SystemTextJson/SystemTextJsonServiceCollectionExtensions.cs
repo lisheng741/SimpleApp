@@ -46,7 +46,7 @@ public static class SystemTextJsonServiceCollectionExtensions
 
             // 自定义 Converter
             options.Converters.Add(new DateTimeJsonConverter());
-            options.Converters.Add(new DictionaryJsonConverter());
+            options.Converters.Add(new EnumJsonConverter());
 
             // 如果传入自定义配置
             if (setupAction != null) setupAction(options);

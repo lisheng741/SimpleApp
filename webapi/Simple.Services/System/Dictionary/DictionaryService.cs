@@ -46,6 +46,15 @@ public class DictionaryService
         return result;
     }
 
+    public async Task<List<DictionaryTreeModel>> GetTreeAsync()
+    {
+        var dictionaries = await _context.Set<SysDictionary>()
+            .Include(d => d.DictionaryItems)
+            .ToListAsync();
+
+        return _services.Mapper.Map<List<DictionaryTreeModel>>(dictionaries);
+    }
+
     public async Task<int> AddAsync(DictionaryModel model)
     {
         if (await _context.Set<SysDictionary>().AnyAsync(d => d.Id != model.Id && d.Code == model.Code))
@@ -103,7 +112,7 @@ public class DictionaryService
             .Where(d => d.Code == code)
             .FirstOrDefaultAsync();
 
-        if(items == null)
+        if (items == null)
         {
             return new List<DictionaryItemModel>();
         }

@@ -31,7 +31,14 @@ public class MenuController : ControllerBase
     [HttpGet]
     public async Task<AppResult> Tree()
     {
-        List<AntTreeNode> data = await _menuService.GetTreeAsync();
+        List<AntTreeNode> data = await _menuService.GetTreeAsync(false);
+        return AppResult.Status200OK(data: data);
+    }
+
+    [HttpGet]
+    public async Task<AppResult> TreeForGrant()
+    {
+        List<AntTreeNode> data = await _menuService.GetTreeAsync(true);
         return AppResult.Status200OK(data: data);
     }
 

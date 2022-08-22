@@ -25,6 +25,9 @@ public class MenuService
             query = query.Where(m => m.Application == input.Application);
         }
 
+        // 排序
+        query = query.OrderBy(m => m.Sort).ThenBy(m => m.Weight);
+
         var menus = await query.ToListAsync();
         var nodes = _services.Mapper.Map<List<MenuTreeNodeModel>>(menus);
 
@@ -43,11 +46,14 @@ public class MenuService
             query = query.Where(m => EF.Functions.Like(m.Name, $"%{input.Name}%"));
         }
 
+        // 排序
+        query = query.OrderBy(m => m.Sort).ThenBy(m => m.Weight);
+
         // 获取总数量
         result.TotalRows = await query.CountAsync();
 
         // 分页查询
-        query = query.OrderBy(m => m.Sort).Page(input.PageNo, input.PageSize);
+        query = query.Page(input.PageNo, input.PageSize);
         var menus = await query.ToListAsync();
         result.Rows = _services.Mapper.Map<List<MenuModel>>(menus);
 
@@ -57,9 +63,18 @@ public class MenuService
         return result;
     }
 
-    public async Task<List<AntTreeNode>> GetTreeAsync()
+    public async Task<List<AntTreeNode>> GetTreeAsync(bool isContainsButton = false)
     {
-        var menus = await _context.Set<SysMenu>().ToListAsync();
+        var query = _context.Set<SysMenu>().AsQueryable();
+
+        if (!isContainsButton)
+        {
+            query = query.Where(m => m.Type != MenuType.Button);
+        }
+
+        var menus = await query
+            .OrderBy(m => m.Sort).ThenBy(m => m.Weight)
+            .ToListAsync();
         List<TreeNode> nodes = _services.Mapper.Map<List<TreeNode>>(menus);
 
         var builder = AntTreeNode.CreateBuilder(nodes);

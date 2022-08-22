@@ -73,7 +73,6 @@ public class SimpleDbContext : DbContext
             }
 
             // 遍历实体属性
-            PropertyInfo[] propertyInfos = entityType.ClrType.GetProperties();
             foreach (var mutableProperty in entityType.GetProperties())
             {
                 string propertyName = mutableProperty.Name;

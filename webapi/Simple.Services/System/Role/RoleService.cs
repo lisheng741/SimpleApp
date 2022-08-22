@@ -95,4 +95,15 @@ public class RoleService
         _context.RemoveRange(roles);
         return await _context.SaveChangesAsync();
     }
+
+    public async Task<List<Guid>> GetRoleMenuIdsAsync(params Guid[] roleIds)
+    {
+        var menuIds = await _context.Set<SysRole>()
+            .Include(r => r.RoleMenus)
+            .Where(r => roleIds.Contains(r.Id))
+            .SelectMany(r => r.RoleMenus.Select(rm => rm.MenuId))
+            .ToListAsync();
+
+        return menuIds;
+    }
 }

@@ -55,4 +55,11 @@ public class DictionaryController : ControllerBase
         var items = await _dictionaryService.GetItemsAsync(code);
         return AppResult.Status200OK(data: items);
     }
+
+    [HttpGet]
+    public async Task<AppResult> Tree()
+    {
+        var data = await _dictionaryService.GetTreeAsync();
+        return AppResult.Status200OK(data: data);
+    }
 }

@@ -38,6 +38,11 @@ public class SysRole : BusinessEntityBase<Guid>, IConcurrency
     /// </summary>
     public List<SysUserRole> UserRoles { get; set; } = new List<SysUserRole>();
 
+    /// <summary>
+    /// 角色菜单
+    /// </summary>
+    public List<SysRoleMenu> RoleMenus { get; set; } = new List<SysRoleMenu>();
+
     public long RowVersion { get; set; }
 
     public SysRole(string code, string name)

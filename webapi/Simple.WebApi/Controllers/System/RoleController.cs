@@ -48,4 +48,11 @@ public class RoleController : ControllerBase
         await _roleService.DeleteAsync(models.Select(m => m.Id));
         return AppResult.Status200OK("删除成功");
     }
+
+    [HttpGet]
+    public async Task<AppResult> OwnMenu(Guid id)
+    {
+        var data = await _roleService.GetRoleMenuIdsAsync(id);
+        return AppResult.Status200OK(data: data);
+    }
 }

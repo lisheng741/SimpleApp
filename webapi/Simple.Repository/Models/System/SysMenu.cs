@@ -99,4 +99,10 @@ public class SysMenu : BusinessEntityBase<Guid>
     /// 启用状态
     /// </summary>
     public bool IsEnabled { get; set; } = true;
+
+
+    /// <summary>
+    /// 角色菜单
+    /// </summary>
+    public List<SysRoleMenu> RoleMenus { get; set; } = new List<SysRoleMenu>();
 }
