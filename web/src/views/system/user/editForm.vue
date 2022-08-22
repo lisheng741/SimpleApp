@@ -45,32 +45,6 @@
         <a-col :md="12" :sm="24">
           <a-form :form="form">
             <a-form-item
-              label="昵称"
-              :labelCol="labelCol"
-              :wrapperCol="wrapperCol"
-              has-feedback
-            >
-              <a-input placeholder="请输入昵称" v-decorator="['nickName']" />
-            </a-form-item>
-          </a-form>
-        </a-col>
-        <a-col :md="12" :sm="24">
-          <a-form :form="form">
-            <a-form-item
-              label="生日"
-              :labelCol="labelCol"
-              :wrapperCol="wrapperCol"
-              has-feedback
-            >
-              <a-date-picker placeholder="请选择生日" @change="onChange" style="width: 100%" v-decorator="['birthday']" />
-            </a-form-item>
-          </a-form>
-        </a-col>
-      </a-row>
-      <a-row :gutter="24">
-        <a-col :md="12" :sm="24">
-          <a-form :form="form">
-            <a-form-item
               label="性别"
               :labelCol="labelCol"
               :wrapperCol="wrapperCol"
@@ -108,7 +82,7 @@
             </a-form-item>
           </a-form>
         </a-col>
-        <a-col :md="12" :sm="24">
+        <a-col :md="12" :sm="24" style="display:none">
           <a-form :form="form">
             <a-form-item
               label="电话"
@@ -121,7 +95,7 @@
           </a-form>
         </a-col>
       </a-row>
-      <a-divider orientation="left">员工信息</a-divider>
+      <a-divider orientation="left">组织信息</a-divider>
       <a-row :gutter="24">
         <a-col :md="12" :sm="24">
           <a-form :form="form">
@@ -132,7 +106,7 @@
               has-feedback
             >
               <a-tree-select
-                v-decorator="['sysEmpParam.orgId', {rules: [{ required: true, message: '请选择机构！' }]}]"
+                v-decorator="['OrganizationId', {rules: [{ required: true, message: '请选择机构！' }]}]"
                 style="width: 100%"
                 :dropdownStyle="{ maxHeight: '300px', overflow: 'auto' }"
                 :treeData="orgTree"
@@ -145,7 +119,7 @@
             </a-form-item>
             <a-form :form="form">
               <a-form-item v-show="false">
-                <a-input v-decorator="['sysEmpParam.orgName']" />
+                <a-input v-decorator="['OrganizationName']" />
               </a-form-item>
             </a-form>
           </a-form>
@@ -153,30 +127,14 @@
         <a-col :md="12" :sm="24">
           <a-form :form="form">
             <a-form-item
-              label="工号"
+              label="职位信息"
               :labelCol="labelCol"
               :wrapperCol="wrapperCol"
               has-feedback
             >
-              <a-input placeholder="请输入工号" v-decorator="['sysEmpParam.jobNum']" />
-            </a-form-item>
-          </a-form>
-        </a-col>
-      </a-row>
-      <a-row :gutter="24">
-        <a-col :md="24" :sm="24">
-          <a-form :form="form">
-            <a-form-item
-              label="职位信息"
-              :labelCol="labelCol_JG"
-              :wrapperCol="wrapperCol_JG"
-              has-feedback
-            >
               <a-select
-                mode="multiple"
-                style="width: 100%"
                 placeholder="请选择职位信息"
-                v-decorator="['sysEmpParam.posIdList', {rules: [{ required: true, message: '请选择职位信息！' }]}]"
+                v-decorator="['PositionId', {rules: [{ required: true, message: '请选择职位信息！' }]}]"
               >
                 <a-select-option v-for="(item,index) in posList" :key="index" :value="item.id">{{ item.name }}</a-select-option>
               </a-select>
@@ -363,10 +321,10 @@
           SysEmpInfo.positions.forEach(item => {
             Positions.push(item.posId)
           })
-          this.form.getFieldDecorator('sysEmpParam.orgName', { initialValue: SysEmpInfo.orgName })
-          this.form.getFieldDecorator('sysEmpParam.posIdList', { initialValue: Positions })
+          this.form.getFieldDecorator('OrganizationName', { initialValue: SysEmpInfo.orgName })
+          this.form.getFieldDecorator('PositionId', { initialValue: Positions })
           this.form.getFieldDecorator('sysEmpParam.jobNum', { initialValue: SysEmpInfo.jobNum })
-          this.form.getFieldDecorator('sysEmpParam.orgId', { initialValue: SysEmpInfo.orgId })
+          this.form.getFieldDecorator('OrganizationId', { initialValue: SysEmpInfo.orgId })
           SysEmpInfo.extOrgPos.forEach(item => {
             const length = this.data.length
             this.data.push({

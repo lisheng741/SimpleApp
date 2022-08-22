@@ -312,7 +312,7 @@
        */
       handleClick (e) {
         this.queryParam = {
-          'sysEmpParam.orgId': e.toString()
+          'OrganizationId': e.toString()
         }
         this.$refs.table.refresh(true)
       },

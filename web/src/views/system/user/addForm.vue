@@ -18,7 +18,7 @@
               :wrapperCol="wrapperCol"
               has-feedback
             >
-              <a-input placeholder="请输入账号" v-decorator="['account', {rules: [{required: true, min: 5, message: '请输入至少五个字符的账号！'}]}]" />
+              <a-input placeholder="请输入账号" v-decorator="['account', {rules: [{required: true, min: 2, message: '请输入至少2个字符的账号！'}]}]" />
             </a-form-item>
           </a-form>
         </a-col>
@@ -44,12 +44,15 @@
               :wrapperCol="wrapperCol"
               has-feedback
             >
-              <a-input
+              <a-input-password
                 placeholder="请输入密码"
                 type="password"
-                v-decorator="['password', {rules: [{required: true, message: '请输入密码！'},{
-                  validator: validateToNextPassword,
-                },]}]" />
+                v-decorator="['password', {
+                  rules: [{required: true, message: '请输入密码！'},{
+                    validator: validateToNextPassword,
+                  },],
+                  initialValue:'123456'
+                }]" />
             </a-form-item>
           </a-form>
         </a-col>
@@ -61,39 +64,14 @@
               :wrapperCol="wrapperCol"
               has-feedback
             >
-              <a-input
+              <a-input-password
                 placeholder="请再次输入密码"
                 type="password"
                 v-decorator="['confirm', {rules: [{required: true, message: '请再次输入密码！'},
                                                   {
                                                     validator: compareToFirstPassword,
-                                                  }]}]" />
-            </a-form-item>
-          </a-form>
-        </a-col>
-      </a-row>
-      <a-row :gutter="24">
-        <a-col :md="12" :sm="24">
-          <a-form :form="form">
-            <a-form-item
-              label="昵称"
-              :labelCol="labelCol"
-              :wrapperCol="wrapperCol"
-              has-feedback
-            >
-              <a-input placeholder="请输入昵称" v-decorator="['nickName']" />
-            </a-form-item>
-          </a-form>
-        </a-col>
-        <a-col :md="12" :sm="24">
-          <a-form :form="form">
-            <a-form-item
-              label="生日"
-              :labelCol="labelCol"
-              :wrapperCol="wrapperCol"
-              has-feedback
-            >
-              <a-date-picker placeholder="请选择生日" @change="onChange" style="width: 100%" v-decorator="['birthday']" />
+                                                  }],
+                                          initialValue:'123456'}]" />
             </a-form-item>
           </a-form>
         </a-col>
@@ -106,7 +84,7 @@
               :labelCol="labelCol"
               :wrapperCol="wrapperCol"
             >
-              <a-radio-group v-decorator="['sex',{rules: [{ required: true, message: '请选择性别！' }]}]" >
+              <a-radio-group v-decorator="['sex']" >
                 <a-radio :value="1">男</a-radio>
                 <a-radio :value="2">女</a-radio>
               </a-radio-group>
@@ -135,11 +113,11 @@
               :wrapperCol="wrapperCol"
               has-feedback
             >
-              <a-input placeholder="请输入手机号" v-decorator="['phone',{rules: [{ required: true, message: '请输入手机号！' }]}]" />
+              <a-input placeholder="请输入手机号" v-decorator="['phone']" />
             </a-form-item>
           </a-form>
         </a-col>
-        <a-col :md="12" :sm="24">
+        <a-col :md="12" :sm="24" style="display:none">
           <a-form :form="form">
             <a-form-item
               label="电话"
@@ -152,7 +130,7 @@
           </a-form>
         </a-col>
       </a-row>
-      <a-divider orientation="left">员工信息</a-divider>
+      <a-divider orientation="left">组织信息</a-divider>
       <a-row :gutter="24">
         <a-col :md="12" :sm="24">
           <a-form :form="form">
@@ -163,7 +141,7 @@
               has-feedback
             >
               <a-tree-select
-                v-decorator="['sysEmpParam.orgId', {rules: [{ required: true, message: '请选择机构！' }]}]"
+                v-decorator="['OrganizationId']"
                 style="width: 100%"
                 :dropdownStyle="{ maxHeight: '300px', overflow: 'auto' }"
                 :treeData="orgTree"
@@ -175,37 +153,21 @@
               </a-tree-select>
             </a-form-item>
             <a-form-item v-show="false">
-              <a-input v-decorator="['sysEmpParam.orgName']" />
+              <a-input v-decorator="['OrganizationName']" />
             </a-form-item>
           </a-form>
         </a-col>
         <a-col :md="12" :sm="24">
           <a-form :form="form">
             <a-form-item
-              label="工号"
+              label="职位信息"
               :labelCol="labelCol"
               :wrapperCol="wrapperCol"
               has-feedback
             >
-              <a-input placeholder="请输入工号" v-decorator="['sysEmpParam.jobNum']" />
-            </a-form-item>
-          </a-form>
-        </a-col>
-      </a-row>
-      <a-row :gutter="24">
-        <a-col :md="24" :sm="24">
-          <a-form :form="form">
-            <a-form-item
-              label="职位信息"
-              :labelCol="labelCol_JG"
-              :wrapperCol="wrapperCol_JG"
-              has-feedback
-            >
               <a-select
-                mode="multiple"
-                style="width: 100%"
                 placeholder="请选择职位信息"
-                v-decorator="['sysEmpParam.posIdList', {rules: [{ required: true, message: '请选择职位信息！' }]}]"
+                v-decorator="['PositionId']"
               >
                 <a-select-option v-for="(item,index) in posList" :key="index" :value="item.id">{{ item.name }}</a-select-option>
               </a-select>
@@ -403,7 +365,7 @@
        * 选择树机构，初始化机构名称于表单中
        */
       initrOrgName (value) {
-        this.form.getFieldDecorator('sysEmpParam.orgName', { initialValue: this.orgList.find(item => value === item.id).name })
+        this.form.getFieldDecorator('OrganizationName', { initialValue: this.orgList.find(item => value === item.id).name })
       },
       /**
        * 子表单json重构
@@ -434,7 +396,7 @@
         validateFields((errors, values) => {
           if (!errors) {
             this.JsonReconsitution()
-            values.sysEmpParam['extIds'] = this.sysEmpParamExtList
+            // values.sysEmpParam['extIds'] = this.sysEmpParamExtList
             if (this.birthdayString.length > 0) {
               values.birthday = this.birthdayString
             }

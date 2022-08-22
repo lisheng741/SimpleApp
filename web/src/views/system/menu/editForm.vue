@@ -476,8 +476,8 @@
           this.form.getFieldDecorator('component', { initialValue: 'PageView' })
           this.componentRequired = true
           // 父级初始化顶级，并将其隐藏
-          this.form.getFieldDecorator('pid', { initialValue: '0' })
-          this.pid = '0'
+          this.form.getFieldDecorator('pid', { initialValue: '00000000-0000-0000-0000-000000000000' })
+          this.pid = '00000000-0000-0000-0000-000000000000'
           this.pidShow = false
         } else {
           // eslint-disable-next-line eqeqeq
