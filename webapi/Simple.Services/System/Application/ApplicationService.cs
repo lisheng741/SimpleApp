@@ -8,19 +8,17 @@ namespace Simple.Services;
 
 public class ApplicationService
 {
-    private readonly ISimpleService _services;
     private readonly SimpleDbContext _context;
 
-    public ApplicationService(SimpleDbContext context, ISimpleService services)
+    public ApplicationService(SimpleDbContext context)
     {
         _context = context;
-        _services = services;
     }
 
     public async Task<List<ApplicationModel>> GetAsync()
     {
         var applications = await _context.Set<SysApplication>().ToListAsync();
-        return _services.Mapper.Map<List<ApplicationModel>>(applications);
+        return MapperHelper.Map<List<ApplicationModel>>(applications);
     }
 
     public async Task<PageResultModel<ApplicationModel>> GetPageAsync(PageInputModel input)
@@ -44,7 +42,7 @@ public class ApplicationService
         // 分页查询
         query = query.OrderBy(a => a.Sort).Page(input.PageNo, input.PageSize);
         var applications = await query.ToListAsync();
-        result.Rows = _services.Mapper.Map<List<ApplicationModel>>(applications);
+        result.Rows = MapperHelper.Map<List<ApplicationModel>>(applications);
 
         result.SetPage(input);
         result.CountTotalPage();
@@ -59,7 +57,7 @@ public class ApplicationService
             throw AppResultException.Status409Conflict("存在相同编码");
         }
 
-        var application = _services.Mapper.Map<SysApplication>(model);
+        var application = MapperHelper.Map<SysApplication>(model);
         await _context.AddAsync(application);
         return await _context.SaveChangesAsync();
     }
@@ -80,7 +78,7 @@ public class ApplicationService
             throw AppResultException.Status404NotFound("找不到应用，更新失败");
         }
 
-        _services.Mapper.Map<ApplicationModel, SysApplication>(model, application);
+        MapperHelper.Map<ApplicationModel, SysApplication>(model, application);
         _context.Update(application);
         int ret = await _context.SaveChangesAsync();
 

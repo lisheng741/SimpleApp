@@ -2,31 +2,37 @@
 
 public class UserService
 {
-    private readonly ISimpleService _services;
     private readonly SimpleDbContext _context;
 
-    public UserService(SimpleDbContext context, ISimpleService services)
+    public UserService(SimpleDbContext context)
     {
         _context = context;
-        _services = services;
     }
 
     public async Task<List<UserModel>> GetAsync()
     {
         var users = await _context.Set<SysUser>().ToListAsync();
-        return _services.Mapper.Map<List<UserModel>>(users);
+        return MapperHelper.Map<List<UserModel>>(users);
     }
 
-    public async Task<PageResultModel<UserModel>> GetPageAsync(PageInputModel input)
+    public async Task<PageResultModel<UserModel>> GetPageAsync(UserPageInputModel input)
     {
         var result = new PageResultModel<UserModel>();
         var query = _context.Set<SysUser>().AsQueryable();
 
         // 根据条件查询
-
-        if (!string.IsNullOrEmpty(input.Name))
+        if (input.OrganizationId.HasValue)
         {
-            query = query.Where(p => EF.Functions.Like(p.Name!, $"%{input.Name}%"));
+            query = query.Where(u => u.OrganizationId == input.OrganizationId);
+        }
+        if (!string.IsNullOrEmpty(input.SearchValue))
+        {
+            query = query.Where(u => EF.Functions.Like(u.UserName, $"%{input.SearchValue}%") || 
+                                     EF.Functions.Like(u.Name!, $"%{input.SearchValue}%"));
+        }
+        if (input.SearchStatus.HasValue)
+        {
+            query = query.Where(u => u.IsEnabled == (input.SearchStatus == 1));
         }
 
         // 获取总数量
@@ -35,7 +41,7 @@ public class UserService
         // 分页查询
         query = query.OrderBy(u => u.UserName).Page(input.PageNo, input.PageSize);
         var users = await query.ToListAsync();
-        result.Rows = _services.Mapper.Map<List<UserModel>>(users);
+        result.Rows = MapperHelper.Map<List<UserModel>>(users);
 
         result.SetPage(input);
         result.CountTotalPage();
@@ -45,12 +51,12 @@ public class UserService
 
     public async Task<int> AddAsync(UserModel model)
     {
-        if (await _context.Set<SysUser>().AnyAsync(p => p.UserName == model.Account))
+        if (await _context.Set<SysUser>().AnyAsync(u => u.UserName == model.Account))
         {
             throw AppResultException.Status409Conflict("存在相同用户名");
         }
 
-        var user = _services.Mapper.Map<SysUser>(model);
+        var user = MapperHelper.Map<SysUser>(model);
         user.SetPassword(model.Password);
 
         await _context.AddAsync(user);
@@ -59,13 +65,13 @@ public class UserService
 
     public async Task<int> UpdateAsync(UserModel model)
     {
-        if (await _context.Set<SysUser>().AnyAsync(p => p.Id != model.Id && p.UserName == model.Account))
+        if (await _context.Set<SysUser>().AnyAsync(u => u.Id != model.Id && u.UserName == model.Account))
         {
             throw AppResultException.Status409Conflict("存在相同用户名");
         }
 
         var user = await _context.Set<SysUser>()
-            .Where(p => model.Id == p.Id)
+            .Where(u => model.Id == u.Id)
             .FirstOrDefaultAsync();
 
         if (user == null)
@@ -73,7 +79,7 @@ public class UserService
             throw AppResultException.Status404NotFound("找不到用户，更新失败");
         }
 
-        _services.Mapper.Map<UserModel, SysUser>(model, user);
+        MapperHelper.Map<UserModel, SysUser>(model, user);
         user.SetPassword(model.Password);
 
         _context.Update(user);
@@ -90,12 +96,52 @@ public class UserService
     public async Task<int> DeleteAsync(IEnumerable<Guid> ids)
     {
         var users = await _context.Set<SysUser>()
-            .Where(p => ids.Contains(p.Id))
+            .Where(u => ids.Contains(u.Id))
             .ToListAsync();
 
         _context.RemoveRange(users);
         return await _context.SaveChangesAsync();
     }
 
+    /// <summary>
+    /// 修改状态（IsEnabled）
+    /// </summary>
+    /// <param name="input"></param>
+    /// <returns></returns>
+    public async Task<int> ChangeStatusAsync(UserChangeStatusModel input)
+    {
+        var user = await _context.Set<SysUser>()
+            .Where(u => u.Id == input.Id)
+            .FirstOrDefaultAsync();
+        if(user == null)
+        {
+            throw AppResultException.Status404NotFound("找不到用户，更新失败");
+        }
+        
+        if(input.Status == 1)
+        {
+            user.IsEnabled = true;
+        }
+        else
+        {
+            user.IsEnabled = false;
+        }
 
+        _context.Update(user);
+        return await _context.SaveChangesAsync();
+    }
+
+    public async Task<UserModel> GetUserInfoAsync(Guid id)
+    {
+        var user = await _context.Set<SysUser>()
+            .Where(u => u.Id == id)
+            .FirstOrDefaultAsync();
+
+        if(user == null)
+        {
+            return new UserModel();
+        }
+
+        return MapperHelper.Map<UserModel>(user);
+    }
 }

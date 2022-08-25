@@ -22,7 +22,7 @@ public class UserController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<AppResult> Page([FromQuery] PageInputModel model)
+    public async Task<AppResult> Page([FromQuery] UserPageInputModel model)
     {
         PageResultModel<UserModel> data = await _userService.GetPageAsync(model);
         return AppResult.Status200OK(data: data);
@@ -47,5 +47,19 @@ public class UserController : ControllerBase
     {
         await _userService.DeleteAsync(models.Select(m => m.Id));
         return AppResult.Status200OK("删除成功");
+    }
+
+    [HttpPost]
+    public async Task<AppResult> ChangeStatus([FromBody] UserChangeStatusModel input)
+    {
+        await _userService.ChangeStatusAsync(input);
+        return AppResult.Status200OK("更新成功");
+    }
+
+    [HttpGet]
+    public async Task<AppResult> Detail(Guid id)
+    {
+        var data = await _userService.GetUserInfoAsync(id);
+        return AppResult.Status200OK(data: data);
     }
 }

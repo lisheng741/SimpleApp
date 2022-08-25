@@ -2,19 +2,17 @@
 
 public class DictionaryItemService
 {
-    private readonly ISimpleService _services;
     private readonly SimpleDbContext _context;
 
-    public DictionaryItemService(SimpleDbContext context, ISimpleService services)
+    public DictionaryItemService(SimpleDbContext context)
     {
         _context = context;
-        _services = services;
     }
 
     public async Task<List<DictionaryItemModel>> GetAsync()
     {
         var dictionaryItems = await _context.Set<SysDictionaryItem>().ToListAsync();
-        return _services.Mapper.Map<List<DictionaryItemModel>>(dictionaryItems);
+        return MapperHelper.Map<List<DictionaryItemModel>>(dictionaryItems);
     }
 
     public async Task<PageResultModel<DictionaryItemModel>> GetPageAsync(DictionaryItemPageInputModel input)
@@ -42,7 +40,7 @@ public class DictionaryItemService
         // 分页查询
         query = query.OrderBy(di => di.Sort).Page(input.PageNo, input.PageSize);
         var dictionaryItems = await query.ToListAsync();
-        result.Rows = _services.Mapper.Map<List<DictionaryItemModel>>(dictionaryItems);
+        result.Rows = MapperHelper.Map<List<DictionaryItemModel>>(dictionaryItems);
 
         result.SetPage(input);
         result.CountTotalPage();
@@ -58,7 +56,7 @@ public class DictionaryItemService
             throw AppResultException.Status409Conflict("存在相同编码");
         }
 
-        var dictionaryItem = _services.Mapper.Map<SysDictionaryItem>(model);
+        var dictionaryItem = MapperHelper.Map<SysDictionaryItem>(model);
         await _context.AddAsync(dictionaryItem);
         return await _context.SaveChangesAsync();
     }
@@ -80,7 +78,7 @@ public class DictionaryItemService
             throw AppResultException.Status404NotFound("找不到角色，更新失败");
         }
 
-        _services.Mapper.Map<DictionaryItemModel, SysDictionaryItem>(model, dictionaryItem);
+        MapperHelper.Map<DictionaryItemModel, SysDictionaryItem>(model, dictionaryItem);
         _context.Update(dictionaryItem);
         int ret = await _context.SaveChangesAsync();
 

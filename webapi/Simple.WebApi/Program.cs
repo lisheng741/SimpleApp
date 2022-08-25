@@ -18,6 +18,9 @@ try
     var configuration = builder.Configuration;
     AppSettings.Configure(configuration);
 
+    // 添加 HostedService
+    builder.Services.AddHostedService<SimpleHostedService>();
+
     // 日志
     //builder.Logging.ClearProviders(); // .AddConsole()
     builder.Host.UseNLog();
@@ -78,9 +81,6 @@ try
     builder.Services.AddSimpleCors();
 
     var app = builder.Build();
-
-    // 初始化配置，主要是配置静态对象
-    SimpleStartup.Configure(app);
 
     // 配置 HTTP 请求管道
     // 全局异常处理

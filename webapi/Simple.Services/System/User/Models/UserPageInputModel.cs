@@ -2,7 +2,7 @@
 
 public class UserPageInputModel : PageInputModel
 {
-    public Guid? OrgId { get; set; }
+    public Guid? OrganizationId { get; set; }
 
     public string? SearchValue { get; set; }
 

@@ -2,12 +2,14 @@
 
 public class AntTreeNode
 {
+    public virtual Guid Id { get; set; }
     public virtual Guid Value { get; set; }
     public virtual string Title { get; set; }
     public virtual List<AntTreeNode> Children { get; set; } = new List<AntTreeNode>();
 
     public AntTreeNode(Guid value, string title)
     {
+        Id = value;
         Value = value;
         Title = title;
     }

@@ -2,19 +2,17 @@
 
 public class DictionaryService
 {
-    private readonly ISimpleService _services;
     private readonly SimpleDbContext _context;
 
-    public DictionaryService(SimpleDbContext context, ISimpleService services)
+    public DictionaryService(SimpleDbContext context)
     {
         _context = context;
-        _services = services;
     }
 
     public async Task<List<DictionaryModel>> GetAsync()
     {
         var dictionaries = await _context.Set<SysDictionary>().ToListAsync();
-        return _services.Mapper.Map<List<DictionaryModel>>(dictionaries);
+        return MapperHelper.Map<List<DictionaryModel>>(dictionaries);
     }
 
     public async Task<PageResultModel<DictionaryModel>> GetPageAsync(PageInputModel input)
@@ -38,7 +36,7 @@ public class DictionaryService
         // 分页查询
         query = query.OrderBy(d => d.Sort).Page(input.PageNo, input.PageSize);
         var dictionaries = await query.ToListAsync();
-        result.Rows = _services.Mapper.Map<List<DictionaryModel>>(dictionaries);
+        result.Rows = MapperHelper.Map<List<DictionaryModel>>(dictionaries);
 
         result.SetPage(input);
         result.CountTotalPage();
@@ -52,7 +50,7 @@ public class DictionaryService
             .Include(d => d.DictionaryItems)
             .ToListAsync();
 
-        return _services.Mapper.Map<List<DictionaryTreeModel>>(dictionaries);
+        return MapperHelper.Map<List<DictionaryTreeModel>>(dictionaries);
     }
 
     public async Task<int> AddAsync(DictionaryModel model)
@@ -62,7 +60,7 @@ public class DictionaryService
             throw AppResultException.Status409Conflict("存在相同编码");
         }
 
-        var dictionary = _services.Mapper.Map<SysDictionary>(model);
+        var dictionary = MapperHelper.Map<SysDictionary>(model);
         await _context.AddAsync(dictionary);
         return await _context.SaveChangesAsync();
     }
@@ -83,7 +81,7 @@ public class DictionaryService
             throw AppResultException.Status404NotFound("找不到角色，更新失败");
         }
 
-        _services.Mapper.Map<DictionaryModel, SysDictionary>(model, dictionary);
+        MapperHelper.Map<DictionaryModel, SysDictionary>(model, dictionary);
         _context.Update(dictionary);
         int ret = await _context.SaveChangesAsync();
 
@@ -117,6 +115,6 @@ public class DictionaryService
             return new List<DictionaryItemModel>();
         }
 
-        return _services.Mapper.Map<List<DictionaryItemModel>>(items.DictionaryItems);
+        return MapperHelper.Map<List<DictionaryItemModel>>(items.DictionaryItems);
     }
 }
