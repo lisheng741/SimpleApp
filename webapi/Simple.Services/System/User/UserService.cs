@@ -27,7 +27,7 @@ public class UserService
         }
         if (!string.IsNullOrEmpty(input.SearchValue))
         {
-            query = query.Where(u => EF.Functions.Like(u.UserName, $"%{input.SearchValue}%") || 
+            query = query.Where(u => EF.Functions.Like(u.UserName, $"%{input.SearchValue}%") ||
                                      EF.Functions.Like(u.Name!, $"%{input.SearchValue}%"));
         }
         if (input.SearchStatus.HasValue)
@@ -106,26 +106,23 @@ public class UserService
     /// <summary>
     /// 修改状态（IsEnabled）
     /// </summary>
-    /// <param name="input"></param>
+    /// <param name="userId"></param>
+    /// <param name="isEnabled"></param>
     /// <returns></returns>
-    public async Task<int> ChangeStatusAsync(UserChangeStatusModel input)
+    public async Task<int> SetEnabledAsync(Guid userId, bool isEnabled)
     {
+        // 查找用户
         var user = await _context.Set<SysUser>()
-            .Where(u => u.Id == input.Id)
+            .Where(u => u.Id == userId)
             .FirstOrDefaultAsync();
-        if(user == null)
+
+        if (user == null)
         {
             throw AppResultException.Status404NotFound("找不到用户，更新失败");
         }
-        
-        if(input.Status == 1)
-        {
-            user.IsEnabled = true;
-        }
-        else
-        {
-            user.IsEnabled = false;
-        }
+
+        // 更新状态
+        user.IsEnabled = isEnabled;
 
         _context.Update(user);
         return await _context.SaveChangesAsync();
@@ -137,11 +134,27 @@ public class UserService
             .Where(u => u.Id == id)
             .FirstOrDefaultAsync();
 
-        if(user == null)
+        if (user == null)
         {
             return new UserModel();
         }
 
         return MapperHelper.Map<UserModel>(user);
+    }
+
+    public async Task<int> ResetPassword(Guid id, string password = "123456")
+    {
+        var user = await _context.Set<SysUser>()
+            .Where(u => u.Id == id)
+            .FirstOrDefaultAsync();
+
+        if (user == null)
+        {
+            throw AppResultException.Status404NotFound("找不到用户，重置失败");
+        }
+
+        user.SetPassword(password);
+        _context.Update(user);
+        return await _context.SaveChangesAsync();
     }
 }

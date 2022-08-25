@@ -34,7 +34,7 @@ public class DictionaryModel : ModelBase
     public string? Remark { get; set; }
 
     /// <summary>
-    /// 启用状态: 1-启用，0-禁用
+    /// 启用状态（1-启用，0-禁用）
     /// </summary>
     public int Status { get; set; } = 1;
 

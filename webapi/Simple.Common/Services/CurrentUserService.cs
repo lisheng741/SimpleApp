@@ -30,7 +30,7 @@ public class CurrentUserService : ICurrentUserService
 {
     protected readonly ISimpleService _simpleService;
 
-    public CurrentUserService(ISimpleService simpleService)
+    public CurrentUserService(ISimpleService simpleService, IServiceProvider serviceProvider)
     {
         _simpleService = simpleService;
     }

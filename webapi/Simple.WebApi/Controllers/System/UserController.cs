@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Simple.Service;
+using Simple.Services;
 
 namespace Simple.WebApi.Controllers.System;
 
@@ -8,10 +10,16 @@ namespace Simple.WebApi.Controllers.System;
 public class UserController : ControllerBase
 {
     private readonly UserService _userService;
+    private readonly UserRoleService _userRoleService;
+    private readonly UserDataScopeService _userDataScopeService;
 
-    public UserController(UserService userService)
+    public UserController(UserService userService, 
+                          UserRoleService userRoleService, 
+                          UserDataScopeService userDataScopeService)
     {
         _userService = userService;
+        _userRoleService = userRoleService;
+        _userDataScopeService = userDataScopeService;
     }
 
     [HttpGet]
@@ -50,9 +58,9 @@ public class UserController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<AppResult> ChangeStatus([FromBody] UserChangeStatusModel input)
+    public async Task<AppResult> ChangeStatus([FromBody] UserChangeStatusInputModel input)
     {
-        await _userService.ChangeStatusAsync(input);
+        await _userService.SetEnabledAsync(input.Id, input.Status == 1);
         return AppResult.Status200OK("更新成功");
     }
 
@@ -61,5 +69,40 @@ public class UserController : ControllerBase
     {
         var data = await _userService.GetUserInfoAsync(id);
         return AppResult.Status200OK(data: data);
+    }
+
+    [HttpPost]
+    public async Task<AppResult> ResetPwd(IdInputModel input)
+    {
+        var data = await _userService.ResetPassword(input.Id);
+        return AppResult.Status200OK("重置成功");
+    }
+
+    [HttpGet]
+    public async Task<AppResult> OwnRole(Guid id)
+    {
+        var data = await _userRoleService.GetUserRoleIdsAsync(id);
+        return AppResult.Status200OK(data: data);
+    }
+
+    [HttpPost]
+    public async Task<AppResult> GrantRole(UserGrantRoleInputModel input)
+    {
+        await _userRoleService.SetUserRoleAsync(input.Id, input.GrantRoleIdList);
+        return AppResult.Status200OK("授权成功");
+    }
+
+    [HttpGet]
+    public async Task<AppResult> OwnData(Guid id)
+    {
+        var data = await _userDataScopeService.GetUserDataScopeIdsAsync(id);
+        return AppResult.Status200OK(data: data);
+    }
+
+    [HttpPost]
+    public async Task<AppResult> GrantData(UserGrantOrganizationInputModel input)
+    {
+        await _userDataScopeService.SetUserDataScopeAsync(input.Id, input.GrantOrgIdList);
+        return AppResult.Status200OK("授权成功");
     }
 }

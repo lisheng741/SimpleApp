@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 using Simple.Common.Filters;
 
 namespace Microsoft.Extensions.DependencyInjection;
@@ -7,32 +8,16 @@ public static class AppResultMvcBuilderExtensions
 {
     public static IMvcBuilder AddAppResult(this IMvcBuilder builder, Action<AppResultOptions>? setupAction = null)
     {
+        // 添加过滤器
         builder.AddMvcOptions(options =>
         {
             options.Filters.Add<AppResultExceptionFilter>();
         });
 
-        builder.Services.Configure<AppResultOptions>(options =>
-        {
-            // 默认结果工厂（!Problem: 目前只能处理 Api 结果）
-            options.ResultFactory = resultException =>
-            {
-                IActionResult result;
+        // 默认 AppResultOptions 配置
+        builder.Services.AddTransient<IConfigureOptions<AppResultOptions>, AppResultOptionsSetup>();
 
-                // Mvc 结果
-
-                // Api 结果
-                result = new ContentResult()
-                {
-                    StatusCode = resultException.AppResult.Code,
-                    ContentType = "application/json",
-                    Content = JsonHelper.Serialize(resultException.AppResult)
-                };
-
-                return result;
-            };
-        });
-
+        // 如果有自定义配置
         if(setupAction != null) builder.Services.Configure(setupAction);
 
         return builder;

@@ -1,6 +1,6 @@
 ﻿namespace Simple.Services;
 
-public class UserChangeStatusModel
+public class UserChangeStatusInputModel
 {
     /// <summary>
     /// 主键Id

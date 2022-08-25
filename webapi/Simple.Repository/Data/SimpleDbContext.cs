@@ -131,6 +131,10 @@ public class SimpleDbContext : DbContext
         {
             throw CreateResultException(ex);
         }
+        catch(DbUpdateException ex)
+        {
+            throw CreateResultException(ex);
+        }
         finally
         {
 
@@ -148,6 +152,10 @@ public class SimpleDbContext : DbContext
             return result;
         }
         catch (DbUpdateConcurrencyException ex)
+        {
+            throw CreateResultException(ex);
+        }
+        catch (DbUpdateException ex)
         {
             throw CreateResultException(ex);
         }
@@ -178,6 +186,12 @@ public class SimpleDbContext : DbContext
     protected virtual AppResultException CreateResultException(DbUpdateConcurrencyException exception)
     {
         var appResult = new AppResult(StatusCodes.Status409Conflict, "数据已被其他人操作，你的操作没有生效！");
+        return new AppResultException(appResult, exception);
+    }
+
+    protected virtual AppResultException CreateResultException(DbUpdateException exception)
+    {
+        var appResult = new AppResult(StatusCodes.Status409Conflict, "数据库写入错误！");
         return new AppResultException(appResult, exception);
     }
 

@@ -2,19 +2,17 @@
 
 public class OrganizationService
 {
-    private readonly ISimpleService _services;
     private readonly SimpleDbContext _context;
 
-    public OrganizationService(SimpleDbContext context, ISimpleService services)
+    public OrganizationService(SimpleDbContext context)
     {
         _context = context;
-        _services = services;
     }
 
     public async Task<List<OrganizationModel>> GetAsync()
     {
         var organizations = await _context.Set<SysOrganization>().ToListAsync();
-        return _services.Mapper.Map<List<OrganizationModel>>(organizations);
+        return MapperHelper.Map<List<OrganizationModel>>(organizations);
     }
 
     public async Task<PageResultModel<OrganizationModel>> GetPageAsync(OrganizationPageInputModel input)
@@ -42,7 +40,7 @@ public class OrganizationService
         // 分页查询
         query = query.OrderBy(o => o.Sort).Page(input.PageNo, input.PageSize);
         var organizations = await query.ToListAsync();
-        result.Rows = _services.Mapper.Map<List<OrganizationModel>>(organizations);
+        result.Rows = MapperHelper.Map<List<OrganizationModel>>(organizations);
 
         result.SetPage(input);
         result.CountTotalPage();
@@ -53,7 +51,7 @@ public class OrganizationService
     public async Task<List<AntTreeNode>> GetTreeAsync()
     {
         var organizations = await _context.Set<SysOrganization>().ToListAsync();
-        List<TreeNode> nodes = _services.Mapper.Map<List<TreeNode>>(organizations);
+        List<TreeNode> nodes = MapperHelper.Map<List<TreeNode>>(organizations);
 
         var builder = AntTreeNode.CreateBuilder(nodes);
         return builder.Build();
@@ -66,7 +64,7 @@ public class OrganizationService
             throw AppResultException.Status409Conflict("存在相同编码的组织");
         }
 
-        var organization = _services.Mapper.Map<SysOrganization>(model);
+        var organization = MapperHelper.Map<SysOrganization>(model);
         await _context.AddAsync(organization);
         return await _context.SaveChangesAsync();
     }
@@ -87,7 +85,7 @@ public class OrganizationService
             throw AppResultException.Status404NotFound("找不到组织，更新失败");
         }
 
-        _services.Mapper.Map<OrganizationModel, SysOrganization>(model, organization);
+        MapperHelper.Map<OrganizationModel, SysOrganization>(model, organization);
         _context.Update(organization);
         int ret = await _context.SaveChangesAsync();
 

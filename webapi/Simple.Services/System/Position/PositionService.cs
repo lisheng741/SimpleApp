@@ -2,19 +2,17 @@
 
 public class PositionService
 {
-    private readonly ISimpleService _services;
     private readonly SimpleDbContext _context;
 
-    public PositionService(SimpleDbContext context, ISimpleService services)
+    public PositionService(SimpleDbContext context)
     {
         _context = context;
-        _services = services;
     }
 
     public async Task<List<PositionModel>> GetAsync()
     {
         var positions = await _context.Set<SysPosition>().ToListAsync();
-        return _services.Mapper.Map<List<PositionModel>>(positions);
+        return MapperHelper.Map<List<PositionModel>>(positions);
     }
 
     public async Task<PageResultModel<PositionModel>> GetPageAsync(PageInputModel input)
@@ -38,7 +36,7 @@ public class PositionService
         // 分页查询
         query = query.OrderBy(p => p.Sort).Page(input.PageNo, input.PageSize);
         var positions = await query.ToListAsync();
-        result.Rows = _services.Mapper.Map<List<PositionModel>>(positions);
+        result.Rows = MapperHelper.Map<List<PositionModel>>(positions);
 
         result.SetPage(input);
         result.CountTotalPage();
@@ -53,7 +51,7 @@ public class PositionService
             throw AppResultException.Status409Conflict("存在相同编码的岗位");
         }
 
-        var position = _services.Mapper.Map<SysPosition>(model);
+        var position = MapperHelper.Map<SysPosition>(model);
         await _context.AddAsync(position);
         return await _context.SaveChangesAsync();
     }
@@ -74,7 +72,7 @@ public class PositionService
             throw AppResultException.Status404NotFound("找不到岗位，更新失败");
         }
 
-        _services.Mapper.Map<PositionModel, SysPosition>(model, position);
+        MapperHelper.Map<PositionModel, SysPosition>(model, position);
         _context.Update(position);
         int ret = await _context.SaveChangesAsync();
 

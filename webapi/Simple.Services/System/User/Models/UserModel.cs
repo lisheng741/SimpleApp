@@ -12,13 +12,15 @@ public class UserModel : ModelBase
     /// <summary>
     /// 账号
     /// </summary>
-    [MaxLength(64)]
+    [Required(ErrorMessage = "账号不能为空"),
+        MaxLength(64, ErrorMessage = "账号长度不能超过64个字符")]
     public string Account { get; set; } = "";
 
     /// <summary>
     /// 密码
     /// </summary>
-    [MaxLength(64)]
+    [Required(ErrorMessage = "密码不能为空"), 
+        MaxLength(64, ErrorMessage = "密码长度不能超过64个字符")]
     public string Password { get; set; } = "";
 
     /// <summary>
@@ -63,6 +65,7 @@ public class UserModel : ModelBase
     public override void ConfigureMapper(Profile profile)
     {
         profile.CreateMap<SysUser, UserModel>()
+            .ForMember(d => d.Password, options => options.Ignore())
             .ForMember(d => d.Account, options => options.MapFrom(s => s.UserName))
             .ForMember(d => d.Sex, options => options.MapFrom(s => s.Gender))
             .ForMember(d => d.Status, options => options.MapFrom(s => s.IsEnabled ? 1 : 0));

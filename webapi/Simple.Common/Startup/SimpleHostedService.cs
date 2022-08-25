@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
 
@@ -26,12 +27,16 @@ public class SimpleHostedService : IHostedService
         // new
         // Json 配置
         var jsonOptions = serviceProvider.GetService<IOptions<JsonOptions>>();
-        JsonHelper.Configure(jsonOptions!.Value.JsonSerializerOptions);
+        if (jsonOptions != null) JsonHelper.Configure(jsonOptions!.Value.JsonSerializerOptions);
 
         // AutoMapper
         var mapper = serviceProvider.GetService<IMapper>();
-        MapperHelper.Configure(mapper);
+        if (mapper != null) MapperHelper.Configure(mapper);
 
+        // Cache
+        var cache = serviceProvider.GetService<IDistributedCache>();
+        if (cache != null) CacheHelper.Configure(cache);
+        
         return Task.CompletedTask;
     }
 

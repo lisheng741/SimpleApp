@@ -2,19 +2,17 @@
 
 public class RoleService
 {
-    private readonly ISimpleService _services;
     private readonly SimpleDbContext _context;
 
-    public RoleService(SimpleDbContext context, ISimpleService services)
+    public RoleService(SimpleDbContext context)
     {
         _context = context;
-        _services = services;
     }
 
     public async Task<List<RoleModel>> GetAsync()
     {
         var roles = await _context.Set<SysRole>().ToListAsync();
-        return _services.Mapper.Map<List<RoleModel>>(roles);
+        return MapperHelper.Map<List<RoleModel>>(roles);
     }
 
     public async Task<PageResultModel<RoleModel>> GetPageAsync(PageInputModel input)
@@ -38,7 +36,7 @@ public class RoleService
         // 分页查询
         query = query.OrderBy(r => r.Sort).Page(input.PageNo, input.PageSize);
         var roles = await query.ToListAsync();
-        result.Rows = _services.Mapper.Map<List<RoleModel>>(roles);
+        result.Rows = MapperHelper.Map<List<RoleModel>>(roles);
 
         result.SetPage(input);
         result.CountTotalPage();
@@ -53,7 +51,7 @@ public class RoleService
             throw AppResultException.Status409Conflict("存在相同编码");
         }
 
-        var role = _services.Mapper.Map<SysRole>(model);
+        var role = MapperHelper.Map<SysRole>(model);
         await _context.AddAsync(role);
         return await _context.SaveChangesAsync();
     }
@@ -74,7 +72,7 @@ public class RoleService
             throw AppResultException.Status404NotFound("找不到角色，更新失败");
         }
 
-        _services.Mapper.Map<RoleModel, SysRole>(model, role);
+        MapperHelper.Map<RoleModel, SysRole>(model, role);
         _context.Update(role);
         int ret = await _context.SaveChangesAsync();
 

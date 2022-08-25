@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Extensions.Caching.Distributed;
+using Microsoft.Extensions.Configuration;
 
 namespace Simple.Common.Configuration;
 
@@ -21,13 +22,23 @@ public static class AppSettings
         }
     }
 
+    [Obsolete("这只是一个示例，请使用 Configure(IConfiguration) 方法")]
+    public static void Configure(IServiceProvider serviceProvider)
+    {
+        if (serviceProvider == null) throw new ArgumentNullException(nameof(serviceProvider));
+
+        var configuration = serviceProvider.GetService<IConfiguration>();
+
+        Configure(configuration);
+    }
+
     /// <summary>
     /// 设置 Configuration 的实例
     /// </summary>
     /// <param name="configuration"></param>
     /// <exception cref="Exception"></exception>
     /// <exception cref="ArgumentNullException"></exception>
-    public static void Configure(IConfiguration configuration)
+    public static void Configure(IConfiguration? configuration)
     {
         if (_configuration != null)
         {

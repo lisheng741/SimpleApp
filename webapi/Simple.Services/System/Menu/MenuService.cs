@@ -29,7 +29,7 @@ public class MenuService
         query = query.OrderBy(m => m.Sort).ThenBy(m => m.Weight);
 
         var menus = await query.ToListAsync();
-        var nodes = _services.Mapper.Map<List<MenuTreeNodeModel>>(menus);
+        var nodes = MapperHelper.Map<List<MenuTreeNodeModel>>(menus);
 
         var builder = MenuTreeNodeModel.CreateBuilder(nodes);
         return builder.Build();
@@ -55,7 +55,7 @@ public class MenuService
         // 分页查询
         query = query.Page(input.PageNo, input.PageSize);
         var menus = await query.ToListAsync();
-        result.Rows = _services.Mapper.Map<List<MenuModel>>(menus);
+        result.Rows = MapperHelper.Map<List<MenuModel>>(menus);
 
         result.SetPage(input);
         result.CountTotalPage();
@@ -75,7 +75,7 @@ public class MenuService
         var menus = await query
             .OrderBy(m => m.Sort).ThenBy(m => m.Weight)
             .ToListAsync();
-        List<TreeNode> nodes = _services.Mapper.Map<List<TreeNode>>(menus);
+        List<TreeNode> nodes = MapperHelper.Map<List<TreeNode>>(menus);
 
         var builder = AntTreeNode.CreateBuilder(nodes);
         return builder.Build();
@@ -88,7 +88,7 @@ public class MenuService
             throw AppResultException.Status409Conflict("存在相同编码的组织");
         }
 
-        var menu = _services.Mapper.Map<SysMenu>(model);
+        var menu = MapperHelper.Map<SysMenu>(model);
         await _context.AddAsync(menu);
         return await _context.SaveChangesAsync();
     }
@@ -109,7 +109,7 @@ public class MenuService
             throw AppResultException.Status404NotFound("找不到菜单，更新失败");
         }
 
-        _services.Mapper.Map<MenuModel, SysMenu>(model, menu);
+        MapperHelper.Map<MenuModel, SysMenu>(model, menu);
         _context.Update(menu);
         int ret = await _context.SaveChangesAsync();
 
