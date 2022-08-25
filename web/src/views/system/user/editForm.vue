@@ -24,7 +24,7 @@
               :wrapperCol="wrapperCol"
               has-feedback
             >
-              <a-input placeholder="请输入账号" v-decorator="['account', {rules: [{required: true, min: 5, message: '请输入至少五个字符的账号！'}]}]" />
+              <a-input placeholder="请输入账号" v-decorator="['account', {rules: [{required: true, min: 2, message: '请输入至少2个字符的账号！'}]}]" />
             </a-form-item>
           </a-form>
         </a-col>
@@ -106,7 +106,7 @@
               has-feedback
             >
               <a-tree-select
-                v-decorator="['OrganizationId', {rules: [{ required: true, message: '请选择机构！' }]}]"
+                v-decorator="['organizationId', {rules: [{ required: true, message: '请选择机构！' }]}]"
                 style="width: 100%"
                 :dropdownStyle="{ maxHeight: '300px', overflow: 'auto' }"
                 :treeData="orgTree"
@@ -119,7 +119,7 @@
             </a-form-item>
             <a-form :form="form">
               <a-form-item v-show="false">
-                <a-input v-decorator="['OrganizationName']" />
+                <a-input v-decorator="['organizationName']" />
               </a-form-item>
             </a-form>
           </a-form>
@@ -134,7 +134,7 @@
             >
               <a-select
                 placeholder="请选择职位信息"
-                v-decorator="['PositionId', {rules: [{ required: true, message: '请选择职位信息！' }]}]"
+                v-decorator="['positionId', {rules: [{ required: true, message: '请选择职位信息！' }]}]"
               >
                 <a-select-option v-for="(item,index) in posList" :key="index" :value="item.id">{{ item.name }}</a-select-option>
               </a-select>
@@ -142,7 +142,7 @@
           </a-form>
         </a-col>
       </a-row>
-      <a-row :gutter="24">
+      <a-row :gutter="24" style="display:none">
         <a-col :md="24" :sm="24">
           <a-form-item
             label="附属信息:"
@@ -298,7 +298,9 @@
               sex: record.sex,
               email: record.email,
               phone: record.phone,
-              tel: record.tel
+              tel: record.tel,
+              organizationId: record.organizationId,
+              positionId: record.positionId
             }
           )
         }, 100)
@@ -308,7 +310,9 @@
         }
         this.birthdayString = moment(record.birthday).format('YYYY-MM-DD')
         // 职位信息加入表单
-        this.getUserDetaile(record.id)
+        // this.getUserDetaile(record.id)
+        // 上面一句注释了，所以需要下面这句
+        this.confirmLoading = false
       },
       /**
        * 通过用户ID查询出用户详情，将职位信息填充
@@ -321,10 +325,9 @@
           SysEmpInfo.positions.forEach(item => {
             Positions.push(item.posId)
           })
-          this.form.getFieldDecorator('OrganizationName', { initialValue: SysEmpInfo.orgName })
-          this.form.getFieldDecorator('PositionId', { initialValue: Positions })
-          this.form.getFieldDecorator('sysEmpParam.jobNum', { initialValue: SysEmpInfo.jobNum })
-          this.form.getFieldDecorator('OrganizationId', { initialValue: SysEmpInfo.orgId })
+          this.form.getFieldDecorator('organizationName', { initialValue: SysEmpInfo.orgName })
+          this.form.getFieldDecorator('positionId', { initialValue: Positions })
+          this.form.getFieldDecorator('organizationId', { initialValue: SysEmpInfo.orgId })
           SysEmpInfo.extOrgPos.forEach(item => {
             const length = this.data.length
             this.data.push({
@@ -388,7 +391,7 @@
        * 选择树机构，初始化机构名称于表单中
        */
       initrOrgName (value) {
-        this.form.getFieldDecorator('sysEmpParam.orgName', { initialValue: this.orgList.find(item => value === item.id).name })
+        this.form.getFieldDecorator('organizationName', { initialValue: this.orgList.find(item => value === item.id).name })
       },
       /**
        * 子表单json重构
@@ -415,7 +418,7 @@
         validateFields((errors, values) => {
           if (!errors) {
             this.JsonReconsitution()
-            values.sysEmpParam['extIds'] = this.sysEmpParamExtList
+            // values.sysEmpParam['extIds'] = this.sysEmpParamExtList
             // eslint-disable-next-line eqeqeq
             if (this.birthdayString == 'Invalid date') {
               this.birthdayString = null

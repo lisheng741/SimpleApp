@@ -141,7 +141,7 @@
               has-feedback
             >
               <a-tree-select
-                v-decorator="['OrganizationId']"
+                v-decorator="['organizationId']"
                 style="width: 100%"
                 :dropdownStyle="{ maxHeight: '300px', overflow: 'auto' }"
                 :treeData="orgTree"
@@ -153,7 +153,7 @@
               </a-tree-select>
             </a-form-item>
             <a-form-item v-show="false">
-              <a-input v-decorator="['OrganizationName']" />
+              <a-input v-decorator="['organizationName']" />
             </a-form-item>
           </a-form>
         </a-col>
@@ -167,7 +167,7 @@
             >
               <a-select
                 placeholder="请选择职位信息"
-                v-decorator="['PositionId']"
+                v-decorator="['positionId']"
               >
                 <a-select-option v-for="(item,index) in posList" :key="index" :value="item.id">{{ item.name }}</a-select-option>
               </a-select>
@@ -175,7 +175,7 @@
           </a-form>
         </a-col>
       </a-row>
-      <a-row :gutter="24">
+      <a-row :gutter="24" style="display:none">
         <a-col :md="24" :sm="24">
           <a-form-item
             label="附属信息:"
@@ -365,7 +365,7 @@
        * 选择树机构，初始化机构名称于表单中
        */
       initrOrgName (value) {
-        this.form.getFieldDecorator('OrganizationName', { initialValue: this.orgList.find(item => value === item.id).name })
+        this.form.getFieldDecorator('organizationName', { initialValue: this.orgList.find(item => value === item.id).name })
       },
       /**
        * 子表单json重构

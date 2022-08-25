@@ -35,6 +35,7 @@
           <a-button @click="$refs.addForm.add()" icon="plus" type="primary" v-if="hasPerm('sysPos:add')">新增职位</a-button>
           <a-button type="danger" :disabled="selectedRowKeys.length < 1" v-if="hasPerm('sysPos:delete')" @click="batchDelete"><a-icon type="delete"/>批量删除</a-button>
           <x-down
+            style="display:none"
             v-if="hasPerm('sysPos:export')"
             ref="batchExport"
             @batchExport="batchExport"

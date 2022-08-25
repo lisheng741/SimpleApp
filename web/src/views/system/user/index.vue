@@ -54,6 +54,7 @@
             <a-button type="primary" v-if="hasPerm('sysUser:add')" icon="plus" @click="$refs.addForm.add()">新增用户</a-button>
             <a-button type="danger" :disabled="selectedRowKeys.length < 1" v-if="hasPerm('sysUser:delete')" @click="batchDelete"><a-icon type="delete"/>批量删除</a-button>
             <x-down
+              style="display:none"
               v-if="hasPerm('sysUser:export')"
               ref="batchExport"
               @batchExport="batchExport"
@@ -63,7 +64,7 @@
             {{ sexFilter(text) }}
           </span>
           <span slot="status" slot-scope="text,record" v-if="hasPerm('sysUser:changeStatus')">
-            <a-popconfirm placement="top" :title="text===0? '确定停用该用户？':'确定启用该用户？'" @confirm="() => editUserStatus(text,record)">
+            <a-popconfirm placement="top" :title="text===0? '确定启用该用户？':'确定禁用该用户？'" @confirm="() => editUserStatus(text,record)">
               <a>{{ statusFilter(text) }}</a>
             </a-popconfirm>
           </span>
@@ -312,7 +313,7 @@
        */
       handleClick (e) {
         this.queryParam = {
-          'OrganizationId': e.toString()
+          'organizationId': e.toString()
         }
         this.$refs.table.refresh(true)
       },

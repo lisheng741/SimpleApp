@@ -48,6 +48,7 @@
             <a-button @click="$refs.addForm.add()" icon="plus" type="primary" v-if="hasPerm('sysOrg:add')">新增机构</a-button>
             <a-button type="danger" :disabled="selectedRowKeys.length < 1" v-if="hasPerm('sysPos:delete')" @click="batchDelete"><a-icon type="delete"/>批量删除</a-button>
             <x-down
+              style="display:none"
               v-if="hasPerm('sysOrg:export')"
               ref="batchExport"
               @batchExport="batchExport"

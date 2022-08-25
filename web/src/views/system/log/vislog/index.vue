@@ -64,6 +64,7 @@
             <a-button type="danger" ghost>清空日志</a-button>
           </a-popconfirm>
           <x-down
+            style="display:none"
             v-if="hasPerm('sysVisLog:export')"
             ref="batchExport"
             @batchExport="batchExport"
