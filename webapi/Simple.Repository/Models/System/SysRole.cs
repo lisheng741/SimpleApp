@@ -1,4 +1,7 @@
-﻿namespace Simple.Repository.Models.System;
+﻿using Microsoft.EntityFrameworkCore;
+using StackExchange.Redis;
+
+namespace Simple.Repository.Models.System;
 
 /// <summary>
 /// 角色表
@@ -9,13 +12,13 @@ public class SysRole : BusinessEntityBase<Guid>, IConcurrency
     /// 编码
     /// </summary>
     [MaxLength(128)]
-    public string Code { get; set; }
+    public string Code { get; set; } = "";
 
     /// <summary>
     /// 名称
     /// </summary>
     [MaxLength(128)]
-    public string Name { get; set; }
+    public string Name { get; set; } = "";
 
     /// <summary>
     /// 排序
@@ -50,9 +53,92 @@ public class SysRole : BusinessEntityBase<Guid>, IConcurrency
 
     public long RowVersion { get; set; }
 
-    public SysRole(string code, string name)
+    public SysRole()
     {
-        Code = code;
-        Name = name;
+    }
+
+    public void AddMenu(params Guid[] menuIds)
+    {
+        foreach (var menuId in menuIds)
+        {
+            // 存在则跳过
+            if(RoleMenus.Any(rm => rm.MenuId == menuId))
+            {
+                continue;
+            }
+
+            // 新增
+            var roleMenu = new SysRoleMenu()
+            {
+                RoleId = Id,
+                MenuId = menuId
+            };
+            RoleMenus.Add(roleMenu);
+        }
+    }
+
+    public void RemoveMenu(params Guid[] menuIds)
+    {
+        foreach (var menuId in menuIds)
+        {
+            var roleMenu = RoleMenus.Where(rm => rm.MenuId == menuId).FirstOrDefault();
+            if (roleMenu != null)
+            {
+                RoleMenus.Remove(roleMenu);
+            }
+        }
+    }
+
+    public void SetMenu(params Guid[] menuIds)
+    {
+        var oldMenuIds = RoleMenus.Select(rm => rm.MenuId);
+
+        var removeMenuIds = oldMenuIds.Except(menuIds);
+        var addMenuIds = menuIds.Except(oldMenuIds);
+
+        RemoveMenu(removeMenuIds.ToArray());
+        AddMenu(addMenuIds.ToArray());
+    }
+
+    public void AddDataScope(params Guid[] organizationIds)
+    {
+        foreach(var organizationId in organizationIds)
+        {
+            if(RoleDataScopes.Any(rd => rd.OrganizationId == organizationId))
+            {
+                continue;
+            }
+
+            var dataScope = new SysRoleDataScope()
+            {
+                RoleId = Id,
+                OrganizationId = organizationId
+            };
+            RoleDataScopes.Add(dataScope);
+        }
+    }
+
+    public void RemoveDataScope(params Guid[] organizationIds)
+    {
+        foreach(var organizationId in organizationIds)
+        {
+            var dataScope = RoleDataScopes.Where(rd => rd.OrganizationId == organizationId).FirstOrDefault();
+
+            if(dataScope != null)
+            {
+                RoleDataScopes.Remove(dataScope);
+            }
+        }
+    }
+
+    public void SetDataScope(params Guid[] organizationIds)
+    {
+        var oldOrganizationIds = RoleDataScopes.Select(rd => rd.OrganizationId);
+
+        var removeOrganizationIds = oldOrganizationIds.Except(organizationIds);
+        var addOrganizationIds = organizationIds.Except(oldOrganizationIds);
+
+        RemoveDataScope(removeOrganizationIds.ToArray());
+        AddDataScope(addOrganizationIds.ToArray());
     }
 }

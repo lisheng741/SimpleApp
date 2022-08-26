@@ -15,7 +15,7 @@ public class UserDataScopeService
         _context = context;
     }
 
-    public async Task<List<Guid>> GetUserDataScopeIdsAsync(params Guid[] userIds)
+    public async Task<List<Guid>> GetDataScopeAsync(params Guid[] userIds)
     {
         var organizationIds = await _context.Set<SysUser>()
             .Include(u => u.UserDataScopes)
@@ -26,7 +26,7 @@ public class UserDataScopeService
         return organizationIds;
     }
 
-    public async Task<int> SetUserDataScopeAsync(Guid userId, List<Guid> organizationIds)
+    public async Task<int> SetDataScopeAsync(Guid userId, Guid[] organizationIds)
     {
         // 查找用户
         var user = await _context.Set<SysUser>()
@@ -39,32 +39,7 @@ public class UserDataScopeService
             throw AppResultException.Status404NotFound("找不到用户，设置失败");
         }
 
-        // 删除
-        foreach (var userDataScope in user.UserDataScopes)
-        {
-            if (organizationIds.Any(item => item == userDataScope.OrganizationId))
-            {
-                continue;
-            }
-            _context.Remove(userDataScope);
-        }
-
-        // 新增
-        // 取差集
-        List<Guid> exceptOrganizationIds = organizationIds
-            .Except(user.UserDataScopes.Select(ud => ud.OrganizationId))
-            .ToList();
-        List<SysUserDataScope> userDataScopes = new List<SysUserDataScope>();
-        foreach (var organizationId in exceptOrganizationIds)
-        {
-            var userDataScope = new SysUserDataScope()
-            {
-                UserId = user.Id,
-                OrganizationId = organizationId
-            };
-            userDataScopes.Add(userDataScope);
-        }
-        user.UserDataScopes.AddRange(userDataScopes);
+        user.SetDataScope(organizationIds);
 
         _context.UpdateRange(user);
         return await _context.SaveChangesAsync();

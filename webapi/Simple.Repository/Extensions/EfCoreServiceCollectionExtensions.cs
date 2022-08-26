@@ -1,4 +1,5 @@
 ﻿using System.Reflection;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 
 namespace Microsoft.Extensions.DependencyInjection;
 
@@ -15,6 +16,11 @@ public static class EfCoreServiceCollectionExtensions
         services.AddDbContext<SimpleDbContext>(options =>
         {
             options.UseSqlServer(connectionString);
+            options.ConfigureWarnings(builder =>
+            {
+                // 消除 https://go.microsoft.com/fwlink/?linkid=2131316
+                builder.Ignore(CoreEventId.PossibleIncorrectRequiredNavigationWithQueryFilterInteractionWarning);
+            });
         });
 
         return services;

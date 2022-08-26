@@ -142,7 +142,7 @@ public class UserService
         return MapperHelper.Map<UserModel>(user);
     }
 
-    public async Task<int> ResetPassword(Guid id, string password = "123456")
+    public async Task<int> SetPasswordAsync(Guid id, string password = "123456")
     {
         var user = await _context.Set<SysUser>()
             .Where(u => u.Id == id)

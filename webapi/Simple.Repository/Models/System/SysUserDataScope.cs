@@ -38,10 +38,10 @@ public class SysUserDataScope : EntityBase
         builder.Entity<SysUserDataScope>()
             .HasOne(ud => ud.User)
             .WithMany(r => r.UserDataScopes)
-            .IsRequired(false); // 消除 https://go.microsoft.com/fwlink/?linkid=2131316
+            .IsRequired();
         builder.Entity<SysUserDataScope>()
             .HasOne(rm => rm.Organization)
             .WithMany()
-            .IsRequired(false);
+            .IsRequired();
     }
 }

@@ -11,11 +11,6 @@ public class SysDictionaryItem : EntityBase<Guid>
     public Guid DictionaryId { get; set; }
 
     /// <summary>
-    /// 字典
-    /// </summary>
-    public SysDictionary Dictionary { get; set; } = default!;
-
-    /// <summary>
     /// 编码
     /// </summary>
     [MaxLength(128)]
@@ -43,11 +38,12 @@ public class SysDictionaryItem : EntityBase<Guid>
     /// </summary>
     public bool IsEnabled { get; set; } = true;
 
+    /// <summary>
+    /// 字典
+    /// </summary>
+    public SysDictionary Dictionary { get; set; } = default!;
+
     public override void ConfigureEntity(ModelBuilder builder)
     {
-        builder.Entity<SysDictionaryItem>()
-            .HasOne(i => i.Dictionary)
-            .WithMany(d => d.DictionaryItems)
-            .IsRequired(false);
     }
 }

@@ -35,15 +35,5 @@ public class SysRoleMenu : EntityBase
         builder.Entity<SysRoleMenu>()
             .HasIndex(e => new { e.MenuId, e.RoleId })
             .IsUnique(false);
-
-        // 关系配置
-        builder.Entity<SysRoleMenu>()
-            .HasOne(rm => rm.Role)
-            .WithMany(r => r.RoleMenus)
-            .IsRequired(false); // 消除 https://go.microsoft.com/fwlink/?linkid=2131316
-        builder.Entity<SysRoleMenu>()
-            .HasOne(rm => rm.Menu)
-            .WithMany(r => r.RoleMenus)
-            .IsRequired(false);
     }
 }

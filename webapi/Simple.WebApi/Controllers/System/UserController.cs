@@ -74,35 +74,35 @@ public class UserController : ControllerBase
     [HttpPost]
     public async Task<AppResult> ResetPwd(IdInputModel input)
     {
-        var data = await _userService.ResetPassword(input.Id);
+        var data = await _userService.SetPasswordAsync(input.Id);
         return AppResult.Status200OK("重置成功");
     }
 
     [HttpGet]
     public async Task<AppResult> OwnRole(Guid id)
     {
-        var data = await _userRoleService.GetUserRoleIdsAsync(id);
+        var data = await _userRoleService.GetRoleAsync(id);
         return AppResult.Status200OK(data: data);
     }
 
     [HttpPost]
     public async Task<AppResult> GrantRole(UserGrantRoleInputModel input)
     {
-        await _userRoleService.SetUserRoleAsync(input.Id, input.GrantRoleIdList);
+        await _userRoleService.SetRoleAsync(input.Id, input.GrantRoleIdList);
         return AppResult.Status200OK("授权成功");
     }
 
     [HttpGet]
     public async Task<AppResult> OwnData(Guid id)
     {
-        var data = await _userDataScopeService.GetUserDataScopeIdsAsync(id);
+        var data = await _userDataScopeService.GetDataScopeAsync(id);
         return AppResult.Status200OK(data: data);
     }
 
     [HttpPost]
-    public async Task<AppResult> GrantData(UserGrantOrganizationInputModel input)
+    public async Task<AppResult> GrantData(UserGrantDataScopeInputModel input)
     {
-        await _userDataScopeService.SetUserDataScopeAsync(input.Id, input.GrantOrgIdList);
+        await _userDataScopeService.SetDataScopeAsync(input.Id, input.GrantOrgIdList);
         return AppResult.Status200OK("授权成功");
     }
 }

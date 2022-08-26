@@ -84,7 +84,7 @@ public class RoleService
         return ret;
     }
 
-    public async Task<int> DeleteAsync(IEnumerable<Guid> ids)
+    public async Task<int> DeleteAsync(params Guid[] ids)
     {
         var roles = await _context.Set<SysRole>()
             .Where(r => ids.Contains(r.Id))

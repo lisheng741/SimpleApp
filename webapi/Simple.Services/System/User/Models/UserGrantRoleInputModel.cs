@@ -10,5 +10,5 @@ public class UserGrantRoleInputModel
     /// <summary>
     /// 拥有的角色Id列表
     /// </summary>
-    public List<Guid> GrantRoleIdList { get; set; } = new List<Guid>();
+    public Guid[] GrantRoleIdList { get; set; } = new Guid[0];
 }

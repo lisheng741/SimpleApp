@@ -37,10 +37,10 @@ public class SysRoleDataScope : EntityBase
         builder.Entity<SysRoleDataScope>()
             .HasOne(rd => rd.Role)
             .WithMany(r => r.RoleDataScopes)
-            .IsRequired(false); // 消除 https://go.microsoft.com/fwlink/?linkid=2131316
+            .IsRequired();
         builder.Entity<SysRoleDataScope>()
             .HasOne(rd => rd.Organization)
             .WithMany()
-            .IsRequired(false);
+            .IsRequired();
     }
 }

@@ -35,15 +35,5 @@ public class SysUserRole : EntityBase
         builder.Entity<SysUserRole>()
             .HasIndex(e => new { e.RoleId, e.UserId })
             .IsUnique(false);
-
-        // 关系配置
-        builder.Entity<SysUserRole>()
-            .HasOne(ur => ur.User)
-            .WithMany(u => u.UserRoles)
-            .IsRequired(false);
-        builder.Entity<SysUserRole>()
-            .HasOne(ur => ur.Role)
-            .WithMany(r => r.UserRoles)
-            .IsRequired(false);
     }
 }
