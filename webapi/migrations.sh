@@ -18,6 +18,10 @@ settings=" -s ../Simple.WebApi "
 # 进入仓储项目
 cd "./Simple.Repository"
 
+if [ ! -d "./Migrations" ] then
+  mkdir ./Migrations
+fi
+
 version=0
 files=$(ls "./Migrations")
 for file in ${files}
