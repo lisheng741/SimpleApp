@@ -4,12 +4,15 @@ public class MenuService
 {
     private readonly ISimpleService _services;
     private readonly SimpleDbContext _context;
+    private readonly CacheService _cacheService;
 
     public MenuService(SimpleDbContext context, 
-                       ISimpleService services)
+                       ISimpleService services,
+                       CacheService cacheService)
     {
         _context = context;
         _services = services;
+        _cacheService = cacheService;
     }
 
     public async Task<List<MenuTreeNodeModel>> GetAsync(MenuInputModel input)
@@ -110,9 +113,13 @@ public class MenuService
             throw AppResultException.Status404NotFound("找不到菜单，更新失败");
         }
 
+
         MapperHelper.Map<MenuModel, SysMenu>(model, menu);
         _context.Update(menu);
         int ret = await _context.SaveChangesAsync();
+
+        // 清空缓存
+        await _cacheService.ClearMenuAndPermissionCacheAsync();
 
         if (ret == 0)
         {
@@ -128,7 +135,13 @@ public class MenuService
             .Where(m => m.Id == id)
             .ToListAsync();
 
+        // 先更新数据库
         _context.RemoveRange(menus);
-        return await _context.SaveChangesAsync();
+        int ret = await _context.SaveChangesAsync();
+
+        // 再清空缓存
+        await _cacheService.ClearMenuAndPermissionCacheAsync();
+
+        return ret;
     }
 }

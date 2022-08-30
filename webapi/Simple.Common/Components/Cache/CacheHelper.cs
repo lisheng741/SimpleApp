@@ -72,6 +72,26 @@ public static class CacheHelper
         await RemoveCacheKeyAsync(key);
     }
 
+    public static void RemoveRange(IEnumerable<string> keys)
+    {
+        foreach(string key in keys)
+        {
+            Cache.Remove(key);
+        }
+
+        RemoveRangeCacheKey(keys);
+    }
+
+    public static async Task RemoveRangeAsync(IEnumerable<string> keys, CancellationToken token = default)
+    {
+        foreach (string key in keys)
+        {
+            await Cache.RemoveAsync(key, token);
+        }
+
+        await RemoveRangeCacheKeyAsync(keys, token);
+    }
+
     public static void Set(string key, byte[] value)
     {
         Cache.Set(key, value);
@@ -121,20 +141,23 @@ public static class CacheHelper
 
     #region 索引键操作方法
 
-    public static async Task<HashSet<string>?> GetKeySetAsync()
+    public static HashSet<string> GetKeySet()
+    {
+        var keySet = Cache.Get<HashSet<string>>(KeySetCacheKey);
+        return keySet ?? new HashSet<string>();
+    }
+
+    public static async Task<HashSet<string>> GetKeySetAsync()
     {
         var keySet = await Cache.GetAsync<HashSet<string>>(KeySetCacheKey);
-        return keySet;
+        return keySet ?? new HashSet<string>();
     }
 
     public static void AddCacheKey(string key)
     {
         // 获取缓存键集合
-        var keySet = Cache.Get<HashSet<string>>(KeySetCacheKey);
-        if (keySet == null)
-        {
-            keySet = new HashSet<string>();
-        }
+        var keySet = GetKeySet();
+
         // 成功添加，则写入新的缓存
         if (keySet.Add(key))
         {
@@ -142,51 +165,92 @@ public static class CacheHelper
         }
     }
 
-    public static async Task AddCacheKeyAsync(string key)
+    public static async Task AddCacheKeyAsync(string key, CancellationToken token = default)
     {
         // 获取缓存键集合
-        var keySet = await Cache.GetAsync<HashSet<string>>(KeySetCacheKey);
-        if(keySet == null)
-        {
-            keySet = new HashSet<string>();
-        }
+        var keySet = await GetKeySetAsync();
+
         // 成功添加，则写入新的缓存
         if (keySet.Add(key))
         {
-            await Cache.SetAsync(KeySetCacheKey, keySet);
+            await Cache.SetAsync(KeySetCacheKey, keySet, token);
         }
     }
 
-    public static bool RemoveCacheKey(string key)
+    public static void AddRangeCacheKey(IEnumerable<string> keys)
+    {
+        // 获取缓存键集合
+        var keySet = GetKeySet();
+
+        // 添加
+        foreach (var key in keys)
+        {
+            keySet.Add(key);
+        }
+        // 写入缓存
+        Cache.Set(KeySetCacheKey, keySet);
+    }
+
+    public static async Task AddRangeCacheKeyAsync(IEnumerable<string> keys, CancellationToken token = default)
+    {
+        // 获取缓存键集合
+        var keySet = await GetKeySetAsync();
+
+        // 添加
+        foreach (var key in keys)
+        {
+            keySet.Add(key);
+        }
+        // 写入缓存
+        await Cache.SetAsync(KeySetCacheKey, keySet, token);
+    }
+
+    public static void RemoveCacheKey(string key)
     {
         // 读缓存
-        var keySet = Cache.Get<HashSet<string>>(KeySetCacheKey);
+        var keySet = GetKeySet();
 
-        // 如果缓存存在，且存在要删除的键
-        if(keySet != null && keySet.Any(k => k == key))
+        // 如果缓存存在，且成功删除，则更新缓存
+        if (keySet.Remove(key))
         {
-            keySet.Remove(key);
             Cache.Set(KeySetCacheKey, keySet);
-            return true;
         }
-
-        return false;
     }
 
-    public static async Task<bool> RemoveCacheKeyAsync(string key)
+    public static async Task RemoveCacheKeyAsync(string key, CancellationToken token = default)
     {
         // 读缓存
-        var keySet = await Cache.GetAsync<HashSet<string>>(KeySetCacheKey);
+        var keySet = await GetKeySetAsync();
 
-        // 如果缓存存在，且存在要删除的键
-        if (keySet != null && keySet.Any(k => k == key))
+        // 如果缓存存在，且成功删除，则更新缓存
+        if (keySet.Remove(key))
+        {
+            await Cache.SetAsync(KeySetCacheKey, keySet, token);
+        }
+    }
+
+    public static void RemoveRangeCacheKey(IEnumerable<string> keys)
+    {
+        // 读缓存
+        var keySet = GetKeySet();
+
+        foreach (string key in keys)
         {
             keySet.Remove(key);
-            await Cache.SetAsync(KeySetCacheKey, keySet);
-            return true;
         }
+        Cache.Set(KeySetCacheKey, keySet);
+    }
 
-        return false;
+    public static async Task RemoveRangeCacheKeyAsync(IEnumerable<string> keys, CancellationToken token = default)
+    {
+        // 读缓存
+        var keySet = await GetKeySetAsync();
+
+        foreach (string key in keys)
+        {
+            keySet.Remove(key);
+        }
+        await Cache.SetAsync(KeySetCacheKey, keySet, token);
     }
 
     #endregion

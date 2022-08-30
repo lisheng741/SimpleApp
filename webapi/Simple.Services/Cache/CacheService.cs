@@ -1,4 +1,6 @@
-﻿namespace Simple.Services;
+﻿using Microsoft.EntityFrameworkCore.Metadata.Internal;
+
+namespace Simple.Services;
 
 public class CacheService
 {
@@ -12,6 +14,50 @@ public class CacheService
         await RemoveRoleApplicationAsync(roleId);
         await RemoveRoleMenuAsync(roleId);
         await RemoveRolePermissionAsync(roleId);
+    }
+
+    /// <summary>
+    /// 清空 Application 相关的缓存
+    /// </summary>
+    /// <returns></returns>
+    public async Task ClearApplicationCacheAsync()
+    {
+        await RemoveByPrefixAsync(CacheKeyConst.Application);
+    }
+
+    /// <summary>
+    /// 清空 Menu 和 Permission 相关的缓存
+    /// </summary>
+    /// <returns></returns>
+    public async Task ClearMenuAndPermissionCacheAsync()
+    {
+        await ClearMenuCacheAsync();
+        await ClearPermissionCacheAsync();
+    }
+
+    /// <summary>
+    /// 清空 Menu 相关的缓存
+    /// </summary>
+    /// <returns></returns>
+    public async Task ClearMenuCacheAsync()
+    {
+        await RemoveByPrefixAsync(CacheKeyConst.Menu);
+    }
+
+    /// <summary>
+    /// 清空 Permission 相关的缓存
+    /// </summary>
+    /// <returns></returns>
+    public async Task ClearPermissionCacheAsync()
+    {
+        await RemoveByPrefixAsync(CacheKeyConst.Permission);
+    }
+
+    public async Task RemoveByPrefixAsync(string prefix)
+    {
+        HashSet<string> keySet = await CacheHelper.GetKeySetAsync();
+        var keys = keySet.Where(key => key.StartsWith(prefix)).ToList();
+        await CacheHelper.RemoveRangeAsync(keys);
     }
 
     public async Task<List<ApplicationCacheItem>> GetRoleApplicationsAsync(params Guid[] roleIds)

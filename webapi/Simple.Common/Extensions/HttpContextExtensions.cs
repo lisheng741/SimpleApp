@@ -27,4 +27,14 @@ public static class HttpContextExtensions
         }
         return ip;
     }
+
+    /// <summary>
+    /// 设置规范化文档自动登录
+    /// </summary>
+    /// <param name="httpContext"></param>
+    /// <param name="accessToken"></param>
+    public static void SigninToSwagger(this HttpContext httpContext, string accessToken)
+    {
+        httpContext.Response.Headers["access-token"] = accessToken;
+    }
 }

@@ -10,11 +10,13 @@ public class ApplicationService
 {
     private readonly SimpleDbContext _context;
     private readonly MenuService _menuService;
+    private readonly CacheService _cacheService;
 
-    public ApplicationService(SimpleDbContext context, MenuService menuService)
+    public ApplicationService(SimpleDbContext context, MenuService menuService, CacheService cacheService)
     {
         _context = context;
         _menuService = menuService;
+        _cacheService = cacheService;
     }
 
     public async Task<List<ApplicationModel>> GetAsync()
@@ -90,6 +92,9 @@ public class ApplicationService
         _context.Update(application);
         int ret = await _context.SaveChangesAsync();
 
+        // 清缓存
+        await _cacheService.ClearApplicationCacheAsync();
+
         if (ret == 0)
         {
             throw AppResultException.Status200OK("更新记录数为0");
@@ -105,7 +110,12 @@ public class ApplicationService
             .ToListAsync();
 
         _context.RemoveRange(applications);
-        return await _context.SaveChangesAsync();
+        int ret = await _context.SaveChangesAsync();
+
+        // 清缓存
+        await _cacheService.ClearApplicationCacheAsync();
+
+        return ret;
     }
 
     /// <summary>
@@ -133,6 +143,11 @@ public class ApplicationService
             }
         }
         _context.UpdateRange(applications);
-        return await _context.SaveChangesAsync();
+        int ret = await _context.SaveChangesAsync();
+
+        // 清缓存
+        await _cacheService.ClearApplicationCacheAsync();
+
+        return ret;
     }
 }

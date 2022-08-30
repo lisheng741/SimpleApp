@@ -122,11 +122,13 @@ public class RoleService
 
         role.SetMenu(menuIds);
 
-        // 清空权限缓存
+        _context.Update(role);
+        int ret = await _context.SaveChangesAsync();
+
+        // 清缓存
         await _cacheService.ClearRoleCacheAsync(roleId);
 
-        _context.Update(role);
-        return await _context.SaveChangesAsync();
+        return ret;
     }
 
     public async Task<List<Guid>> GetDataScopeIdsAsync(params Guid[] roleIds)

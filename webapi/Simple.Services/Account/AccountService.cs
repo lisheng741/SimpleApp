@@ -5,6 +5,7 @@ using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion.Internal;
 using Simple.Common.Authentication;
@@ -16,34 +17,68 @@ namespace Simple.Services;
 public class AccountService
 {
     private readonly SimpleDbContext _context;
+    private readonly ISimpleService _simpleService;
     private readonly ICurrentUserService _currentUser;
     private readonly CacheService _cacheService;
     private readonly UserService _userService;
 
     public AccountService(SimpleDbContext context,
+                          ISimpleService simpleService,
                           ICurrentUserService currentUser,
                           CacheService cacheService,
                           UserService userService,
                           RoleService roleService)
     {
         _context = context;
+        _simpleService = simpleService;
         _currentUser = currentUser;
         _userService = userService;
         _cacheService = cacheService;
     }
 
-    public Task<string> CreateTokenAsync(LoginModel login)
+    public async Task<string> LoginAsync(LoginModel login)
     {
+        var passwordHash = HashHelper.Md5(login.Password);
+
+        var user = await _context.Set<SysUser>()
+            .Include(u => u.UserRoles)
+            .Where(u => u.UserName == login.Account)
+            .Where(u => u.Password == passwordHash)
+            .FirstOrDefaultAsync(u => u.UserName == login.Account);
+
+        if(user == null)
+        {
+            throw AppResultException.Status404NotFound("用户不存在或密码不匹配");
+        }
+
+        if (!user.IsEnabled)
+        {
+            throw AppResultException.Status403Forbidden("该账号已被停用");
+        }
+
+        // 用户信息
         List<Claim> claims = new List<Claim>()
         {
-            new Claim(SimpleClaimTypes.UserId, "08da8458-c8ce-4a1e-8924-b5377d708ff5")
+            new Claim(SimpleClaimTypes.UserId, user.Id.ToString()),
+            new Claim(SimpleClaimTypes.Name, user.Name ?? ""),
+            new Claim(SimpleClaimTypes.Email, user.Email?? ""),
         };
-        var jwtTokenModel = new JwtTokenModel(login.Account, claims, "admin");
+        string[] roles = user.UserRoles.Select(ur => ur.RoleId.ToString()).ToArray();
+
+        // 生成 token
+        var jwtTokenModel = new JwtTokenModel(login.Account, claims, roles);
         string token = JwtHelper.Create(jwtTokenModel);
 
-        return Task.FromResult(token);
+        // 设置Swagger自动登录
+        _simpleService.HttpContext.SigninToSwagger(token);
+
+        return token;
     }
 
+    /// <summary>
+    /// 获取用户信息（适配小诺1.8前端）
+    /// </summary>
+    /// <returns></returns>
     public async Task<UserInfoModel> GetUserInfoAsync()
     {
         if (_currentUser.UserId == null)
@@ -53,9 +88,9 @@ public class AccountService
 
         var result = new UserInfoModel();
 
-        // 查询用户
+        // 查询用户，关联
         var user = await _context.Set<SysUser>()
-            .Include(u => u.UserRoles).ThenInclude(ur => ur.Role).ThenInclude(r => r!.RoleMenus).ThenInclude(rm => rm.Menu)
+            .Include(u => u.UserRoles).ThenInclude(ur => ur.Role)
             .Include(u => u.UserDataScopes)
             .Where(u => u.Id == _currentUser.UserId)
             .FirstOrDefaultAsync();
@@ -72,7 +107,7 @@ public class AccountService
         var roleIds = user.UserRoles.Select(ur => ur.RoleId);
 
         // Roles 角色信息
-        List<SysRole> roles = user.UserRoles.Where(ur => ur.Role != null).Select(ur => ur.Role!).ToList(); ;
+        List<SysRole> roles = user.UserRoles.Where(ur => ur.Role != null).Select(ur => ur.Role!).ToList();
         result.Roles = MapperHelper.Map<List<UserInfoRoleModel>>(roles);
 
         // Menus 菜单信息
@@ -83,13 +118,19 @@ public class AccountService
 
         // Apps 应用信息
         result.Apps = await GetRoleApplicationsAsync(roleIds.ToArray());
+        // 如果没有默认应用，设定第一个为默认应用
         if (result.Apps.Count > 0 && !(result.Apps.Any(a => a.Active)))
         {
             result.Apps[0].Active = true;
         }
 
-
-        //result.AdminType = 1;
+        // 账号类型
+        if(roles.Select(r => r.Code).Contains("admin"))
+        {
+            result.AdminType = AdminType.Admin;
+        }
+        // 测试都是管理员权限，以后要改掉
+        result.AdminType = AdminType.Admin;
 
         return result;
     }
@@ -117,7 +158,7 @@ public class AccountService
             .ThenInclude(rm => rm.Menu)
             .Where(r => roleIds.Contains(r.Id))
             .ToListAsync();
-
+        
         foreach (var role in roles)
         {
             List<SysMenu> roleMenus = role.RoleMenus
@@ -192,7 +233,11 @@ public class AccountService
         List<ApplicationCacheItem> applicationCacheItems = await _cacheService.GetRoleApplicationsAsync(roleIds);
         if (applicationCacheItems.Count > 0)
         {
-            return MapperHelper.Map<List<UserInfoApplicationModel>>(applicationCacheItems.Distinct());
+            // 去重并排序
+            applicationCacheItems = applicationCacheItems.Distinct().OrderBy(a => a.Sort).ToList();
+
+            // 返回结果
+            return MapperHelper.Map<List<UserInfoApplicationModel>>(applicationCacheItems);
         }
 
         // 没有缓存，读数据库
@@ -213,6 +258,7 @@ public class AccountService
         // step3: 获取 Application 列表
         var applications = _context.Set<SysApplication>()
             .Where(a => applicationCodes.Contains(a.Code))
+            .OrderBy(a => a.Sort)
             .ToList();
 
         // step4: 缓存
