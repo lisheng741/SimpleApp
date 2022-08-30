@@ -9,15 +9,23 @@ namespace Simple.Services;
 public class ApplicationService
 {
     private readonly SimpleDbContext _context;
+    private readonly MenuService _menuService;
 
-    public ApplicationService(SimpleDbContext context)
+    public ApplicationService(SimpleDbContext context, MenuService menuService)
     {
         _context = context;
+        _menuService = menuService;
     }
 
     public async Task<List<ApplicationModel>> GetAsync()
     {
         var applications = await _context.Set<SysApplication>().ToListAsync();
+        return MapperHelper.Map<List<ApplicationModel>>(applications);
+    }
+
+    public async Task<List<ApplicationModel>> GetAsync(params string[] codes)
+    {
+        var applications = await _context.Set<SysApplication>().Where(a => codes.Contains(a.Code)).ToListAsync();
         return MapperHelper.Map<List<ApplicationModel>>(applications);
     }
 

@@ -1,4 +1,6 @@
-﻿namespace Simple.Repository.Models.System;
+﻿using System.Linq;
+
+namespace Simple.Repository.Models.System;
 
 /// <summary>
 /// 用户表
@@ -77,6 +79,11 @@ public class SysUser : BusinessEntityBase<Guid>, IConcurrency
     public List<SysUserDataScope> UserDataScopes { get; set; } = default!;
 
     public long RowVersion { get; set; }
+
+    public SysUser()
+    {
+
+    }
 
     public void SetPassword(string password)
     {

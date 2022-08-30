@@ -37,6 +37,11 @@ public class RoleModel : ModelBase
     /// </summary>
     public bool IsEnabled { get; set; } = true;
 
+    /// <summary>
+    /// 数据范围（1-全部数据，2-本部门及以下数据，3-本部门数据，4-仅本人数据，5-自定义数据）
+    /// </summary>
+    public DataScopeType DataScopeType { get; set; } = DataScopeType.All;
+
     public RoleModel(string code, string name)
     {
         Code = code;
@@ -45,9 +50,11 @@ public class RoleModel : ModelBase
 
     public override void ConfigureMapper(Profile profile)
     {
-        profile.CreateMap<SysRole, RoleModel>();
+        profile.CreateMap<SysRole, RoleModel>()
+            .ForMember(d => d.DataScopeType, options => options.MapFrom(s => s.DataScope));
 
         profile.CreateMap<RoleModel, SysRole>()
-            .ForMember(d => d.Id, options => options.Ignore());
+            .ForMember(d => d.Id, options => options.Ignore())
+            .ForMember(d => d.DataScope, options => options.MapFrom(s => s.DataScopeType));
     }
 }

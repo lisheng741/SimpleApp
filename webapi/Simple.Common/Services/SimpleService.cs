@@ -1,30 +1,60 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using AutoMapper;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Http;
 
 namespace Simple.Common.Services;
 
 public interface ISimpleService
 {
-    public HttpContext HttpContext { get; }
+    IServiceProvider ServiceProvider { get; }
+
+    HttpContext HttpContext { get; }
+
+    TService GetService<TService>() where TService : class;
+
+    object GetService(Type type);
 }
 
 public class SimpleService : ISimpleService
 {
-    private readonly IHttpContextAccessor _accessor;
+    protected IDictionary<Type, object> CacheServices { get; set; } = new Dictionary<Type, object>();
 
-    public SimpleService(IHttpContextAccessor accessor)
+    public SimpleService(IServiceProvider serviceProvider)
     {
-        _accessor = accessor;
+        ServiceProvider = serviceProvider;
 
         // 不要在构造函数中捕获 IHttpContextAccessor.HttpContext。
         // 详见：https://docs.microsoft.com/zh-cn/aspnet/core/fundamentals/http-context?view=aspnetcore-6.0#httpcontext-isnt-thread-safe
         //HttpContext = accessor.HttpContext ?? throw new ArgumentNullException(nameof(HttpContext));
     }
 
-    public HttpContext HttpContext => _accessor.HttpContext!;
+    public virtual IServiceProvider ServiceProvider { get; private set; }
+
+    public virtual IHttpContextAccessor HttpContextAccessor => GetService<IHttpContextAccessor>();
+
+    public virtual HttpContext HttpContext => HttpContextAccessor.HttpContext!;
+
+    public virtual TService GetService<TService>()
+        where TService : class
+    {
+        var service = GetService(typeof(TService)) as TService;
+        if (service == null)
+        {
+            throw new NullReferenceException(nameof(service));
+        }
+        return service;
+    }
+
+    public virtual object GetService(Type type)
+    {
+        if (CacheServices.TryGetValue(type, out var obj))
+        {
+            return obj;
+        }
+
+        var service = ServiceProvider.GetService(type);
+        if (service == null)
+        {
+            throw new NullReferenceException(nameof(service));
+        }
+        return CacheServices[type] = service;
+    }
 }

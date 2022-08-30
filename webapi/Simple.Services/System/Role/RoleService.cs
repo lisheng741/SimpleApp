@@ -3,10 +3,12 @@
 public class RoleService
 {
     private readonly SimpleDbContext _context;
+    private readonly CacheService _cacheService;
 
-    public RoleService(SimpleDbContext context)
+    public RoleService(SimpleDbContext context, CacheService cacheService)
     {
         _context = context;
+        _cacheService = cacheService;
     }
 
     public async Task<List<RoleModel>> GetAsync()
@@ -94,7 +96,7 @@ public class RoleService
         return await _context.SaveChangesAsync();
     }
 
-    public async Task<List<Guid>> GetRoleMenuIdsAsync(params Guid[] roleIds)
+    public async Task<List<Guid>> GetMenuIdsAsync(params Guid[] roleIds)
     {
         var menuIds = await _context.Set<SysRole>()
             .Include(r => r.RoleMenus)
@@ -103,5 +105,58 @@ public class RoleService
             .ToListAsync();
 
         return menuIds;
+    }
+
+    public async Task<int> SetMenuAsync(Guid roleId, Guid[] menuIds)
+    {
+        // 查找
+        var role = await _context.Set<SysRole>()
+            .Include(r => r.RoleMenus)
+            .Where(r => r.Id == roleId)
+            .FirstOrDefaultAsync();
+
+        if (role == null)
+        {
+            throw AppResultException.Status404NotFound("找不到角色，设置失败");
+        }
+
+        role.SetMenu(menuIds);
+
+        // 清空权限缓存
+        await _cacheService.ClearRoleCacheAsync(roleId);
+
+        _context.Update(role);
+        return await _context.SaveChangesAsync();
+    }
+
+    public async Task<List<Guid>> GetDataScopeIdsAsync(params Guid[] roleIds)
+    {
+        var organizationIds = await _context.Set<SysRole>()
+            .Include(r => r.RoleDataScopes)
+            .Where(r => roleIds.Contains(r.Id))
+            .SelectMany(r => r.RoleDataScopes.Select(rm => rm.OrganizationId))
+            .ToListAsync();
+
+        return organizationIds;
+    }
+
+    public async Task<int> SetDataScopeAsync(Guid roleId, DataScopeType dataScope, Guid[] organizationIds)
+    {
+        // 查找
+        var role = await _context.Set<SysRole>()
+            .Include(r => r.RoleDataScopes)
+            .Where(r => r.Id == roleId)
+            .FirstOrDefaultAsync();
+
+        if (role == null)
+        {
+            throw AppResultException.Status404NotFound("找不到角色，设置失败");
+        }
+
+        role.DataScope = dataScope;
+        role.SetDataScope(organizationIds);
+
+        _context.Update(role);
+        return await _context.SaveChangesAsync();
     }
 }

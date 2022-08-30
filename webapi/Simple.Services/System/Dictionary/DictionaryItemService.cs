@@ -75,7 +75,7 @@ public class DictionaryItemService
 
         if (dictionaryItem == null)
         {
-            throw AppResultException.Status404NotFound("找不到角色，更新失败");
+            throw AppResultException.Status404NotFound("找不到字典子项，更新失败");
         }
 
         MapperHelper.Map<DictionaryItemModel, SysDictionaryItem>(model, dictionaryItem);

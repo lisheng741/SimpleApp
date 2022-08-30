@@ -9,16 +9,10 @@ namespace Simple.WebApi.Controllers.System;
 public class RoleController : ControllerBase
 {
     private readonly RoleService _roleService;
-    private readonly RoleMenuService _roleMenuService;
-    private readonly RoleDataScopeService _roleDataScopeService;
 
-    public RoleController(RoleService roleService, 
-                          RoleMenuService roleMenuService, 
-                          RoleDataScopeService roleDataScopeService)
+    public RoleController(RoleService roleService)
     {
         _roleService = roleService;
-        _roleMenuService = roleMenuService;
-        _roleDataScopeService = roleDataScopeService;
     }
 
     [HttpGet]
@@ -59,28 +53,28 @@ public class RoleController : ControllerBase
     [HttpGet]
     public async Task<AppResult> OwnMenu(Guid id)
     {
-        var data = await _roleMenuService.GetMenuAsync(id);
+        var data = await _roleService.GetMenuIdsAsync(id);
         return AppResult.Status200OK(data: data);
     }
 
     [HttpPost]
     public async Task<AppResult> GrantMenu(RoleGrantMenuInputModel input)
     {
-        await _roleMenuService.SetMenuAsync(input.Id, input.GrantMenuIdList);
+        await _roleService.SetMenuAsync(input.Id, input.GrantMenuIdList);
         return AppResult.Status200OK("授权成功");
     }
 
     [HttpGet]
     public async Task<AppResult> OwnData(Guid id)
     {
-        var data = await _roleDataScopeService.GetDataScopeAsync(id);
+        var data = await _roleService.GetDataScopeIdsAsync(id);
         return AppResult.Status200OK(data: data);
     }
 
     [HttpPost]
     public async Task<AppResult> GrantData(RoleGrantDataScopeInputModel input)
     {
-        await _roleDataScopeService.SetDataScopeAsync(input.Id, input.GrantOrgIdList);
+        await _roleService.SetDataScopeAsync(input.Id, input.DataScopeType, input.GrantOrgIdList);
         return AppResult.Status200OK("授权成功");
     }
 }

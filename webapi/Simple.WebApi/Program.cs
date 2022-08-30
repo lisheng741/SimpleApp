@@ -69,7 +69,7 @@ try
 
     // 对象映射 AutoMapper
     var profileAssemblies = AssemblyHelper.GetAssemblies("Simple.Services");
-    builder.Services.AddAutoMapper(profileAssemblies);
+    builder.Services.AddAutoMapper(profileAssemblies,ServiceLifetime.Singleton);
 
     // 缓存
     builder.Services.AddSimpleCache();

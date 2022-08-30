@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Claims;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
+﻿using System.Security.Claims;
 using Simple.Common.Authentication;
 
 namespace Simple.Common.Services;
@@ -30,7 +24,7 @@ public class CurrentUserService : ICurrentUserService
 {
     protected readonly ISimpleService _simpleService;
 
-    public CurrentUserService(ISimpleService simpleService, IServiceProvider serviceProvider)
+    public CurrentUserService(ISimpleService simpleService)
     {
         _simpleService = simpleService;
     }

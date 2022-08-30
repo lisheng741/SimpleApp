@@ -128,20 +128,6 @@ public class UserService
         return await _context.SaveChangesAsync();
     }
 
-    public async Task<UserModel> GetUserInfoAsync(Guid id)
-    {
-        var user = await _context.Set<SysUser>()
-            .Where(u => u.Id == id)
-            .FirstOrDefaultAsync();
-
-        if (user == null)
-        {
-            return new UserModel();
-        }
-
-        return MapperHelper.Map<UserModel>(user);
-    }
-
     public async Task<int> SetPasswordAsync(Guid id, string password = "123456")
     {
         var user = await _context.Set<SysUser>()
@@ -156,5 +142,94 @@ public class UserService
         user.SetPassword(password);
         _context.Update(user);
         return await _context.SaveChangesAsync();
+    }
+
+    public async Task<List<Guid>> GetRoleIdsAsync(params Guid[] userIds)
+    {
+        var roleIds = await _context.Set<SysUser>()
+            .Include(u => u.UserRoles)
+            .Where(u => userIds.Contains(u.Id))
+            .SelectMany(u => u.UserRoles.Select(rm => rm.RoleId))
+            .ToListAsync();
+
+        return roleIds;
+    }
+
+    public async Task<int> SetRoleAsync(Guid userId, Guid[] roleIds)
+    {
+        // 查找用户
+        var user = await _context.Set<SysUser>()
+            .Include(u => u.UserRoles)
+            .Where(u => u.Id == userId)
+            .FirstOrDefaultAsync();
+
+        if (user == null)
+        {
+            throw AppResultException.Status404NotFound("找不到用户，设置失败");
+        }
+
+        user.SetRole(roleIds);
+
+        _context.UpdateRange(user);
+        return await _context.SaveChangesAsync();
+    }
+
+    public async Task<List<Guid>> GetDataScopesAsync(params Guid[] userIds)
+    {
+        var organizationIds = await _context.Set<SysUser>()
+            .Include(u => u.UserDataScopes)
+            .Where(u => userIds.Contains(u.Id))
+            .SelectMany(u => u.UserDataScopes.Select(ud => ud.OrganizationId))
+            .ToListAsync();
+
+        return organizationIds;
+    }
+
+    public async Task<int> SetDataScopeAsync(Guid userId, Guid[] organizationIds)
+    {
+        // 查找用户
+        var user = await _context.Set<SysUser>()
+            .Include(u => u.UserDataScopes)
+            .Where(u => u.Id == userId)
+            .FirstOrDefaultAsync();
+
+        if (user == null)
+        {
+            throw AppResultException.Status404NotFound("找不到用户，设置失败");
+        }
+
+        user.SetDataScope(organizationIds);
+
+        _context.UpdateRange(user);
+        return await _context.SaveChangesAsync();
+    }
+
+    /// <summary>
+    /// 获取用户拥有的菜单的应用编码列表
+    /// </summary>
+    /// <returns></returns>
+    public async Task<List<string>> GetApplicationCodeListAsync(Guid userId)
+    {
+        var user = await _context.Set<SysUser>()
+            .Include(u => u.UserRoles)
+            .ThenInclude(ur => ur.Role)
+            .ThenInclude(r => r!.RoleMenus)
+            .ThenInclude(rm => rm.Menu)
+            .Where(u => u.Id == userId).Where(u => u.IsEnabled)
+            .FirstOrDefaultAsync();
+
+        if(user == null)
+        {
+            return new List<string>();
+        }
+
+        //var applicationCodes = user.GetApplicationCodes();
+        var applicationCodes = user.UserRoles
+            .Where(ur => ur.Role != null).Select(ur => ur.Role!)
+            .SelectMany(r => r!.RoleMenus)
+            .Where(rm => rm.Menu != null).Select(rm => rm.Menu!)
+            .Where(m => m.Application != null).Select(m => m!.Application!).ToList();
+
+        return applicationCodes;
     }
 }

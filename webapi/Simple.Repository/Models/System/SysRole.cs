@@ -37,6 +37,11 @@ public class SysRole : BusinessEntityBase<Guid>, IConcurrency
     public bool IsEnabled { get; set; } = true;
 
     /// <summary>
+    /// 数据范围（1-全部数据，2-本部门及以下数据，3-本部门数据，4-仅本人数据，5-自定义数据）
+    /// </summary>
+    public DataScopeType DataScope { get; set; } = DataScopeType.All;
+
+    /// <summary>
     /// 用户角色
     /// </summary>
     public List<SysUserRole> UserRoles { get; set; } = new List<SysUserRole>();
@@ -140,5 +145,12 @@ public class SysRole : BusinessEntityBase<Guid>, IConcurrency
 
         RemoveDataScope(removeOrganizationIds.ToArray());
         AddDataScope(addOrganizationIds.ToArray());
+    }
+
+
+    public override void ConfigureEntity(ModelBuilder builder)
+    {
+        // DataScope 默认值 1
+        builder.Entity<SysRole>().Property(r => r.DataScope).HasDefaultValue(DataScopeType.All);
     }
 }

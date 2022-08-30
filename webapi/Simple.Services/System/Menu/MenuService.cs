@@ -5,7 +5,8 @@ public class MenuService
     private readonly ISimpleService _services;
     private readonly SimpleDbContext _context;
 
-    public MenuService(SimpleDbContext context, ISimpleService services)
+    public MenuService(SimpleDbContext context, 
+                       ISimpleService services)
     {
         _context = context;
         _services = services;

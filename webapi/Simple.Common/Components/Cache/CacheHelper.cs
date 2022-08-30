@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Caching.Distributed;
+﻿using Microsoft.AspNetCore.DataProtection.KeyManagement;
+using Microsoft.Extensions.Caching.Distributed;
 
 namespace Simple.Common.Helpers;
 
@@ -6,7 +7,7 @@ public static class CacheHelper
 {
     private static IDistributedCache? _cache;
 
-    public static IDistributedCache Cache
+    private static IDistributedCache Cache
     {
         get
         {
@@ -14,6 +15,11 @@ public static class CacheHelper
             return _cache;
         }
     }
+
+    /// <summary>
+    /// 缓存所有索引键（Key）
+    /// </summary>
+    public const string KeySetCacheKey = "key_set"; 
 
     public static void Configure(IDistributedCache? cache)
     {
@@ -23,4 +29,175 @@ public static class CacheHelper
         }
         _cache = cache ?? throw new ArgumentNullException(nameof(cache));
     }
+
+    #region 缓存操作方法
+
+    public static byte[] Get(string key)
+    {
+        return Cache.Get(key);
+    }
+
+    public static Task<byte[]> GetAsync(string key, CancellationToken token = default)
+    {
+        return Cache.GetAsync(key, token);
+    }
+
+    public static Task<TCacheItem?> GetAsync<TCacheItem>(string key, CancellationToken token = default)
+        where TCacheItem : class
+    {
+        return Cache.GetAsync<TCacheItem>(key, token);
+    }
+
+    public static void Refresh(string key)
+    {
+        Cache.Refresh(key);
+    }
+
+    public static Task RefreshAsync(string key, CancellationToken token = default)
+    {
+        return Cache.RefreshAsync(key, token);
+    }
+
+    public static void Remove(string key)
+    {
+        Cache.Remove(key);
+
+        RemoveCacheKey(key);
+    }
+
+    public static async Task RemoveAsync(string key, CancellationToken token = default)
+    {
+        await Cache.RemoveAsync(key, token);
+
+        await RemoveCacheKeyAsync(key);
+    }
+
+    public static void Set(string key, byte[] value)
+    {
+        Cache.Set(key, value);
+
+        AddCacheKey(key);
+    }
+
+    public static void Set(string key, byte[] value, DistributedCacheEntryOptions options)
+    {
+        Cache.Set(key, value, options);
+
+        AddCacheKey(key);
+    }
+
+    public static async Task SetAsync(string key, byte[] value, CancellationToken token = default)
+    {
+        await Cache.SetAsync(key, value, token);
+
+        await AddCacheKeyAsync(key);
+    }
+
+    public static async Task SetAsync(string key, byte[] value, DistributedCacheEntryOptions options, CancellationToken token = default)
+    {
+        await Cache.SetAsync(key, value, options, token);
+
+        await AddCacheKeyAsync(key);
+    }
+
+    public static async Task SetAsync<TCacheItem>(string key, TCacheItem value, CancellationToken token = default)
+        where TCacheItem : class
+    {
+        await Cache.SetAsync<TCacheItem>(key, value, token);
+
+        await AddCacheKeyAsync(key);
+    }
+
+    public static async Task SetAsync<TCacheItem>(string key, TCacheItem value, DistributedCacheEntryOptions options, CancellationToken token = default)
+        where TCacheItem : class
+    {
+        await Cache.SetAsync<TCacheItem>(key, value, options, token);
+
+        await AddCacheKeyAsync(key);
+    }
+
+    #endregion
+
+
+    #region 索引键操作方法
+
+    public static async Task<HashSet<string>?> GetKeySetAsync()
+    {
+        var keySet = await Cache.GetAsync<HashSet<string>>(KeySetCacheKey);
+        return keySet;
+    }
+
+    public static void AddCacheKey(string key)
+    {
+        // 获取缓存键集合
+        var keySet = Cache.Get<HashSet<string>>(KeySetCacheKey);
+        if (keySet == null)
+        {
+            keySet = new HashSet<string>();
+        }
+        // 成功添加，则写入新的缓存
+        if (keySet.Add(key))
+        {
+            Cache.Set(KeySetCacheKey, keySet);
+        }
+    }
+
+    public static async Task AddCacheKeyAsync(string key)
+    {
+        // 获取缓存键集合
+        var keySet = await Cache.GetAsync<HashSet<string>>(KeySetCacheKey);
+        if(keySet == null)
+        {
+            keySet = new HashSet<string>();
+        }
+        // 成功添加，则写入新的缓存
+        if (keySet.Add(key))
+        {
+            await Cache.SetAsync(KeySetCacheKey, keySet);
+        }
+    }
+
+    public static bool RemoveCacheKey(string key)
+    {
+        // 读缓存
+        var keySet = Cache.Get<HashSet<string>>(KeySetCacheKey);
+
+        // 如果缓存存在，且存在要删除的键
+        if(keySet != null && keySet.Any(k => k == key))
+        {
+            keySet.Remove(key);
+            Cache.Set(KeySetCacheKey, keySet);
+            return true;
+        }
+
+        return false;
+    }
+
+    public static async Task<bool> RemoveCacheKeyAsync(string key)
+    {
+        // 读缓存
+        var keySet = await Cache.GetAsync<HashSet<string>>(KeySetCacheKey);
+
+        // 如果缓存存在，且存在要删除的键
+        if (keySet != null && keySet.Any(k => k == key))
+        {
+            keySet.Remove(key);
+            await Cache.SetAsync(KeySetCacheKey, keySet);
+            return true;
+        }
+
+        return false;
+    }
+
+    #endregion
+
+
+    #region 辅助方法
+
+    public static string GetKey(params string[] partialKeys)
+    {
+        return string.Join("", partialKeys);
+    }
+
+    #endregion
 }

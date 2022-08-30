@@ -40,7 +40,7 @@ public static class InjectionServiceCollectionExtensions
         static void RegistrationType(IServiceCollection services, Type serviceType, Type implementationType)
         {
             // 设置默认生命周期为 Transient
-            var lifecyleType = LifecycleType.Transient;
+            var lifecyleType = ServiceLifetime.Transient;
 
             // 获取服务自动注入标签（AutoInject）
             var autoInjection = serviceType.GetCustomAttribute<AutoInjectionAttribute>();
@@ -56,13 +56,13 @@ public static class InjectionServiceCollectionExtensions
             // 注册服务
             switch (lifecyleType)
             {
-                case LifecycleType.Singleton:
+                case ServiceLifetime.Singleton:
                     services.AddSingleton(serviceType, implementationType);
                     break;
-                case LifecycleType.Scoped:
+                case ServiceLifetime.Scoped:
                     services.AddScoped(serviceType, implementationType);
                     break;
-                case LifecycleType.Transient:
+                case ServiceLifetime.Transient:
                 default:
                     services.AddTransient(serviceType, implementationType);
                     break;

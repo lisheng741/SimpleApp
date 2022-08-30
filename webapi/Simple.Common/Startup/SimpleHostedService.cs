@@ -19,6 +19,9 @@ public class SimpleHostedService : IHostedService
     {
         var serviceProvider = Host.Services;
 
+        // serviceHelper
+        ServiceHelper.Configure(serviceProvider);
+
         // old
         //// Json 配置
         //var jsonSerializerOptions = serviceProvider.GetService<IOptions<JsonSerializerOptions>>();
