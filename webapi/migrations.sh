@@ -5,7 +5,7 @@ set -e
 
 
 # 创建迁移
-# dotnet ef migrations add  x ../Simple.WebApi
+# dotnet ef migrations add  x -s ../Simple.WebApi
 # # 删除迁移
 # dotnet ef migrations remove -s ../Simple.WebApi
 # # 更新数据库
@@ -18,7 +18,8 @@ settings=" -s ../Simple.WebApi "
 # 进入仓储项目
 cd "./Simple.Repository"
 
-if [ ! -d "./Migrations" ] then
+if [ ! -d "./Migrations" ] 
+then
   mkdir ./Migrations
 fi
 
