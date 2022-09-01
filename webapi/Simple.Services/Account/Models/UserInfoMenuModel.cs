@@ -13,6 +13,11 @@ public class UserInfoMenuModel : ModelBase
     public Guid Pid { get; set; }
 
     /// <summary>
+    /// 应用分类
+    /// </summary>
+    public string? Application { get; set; }
+
+    /// <summary>
     /// 路由名称, 必须设置,且不能重名
     /// </summary>
     public string Name { get; set; } = "";
@@ -50,7 +55,7 @@ public class UserInfoMenuModel : ModelBase
             .ForMember(d => d.Name, options => options.MapFrom(s => s.Code))
             .ForMember(d => d.Redirect, options => options.MapFrom(s => s.OpenType == MenuOpenType.Outer ? s.Link : s.Redirect))
             .ForMember(d => d.Path, options => options.MapFrom(s => s.OpenType == MenuOpenType.Outer ? s.Link : s.Router))
-            .ForMember(d => d.Hidden, options => options.MapFrom(s => s.Visible == "Y"))
+            .ForMember(d => d.Hidden, options => options.MapFrom(s => s.Visible == "N"))
             .ForMember(d => d.Meta, options => options.MapFrom(s => 
                 new UserInfoMenuMetaModel()
                 {
@@ -67,7 +72,7 @@ public class UserInfoMenuModel : ModelBase
             .ForMember(d => d.Name, options => options.MapFrom(s => s.Code))
             .ForMember(d => d.Redirect, options => options.MapFrom(s => s.OpenType == MenuOpenType.Outer ? s.Link : s.Redirect))
             .ForMember(d => d.Path, options => options.MapFrom(s => s.OpenType == MenuOpenType.Outer ? s.Link : s.Router))
-            .ForMember(d => d.Hidden, options => options.MapFrom(s => s.Visible == "Y"))
+            .ForMember(d => d.Hidden, options => options.MapFrom(s => s.Visible == "N"))
             .ForMember(d => d.Meta, options => options.MapFrom(s =>
                 new UserInfoMenuMetaModel()
                 {

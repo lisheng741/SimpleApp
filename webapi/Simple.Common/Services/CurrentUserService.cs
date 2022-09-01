@@ -13,6 +13,7 @@ public interface ICurrentUserService
     string? Name { get; }
     string? Email { get; }
     Guid? TenantId { get; }
+    bool IsSuperAdmin { get; }
 
     bool IsInRole(string roleName);
     Claim? FindClaim(string claimType);
@@ -50,6 +51,8 @@ public class CurrentUserService : ICurrentUserService
 
     public virtual string? Name => FindClaimValue(SimpleClaimTypes.Name);
 
+    public virtual string? Email => FindClaimValue(SimpleClaimTypes.Email);
+
     public virtual Guid? UserId
     {
         get
@@ -80,7 +83,7 @@ public class CurrentUserService : ICurrentUserService
         }
     }
 
-    public virtual string? Email => FindClaimValue(SimpleClaimTypes.Email);
+    public virtual bool IsSuperAdmin => FindClaimValue(SimpleClaimTypes.AdminType) == "1";
 
     public virtual bool IsInRole(string roleName)
     {

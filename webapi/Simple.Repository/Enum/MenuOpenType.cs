@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Simple.Repository.Enum;
+﻿namespace Simple.Repository.Enum;
 
 /// <summary>
 /// 菜单打开方式枚举

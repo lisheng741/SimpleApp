@@ -30,7 +30,7 @@ public class MenuService
         }
 
         // 排序
-        query = query.OrderBy(m => m.Sort).ThenBy(m => m.Weight);
+        query = query.OrderBy(m => m.Sort);
 
         var menus = await query.ToListAsync();
         var nodes = MapperHelper.Map<List<MenuTreeNodeModel>>(menus);
@@ -51,7 +51,7 @@ public class MenuService
         }
 
         // 排序
-        query = query.OrderBy(m => m.Sort).ThenBy(m => m.Weight);
+        query = query.OrderBy(m => m.Sort);
 
         // 获取总数量
         result.TotalRows = await query.CountAsync();
@@ -77,7 +77,7 @@ public class MenuService
         }
 
         var menus = await query
-            .OrderBy(m => m.Sort).ThenBy(m => m.Weight)
+            .OrderBy(m => m.Sort)
             .ToListAsync();
         List<TreeNode> nodes = MapperHelper.Map<List<TreeNode>>(menus);
 

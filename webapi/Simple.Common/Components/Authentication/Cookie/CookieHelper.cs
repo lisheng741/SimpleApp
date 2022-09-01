@@ -9,7 +9,7 @@ public static class CookieHelper
     {
         var claims = new List<Claim>()
         {
-            new Claim(SimpleClaimTypes.UserName, cookieModel.Username),
+            new Claim(SimpleClaimTypes.UserName, cookieModel.UserName),
         };
 
         foreach (var role in cookieModel.Roles)

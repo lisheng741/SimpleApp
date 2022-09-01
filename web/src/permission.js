@@ -48,17 +48,18 @@ router.beforeEach((to, from, next) => {
               const applocation = []
               res.apps.forEach(item => {
                 const apps = { 'code': '', 'name': '', 'active': '', 'menu': '' }
+                const menus = res.menus.filter(m => m.application === item.code)
                 if (item.active) {
                   apps.code = item.code
                   apps.name = item.name
                   apps.active = item.active
-                  apps.menu = res.menus
-                  antDesignmenus = res.menus
+                  apps.menu = menus
+                  antDesignmenus = menus
                 } else {
                   apps.code = item.code
                   apps.name = item.name
                   apps.active = item.active
-                  apps.menu = ''
+                  apps.menu = menus
                 }
                 applocation.push(apps)
               })

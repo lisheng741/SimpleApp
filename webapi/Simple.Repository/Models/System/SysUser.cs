@@ -69,6 +69,11 @@ public class SysUser : BusinessEntityBase<Guid>, IConcurrency
     public SysOrganization? Organization { get; set; }
 
     /// <summary>
+    /// 账号类型（1-超级管理员，2-管理员，3-普通账号）
+    /// </summary>
+    public AdminType AdminType { get; set; } = AdminType.None;
+
+    /// <summary>
     /// 用户角色
     /// </summary>
     public List<SysUserRole> UserRoles { get; set; } = new List<SysUserRole>();
@@ -185,5 +190,8 @@ public class SysUser : BusinessEntityBase<Guid>, IConcurrency
             .HasOne(u => u.Position)
             .WithMany()
             .OnDelete(DeleteBehavior.SetNull);
+
+        // AdminType 默认值 3
+        builder.Entity<SysUser>().Property(r => r.AdminType).HasDefaultValue(AdminType.None);
     }
 }

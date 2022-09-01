@@ -2,7 +2,7 @@
 
 public static class SimpleClaimTypes
 {
-    public const string UserName = "username";
+    public const string UserName = "uname";
 
     public const string Role = "role";
 
@@ -26,5 +26,9 @@ public static class SimpleClaimTypes
 
     public const string Email = "email";
 
+    public const string Phone = "phone";
+
     public const string Tenant = "tenant";
+
+    public const string AdminType = "admintype";
 }

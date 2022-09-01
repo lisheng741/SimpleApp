@@ -10,6 +10,8 @@ public interface ITenant
     public Guid TenantId { get; set; }
 }
 
+public interface ICreatedInfo : ICreatedTime, ICreatedUser { }
+
 public interface ICreatedTime
 {
     public DateTime? CreatedTime { get; set; }
@@ -20,7 +22,7 @@ public interface ICreatedUser
     public Guid? CreatedUserId { get; set; }
 }
 
-public interface ICreatedInfo : ICreatedTime, ICreatedUser { }
+public interface IUpdatedInfo : IUpdatedTime, IUpdatedUser { }
 
 public interface IUpdatedTime
 {
@@ -31,8 +33,6 @@ public interface IUpdatedUser
 {
     public Guid? UpdatedUserId { get; set; }
 }
-
-public interface IUpdatedInfo : IUpdatedTime, IUpdatedUser { }
 
 public interface IConcurrency
 {

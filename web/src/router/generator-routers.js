@@ -36,7 +36,7 @@ const userAccount = [
   // account
   {
     'name': 'account',
-    'pid': 0,
+    'pid': '00000000-0000-0000-0000-000000000000',
     'id': 10028,
     'meta': {
       'title': '个人页',
@@ -128,7 +128,7 @@ const userAccount = [
   {
     'name': 'Console',
     'path': '/welcome',
-    'pid': 0,
+    'pid': '00000000-0000-0000-0000-000000000000',
     'id': 183183,
     'meta': {
       'title': '首页',
@@ -163,12 +163,12 @@ export const generatorDynamicRouter = (data) => {
     const menuNav = []
     const childrenNav = []
     //      后端数据, 根级树数组,  根级 PID
-    listToTree(resNav, childrenNav, 0)
+    listToTree(resNav, childrenNav, '00000000-0000-0000-0000-000000000000')
 
     /**
      * 增加静态网页
      */
-    listToTree(userAccount, childrenNav, 0)
+    listToTree(userAccount, childrenNav, '00000000-0000-0000-0000-000000000000')
     rootRouter.children = childrenNav
     menuNav.push(rootRouter)
     const routers = generator(menuNav)

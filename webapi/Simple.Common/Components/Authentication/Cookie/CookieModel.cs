@@ -4,19 +4,19 @@ namespace Simple.Common.Authentication.Cookie;
 
 public class CookieModel
 {
-    public string Username { get; private set; }
+    public string UserName { get; private set; }
     public string[] Roles { get; private set; }
     public List<Claim> Claims { get; set; }
 
-    public CookieModel(string username, params string[] roles)
+    public CookieModel(string userName, params string[] roles)
     {
-        Username = username;
+        UserName = userName;
         Roles = roles;
         Claims = new List<Claim>();
     }
 
-    public CookieModel(string username, List<Claim> claims, params string[] roles)
-        : this(username, roles)
+    public CookieModel(string userName, List<Claim> claims, params string[] roles)
+        : this(userName, roles)
     {
         Claims = claims;
     }

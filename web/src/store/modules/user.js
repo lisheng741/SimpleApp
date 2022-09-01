@@ -124,8 +124,8 @@ const user = {
       })
     },
 
-    // 切换应用菜单
-    MenuChange ({ commit }, application) {
+    // 切换应用菜单（小诺1.8原方法）
+    MenuChange_Original ({ commit }, application) {
       return new Promise((resolve) => {
         sysMenuChange({ application: application.code }).then((res) => {
           const apps = { 'code': '', 'name': '', 'active': '', 'menu': '' }
@@ -158,6 +158,38 @@ const user = {
           // window.location.reload()
         }).catch(() => {
           resolve()
+        })
+      })
+    },
+
+    // 切换应用菜单
+    MenuChange ({ commit }, application) {
+      return new Promise((resolve, reject) => {
+        const appCode = application.code
+        // 缓存获取所有应用
+        const allAppMenu = Vue.ls.get(ALL_APPS_MENU)
+        // 切换应用
+        let appMenu
+        allAppMenu.forEach(item => {
+          if (item.code === appCode) {
+            appMenu = item
+            item.active = true
+          } else {
+            item.active = false
+          }
+        })
+        // 如果找不到
+        if (!appMenu) {
+          reject(new Error(`找不到应用: ${appCode}`))
+          return
+        }
+        // 找到对应的应用，设置新的缓存
+        Vue.ls.set(ALL_APPS_MENU, allAppMenu)
+        resolve(appMenu)
+        // 切换路由表
+        const antDesignmenus = appMenu.menu
+        store.dispatch('GenerateRoutes', { antDesignmenus }).then(() => {
+          router.addRoutes(store.getters.addRouters)
         })
       })
     }
