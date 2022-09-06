@@ -2,7 +2,6 @@
 using Microsoft.Extensions.Options;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
-using System.Text.Json;
 
 namespace Simple.Common.EventBus.RabbitMq;
 
@@ -128,7 +127,7 @@ public class RabbitMqManager : IRabbitMqManager, IDisposable
 
         using var channel = Connection.CreateModel();
 
-        var message = JsonSerializer.Serialize(@event);
+        var message = JsonHelper.Serialize(@event);
         var body = Encoding.UTF8.GetBytes(message);
 
         var properties = channel.CreateBasicProperties();
@@ -153,7 +152,7 @@ public class RabbitMqManager : IRabbitMqManager, IDisposable
             // 获取消息
             //var eventName = e.RoutingKey;
             var message = Encoding.UTF8.GetString(e.Body.Span);
-            var @event = JsonSerializer.Deserialize(message, eventType);
+            var @event = JsonHelper.Deserialize(message, eventType);
 
             // 处理消息
             if (@event != null) await processEvent.Invoke(@event);

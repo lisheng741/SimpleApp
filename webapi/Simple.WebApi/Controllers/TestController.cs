@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
+using Simple.Common.EventBus;
 
 namespace Simple.WebApi.Controllers
 {
@@ -9,16 +10,23 @@ namespace Simple.WebApi.Controllers
     {
         private readonly TestService _testService;
         private readonly IMapper _mapper;
+        private readonly IEventPublisher _eventPublisher;
 
-        public TestController(TestService testService, IMapper mapper, IEnumerable<ITestService> testServices, ITestService test)
+        public TestController(TestService testService, IMapper mapper, IEnumerable<ITestService> testServices, ITestService test, IEventPublisher eventPublisher)
         {
             _testService = testService;
             _mapper = mapper;
+            _eventPublisher = eventPublisher;
         }
 
         [HttpGet]
         public string Get()
-            => _testService.Get();
+        {
+            var @event = new TestEventModel();
+            _eventPublisher.PublishAsync(@event).GetAwaiter().GetResult();
+
+            return _testService.Get();
+        }
 
         [HttpGet]
         public string GetToken()

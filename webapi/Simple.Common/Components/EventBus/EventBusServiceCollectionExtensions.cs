@@ -5,6 +5,7 @@ using Simple.Common.EventBus.RabbitMq;
 using Simple.Common.EventBus.Redis;
 using Microsoft.Extensions.Options;
 using RabbitMQ.Client;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 
 namespace Microsoft.Extensions.DependencyInjection;
 
@@ -27,9 +28,11 @@ public static partial class EventBusServiceCollectionExtensions
 
     public static EventBusBuilder AddEventBusLocal(this IServiceCollection services, Action<LocalEventBusOptions>? setupAction = null)
     {
+        // 替换 IEventPublisher 实现
+        services.Replace(new ServiceDescriptor(typeof(IEventPublisher), typeof(LocalEventPublisher), ServiceLifetime.Singleton));
+
         services.AddHostedService<LocalEventBusHostedService>();
         services.AddSingleton<IEventStore, ChannelEventStore>();
-        services.AddSingleton<IEventPublisher, LocalEventPublisher>();
 
         // 自定义 EventBusOptions 配置
         if (setupAction != null) services.Configure(setupAction);
@@ -53,10 +56,12 @@ public static partial class EventBusServiceCollectionExtensions
             return connectionFactory;
         });
 
+        // 替换 IEventPublisher 实现
+        services.Replace(new ServiceDescriptor(typeof(IEventPublisher), typeof(RabbitMqEventPublisher), ServiceLifetime.Singleton));
+
         // 基本服务
         services.AddHostedService<RabbitMqEventBusHostedService>();
         services.AddSingleton<IRabbitMqManager, RabbitMqManager>();
-        services.AddSingleton<IEventPublisher, RabbitMqEventPublisher>();
 
         // 自定义配置
         if (setupAction != null) services.Configure(setupAction);
@@ -66,10 +71,12 @@ public static partial class EventBusServiceCollectionExtensions
 
     public static EventBusBuilder AddEventBusRedis(this IServiceCollection services,Action<RedisEventBusOptions>? setupAction = null)
     {
+        // 替换 IEventPublisher 实现
+        services.Replace(new ServiceDescriptor(typeof(IEventPublisher), typeof(RedisEventPublisher), ServiceLifetime.Singleton));
+
         // 基本服务
         services.AddHostedService<RedisEventBusHostedService>();
         services.AddSingleton<IRedisManager, RedisManager>();
-        services.AddSingleton<IEventPublisher, RedisEventPublisher>();
 
         // 自定义配置
         if (setupAction != null) services.Configure(setupAction);

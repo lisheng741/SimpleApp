@@ -25,7 +25,7 @@ try
     // 添加事件总线 (Local)
     builder.Services.AddEventBusLocal().AddSubscriber(subscribers =>
     {
-        
+        subscribers.Add<TestEventModel, TestEventHandler>();
     });
 
     // 日志

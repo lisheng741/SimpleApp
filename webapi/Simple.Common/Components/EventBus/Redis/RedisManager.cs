@@ -1,14 +1,11 @@
 ﻿using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using StackExchange.Redis;
-using System.Text.Json;
 
 namespace Simple.Common.EventBus.Redis;
 
 public class RedisManager : IRedisManager, IDisposable
 {
-    private static readonly Version ServerVersionWithExtendedSetCommand = new Version(4, 0, 0);
-
     private readonly ILogger<RedisManager> _logger;
     private readonly ISubscribeManager _subscribeExecuter;
     private readonly RedisEventBusOptions _options;
@@ -153,7 +150,7 @@ public class RedisManager : IRedisManager, IDisposable
         await ConnectAsync(token);
 
         var eventName = @event.GetType().Name;
-        var message = JsonSerializer.Serialize(@event);
+        var message = JsonHelper.Serialize(@event);
 
         await Subscriber.PublishAsync(eventName, message);
     }
@@ -165,7 +162,7 @@ public class RedisManager : IRedisManager, IDisposable
         Action<RedisChannel, RedisValue> handler = async (channel, message) =>
         {
             // 获取消息
-            var @event = JsonSerializer.Deserialize(message.ToString(), eventType);
+            var @event = JsonHelper.Deserialize(message.ToString(), eventType);
 
             // 处理消息
             if (@event != null) await processEvent.Invoke(@event).ConfigureAwait(false);

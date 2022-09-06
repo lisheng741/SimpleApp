@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Text.Json;
-using System.Threading.Tasks;
+﻿using System.Text.Json;
 
 namespace Simple.Common.Helpers;
 
@@ -48,9 +43,14 @@ public static class JsonHelper
         return JsonSerializer.SerializeToUtf8Bytes(value, _serializerOptions);
     }
 
-    public static TValue? Deserialize<TValue>(string json)
+    public static TValue? Deserialize<TValue>(string json, JsonSerializerOptions? options = null)
     {
-        return JsonSerializer.Deserialize<TValue>(json, SerializerOptions);
+        return JsonSerializer.Deserialize<TValue>(json, options ?? SerializerOptions);
+    }
+
+    public static object? Deserialize(string json, Type returnType, JsonSerializerOptions? options = null)
+    {
+        return JsonSerializer.Deserialize(json, returnType, options ?? SerializerOptions);
     }
 
     public static TValue? Deserialize<TValue>(ReadOnlySpan<byte> utf8Json)
