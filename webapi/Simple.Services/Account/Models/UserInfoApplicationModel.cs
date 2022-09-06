@@ -32,7 +32,8 @@ public class UserInfoApplicationModel : ModelBase
 
     public override void ConfigureMapper(Profile profile)
     {
-        profile.CreateMap<SysApplication, UserInfoApplicationModel>();
+        profile.CreateMap<SysApplication, UserInfoApplicationModel>()
+            .ForMember(d => d.Active, options => options.MapFrom(s => s.IsActive));
 
         profile.CreateMap<ApplicationCacheItem, UserInfoApplicationModel>();
     }

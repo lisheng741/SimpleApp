@@ -26,6 +26,7 @@ public class ApplicationCacheItem : ModelBase
 
     public override void ConfigureMapper(Profile profile)
     {
-        profile.CreateMap<SysApplication, ApplicationCacheItem>();
+        profile.CreateMap<SysApplication, ApplicationCacheItem>()
+            .ForMember(d => d.Active, options => options.MapFrom(s => s.IsActive));
     }
 }

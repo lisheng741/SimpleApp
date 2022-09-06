@@ -15,11 +15,18 @@ try
 {
     var builder = WebApplication.CreateBuilder(args);
 
+    // 配置
     var configuration = builder.Configuration;
     AppSettings.Configure(configuration);
 
     // 添加 HostedService
     builder.Services.AddHostedService<SimpleHostedService>();
+
+    // 添加事件总线 (Local)
+    builder.Services.AddEventBusLocal().AddSubscriber(subscribers =>
+    {
+        
+    });
 
     // 日志
     //builder.Logging.ClearProviders(); // .AddConsole()
