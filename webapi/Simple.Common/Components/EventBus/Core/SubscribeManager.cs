@@ -24,11 +24,12 @@ public class SubscribeManager : ISubscribeManager
         Type eventType = @event.GetType();
         if (Subscribers.TryGetValue(eventType, out var handlerTypes))
         {
+            using var scope = _serviceProvider.CreateScope();
             foreach (var handlerType in handlerTypes)
             {
                 try
                 {
-                    var handler = _serviceProvider.GetService(handlerType);
+                    var handler = scope.ServiceProvider.GetService(handlerType);
                     var handle = handlerType.GetMethod("Handle");
 
                     //var handlerGenericType = typeof(IEventHandler<>).MakeGenericType(eventType);

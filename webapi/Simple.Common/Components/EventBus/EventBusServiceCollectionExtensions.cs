@@ -26,6 +26,13 @@ public static partial class EventBusServiceCollectionExtensions
         return builder;
     }
 
+    internal static IServiceCollection AddEventBusDefault(this IServiceCollection services)
+    {
+        services.AddSingleton<IEventPublisher, DefaultEventPublisher>();
+
+        return services;
+    }
+
     public static EventBusBuilder AddEventBusLocal(this IServiceCollection services, Action<LocalEventBusOptions>? setupAction = null)
     {
         // 替换 IEventPublisher 实现
@@ -48,10 +55,11 @@ public static partial class EventBusServiceCollectionExtensions
             var options = sp.GetService<IOptions<RabbitMqEventBusOptions>>()?.Value;
             var connectionFactory = new ConnectionFactory();
 
-            if (!string.IsNullOrEmpty(options?.HostName)) connectionFactory.HostName = options?.HostName;
-            if (!string.IsNullOrEmpty(options?.UserName)) connectionFactory.UserName = options?.UserName;
-            if (!string.IsNullOrEmpty(options?.Password)) connectionFactory.Password = options?.Password;
-            if (!string.IsNullOrEmpty(options?.VirtualHost)) connectionFactory.Password = options?.VirtualHost;
+            if (!string.IsNullOrEmpty(options?.HostName)) connectionFactory.HostName = options.HostName;
+            if (options?.Port != null) connectionFactory.Port = options.Port;
+            if (!string.IsNullOrEmpty(options?.UserName)) connectionFactory.UserName = options.UserName;
+            if (!string.IsNullOrEmpty(options?.Password)) connectionFactory.Password = options.Password;
+            if (!string.IsNullOrEmpty(options?.VirtualHost)) connectionFactory.Password = options.VirtualHost;
 
             return connectionFactory;
         });

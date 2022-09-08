@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc.Filters;
+using Simple.Common.EventBus;
+using Simple.Common.Models;
 
 namespace Simple.Common.Filters;
 

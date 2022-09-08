@@ -47,6 +47,14 @@ public static class AppSettings
         _configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
     }
 
+    /// <summary>
+    /// 是否记录操作日志
+    /// </summary>
+    public static bool IsRecordRequestLog => Configuration.GetValue<bool>("IsRecordRequestLog");
+
+    /// <summary>
+    /// 允许跨域请求列表
+    /// </summary>
     public static string[] AllowCors => Configuration.GetSection("AllowCors").Get<string[]>();
 
     #region Jwt 配置

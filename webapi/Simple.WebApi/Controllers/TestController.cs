@@ -19,11 +19,15 @@ namespace Simple.WebApi.Controllers
             _eventPublisher = eventPublisher;
         }
 
+        /// <summary>
+        /// 测试获取
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         public string Get()
         {
-            var @event = new TestEventModel();
-            _eventPublisher.PublishAsync(@event).GetAwaiter().GetResult();
+            //var @event = new TestEventModel();
+            //_eventPublisher.PublishAsync(@event).GetAwaiter().GetResult();
 
             return _testService.Get();
         }
@@ -45,7 +49,7 @@ namespace Simple.WebApi.Controllers
         }
 
         [HttpGet]
-        public string Throw2()
+        public string Throw2(string s = "12334")
         {
             throw new Exception("测试异常");
         }

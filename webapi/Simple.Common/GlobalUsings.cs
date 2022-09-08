@@ -7,5 +7,7 @@ global using System.Reflection;
 global using Microsoft.Extensions.DependencyInjection;
 global using Simple.Common;
 global using Simple.Common.Configuration;
+global using Simple.Common.EventBus;
 global using Simple.Common.Helpers;
+global using Simple.Common.Models;
 global using Simple.Common.Services;

@@ -7,6 +7,8 @@ global using Simple.Services;
 using Microsoft.OpenApi.Models;
 using NLog;
 using NLog.Web;
+using Simple.Common.Models;
+using Simple.Services.EventHandlers;
 
 var logger = NLog.LogManager.Setup().LoadConfigurationFromAppSettings().GetCurrentClassLogger();
 logger.Debug("启动中……");
@@ -15,22 +17,18 @@ try
 {
     var builder = WebApplication.CreateBuilder(args);
 
-    // 配置
-    var configuration = builder.Configuration;
-    AppSettings.Configure(configuration);
+    // 基本能力配置
+    builder.SimpleConfigure();
 
-    // 添加 HostedService
-    builder.Services.AddHostedService<SimpleHostedService>();
+    var configuration = builder.Configuration;
 
     // 添加事件总线 (Local)
     builder.Services.AddEventBusLocal().AddSubscriber(subscribers =>
     {
         subscribers.Add<TestEventModel, TestEventHandler>();
+        subscribers.Add<ExceptionEvent, ExceptionEventHandler>();
+        subscribers.Add<RequestEvent, RequestEventHandler>();
     });
-
-    // 日志
-    //builder.Logging.ClearProviders(); // .AddConsole()
-    builder.Host.UseNLog();
 
     // API
     builder.Services.AddControllers()
@@ -76,7 +74,7 @@ try
 
     // 对象映射 AutoMapper
     var profileAssemblies = AssemblyHelper.GetAssemblies("Simple.Services");
-    builder.Services.AddAutoMapper(profileAssemblies,ServiceLifetime.Singleton);
+    builder.Services.AddAutoMapper(profileAssemblies, ServiceLifetime.Singleton);
 
     // 缓存
     builder.Services.AddSimpleCache();
@@ -90,6 +88,13 @@ try
     var app = builder.Build();
 
     // 配置 HTTP 请求管道
+
+    app.Use((context, next) =>
+    {
+        context.Request.EnableBuffering();
+        return next(context);
+    });
+
     // 全局异常处理
     app.UseApiException();
 
