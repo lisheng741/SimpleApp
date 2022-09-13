@@ -11,7 +11,7 @@ public static class AuthorizationServiceCollectionExtensions
 
         services.AddTransient<IAuthorizationPolicyProvider, SimpleAuthorizationPolicyProvider>();
         services.AddTransient<IAuthorizationHandler, SimpleAuthorizationHandler>();
-        services.AddTransient<IPermissionChecker, PermissionChecker>();
+        services.AddTransient<IPermissionChecker, DefaultPermissionChecker>();
 
         return services;
     }

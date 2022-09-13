@@ -4,11 +4,14 @@ global using Simple.Common;
 global using Simple.Common.Configuration;
 global using Simple.Common.Helpers;
 global using Simple.Services;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.OpenApi.Models;
 using NLog;
 using NLog.Web;
+using Simple.Common.Authorization;
 using Simple.Common.Models;
 using Simple.Services.EventHandlers;
+using Simple.Services.Permissions;
 
 var logger = NLog.LogManager.Setup().LoadConfigurationFromAppSettings().GetCurrentClassLogger();
 logger.Debug("启动中……");
@@ -71,6 +74,8 @@ try
     builder.Services.AddJwtAuthentication();
     // 授权
     builder.Services.AddSimpleAuthorization();
+    // 替换默认 PermissionChecker
+    builder.Services.Replace(new ServiceDescriptor(typeof(IPermissionChecker), typeof(PermissionChecker), ServiceLifetime.Transient));
 
     // 对象映射 AutoMapper
     var profileAssemblies = AssemblyHelper.GetAssemblies("Simple.Services");

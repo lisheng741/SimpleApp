@@ -123,6 +123,15 @@ public class AccountService
     }
 
     /// <summary>
+    /// 当前用户是否为超级管理员
+    /// </summary>
+    /// <returns></returns>
+    public bool IsSuperAdmin()
+    {
+        return _currentUser.IsSuperAdmin;
+    }
+
+    /// <summary>
     /// 获取当前用户应用列表
     /// </summary>
     /// <returns></returns>
@@ -170,7 +179,6 @@ public class AccountService
         if (user.AdminType == AdminType.SuperAdmin)
         {
             // 超级管理员用户
-
             // 优先读缓存
             List<ApplicationCacheItem> applicationCacheItems = await _cacheService.GetUserApplicationsAsync(user.Id);
             if (applicationCacheItems.Count > 0)
@@ -198,7 +206,6 @@ public class AccountService
         else
         {
             // 其他用户
-
             // 获取用户角色列表
             var roleIds = user.UserRoles.Select(ur => ur.RoleId);
 
@@ -316,7 +323,6 @@ public class AccountService
         if (user.AdminType == AdminType.SuperAdmin)
         {
             // 超级管理员用户
-
             // 优先读缓存
             List<MenuCacheItem> menuCacheItems = await _cacheService.GetUserMenusAsync(user.Id);
             if (menuCacheItems.Count > 0)
@@ -341,7 +347,6 @@ public class AccountService
         else
         {
             // 其他用户
-
             // 获取用户角色列表
             var roleIds = user.UserRoles.Select(ur => ur.RoleId);
 
@@ -396,6 +401,15 @@ public class AccountService
     }
 
     /// <summary>
+    /// 获取所有权限
+    /// </summary>
+    /// <returns></returns>
+    public async Task<List<string>> GetAllPermissionsAsync()
+    {
+        return await GetUserPermissionsAsync(new SysUser() { Id = Guid.Empty});
+    }
+
+    /// <summary>
     /// 获取当前用户权限列表（钮权限标识）
     /// </summary>
     /// <returns></returns>
@@ -441,7 +455,7 @@ public class AccountService
     /// <returns></returns>
     private async Task<List<string>> GetUserPermissionsAsync(SysUser user)
     {
-        if(user.AdminType == AdminType.SuperAdmin)
+        if(user.AdminType == AdminType.SuperAdmin || user.Id == Guid.Empty)
         {
             List<string> result = await _cacheService.GetUserPermissionsAsync(user.Id);
             if (result.Count > 0)

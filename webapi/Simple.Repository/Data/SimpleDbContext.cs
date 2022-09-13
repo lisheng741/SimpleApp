@@ -113,10 +113,10 @@ public class SimpleDbContext : DbContext
             {
                 entityConfigure.ConfigureEntity(builder);
             }
+        } // foreach (var entityType in builder.Model.GetEntityTypes())
 
-            // 配置种子数据
-            builder.ConfigureDataSeed(Assembly.GetExecutingAssembly());
-        }
+        // 配置种子数据
+        builder.ConfigureDataSeed(Assembly.GetExecutingAssembly());
     }
 
     #region SaveChanges 方法重写
