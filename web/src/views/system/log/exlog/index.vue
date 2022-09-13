@@ -1,24 +1,22 @@
 <template>
   <div>
-    <x-card v-if="hasPerm('sysOpLog:page')">
+    <x-card v-if="hasPerm('sysExLog:page')">
       <div slot="content" class="table-page-search-wrapper">
         <a-form layout="inline">
           <a-row :gutter="48">
             <a-col :md="8" :sm="24">
-              <a-form-item label="请求内容">
-                <a-input v-model="queryParam.name" allow-clear placeholder="请输入请求内容"/>
+              <a-form-item label="事件Id">
+                <a-input v-model="queryParam.eventId" allow-clear placeholder="请输入事件Id"/>
               </a-form-item>
             </a-col>
             <a-col :md="8" :sm="24">
-              <a-form-item label="是否成功">
-                <a-select v-model="queryParam.success" placeholder="请选择是否成功" >
-                  <a-select-option v-for="(item,index) in successDict" :key="index" :value="item.code" >{{ item.name }}</a-select-option>
-                </a-select>
+              <a-form-item label="异常名称">
+                <a-input v-model="queryParam.name" allow-clear placeholder="请输入异常名称"/>
               </a-form-item>
             </a-col>
             <template v-if="advanced">
               <a-col :md="16" :sm="24">
-                <a-form-item label="操作时间">
+                <a-form-item label="异常时间">
                   <a-range-picker
                     v-model="queryParam.dates"
                     :show-time="{
@@ -53,45 +51,48 @@
         :rowKey="(record) => record.id"
       >
         <template slot="operator">
-          <a-popconfirm style="display:none" v-if="hasPerm('sysOpLog:delete')" @confirm="() => sysOpLogDelete()" placement="top" title="确认清空日志？">
+          <a-popconfirm style="display:none" v-if="hasPerm('sysExLog:delete')" @confirm="() => sysOpLogDelete()" placement="top" title="确认清空日志？">
             <a-button type="danger" ghost>清空日志</a-button>
           </a-popconfirm>
           <x-down
             style="display:none"
-            v-if="hasPerm('sysOpLog:export')"
+            v-if="hasPerm('sysExLog:export')"
             ref="batchExport"
             @batchExport="batchExport"
           />
         </template>
-        <!-- <span slot="opType" slot-scope="text">
-          {{ 'op_type' | dictType(text) }}
-        </span> -->
-        <span slot="success" slot-scope="text">
-          {{ 'yes_or_no' | dictType(text) }}
+        <span slot="eventId" slot-scope="text">
+          <ellipsis :length="10" tooltip>{{ text }}</ellipsis>
         </span>
         <span slot="name" slot-scope="text">
+          <ellipsis :length="12" tooltip>{{ text }}</ellipsis>
+        </span>
+        <span slot="className" slot-scope="text">
           <ellipsis :length="16" tooltip>{{ text }}</ellipsis>
         </span>
-        <span slot="path" slot-scope="text">
+        <span slot="methodName" slot-scope="text">
           <ellipsis :length="16" tooltip>{{ text }}</ellipsis>
         </span>
-        <!-- <span slot="operatingTime" slot-scope="text">
+        <!-- <span slot="exceptionTime" slot-scope="text">
           <ellipsis :length="10" tooltip>{{ text }}</ellipsis>
         </span> -->
+        <span slot="account" slot-scope="text">
+          <ellipsis :length="16" tooltip>{{ text }}</ellipsis>
+        </span>
         <span slot="action" slot-scope="text, record">
           <span slot="action" >
-            <a @click="$refs.detailsOplog.details(record)">查看详情</a>
+            <a @click="$refs.detailsExlog.details(record)">查看详情</a>
           </span>
         </span>
       </s-table>
-      <details-oplog ref="detailsOplog"/>
+      <details-exlog ref="detailsExlog"/>
     </a-card>
   </div>
 </template>
 <script>
   import { STable, Ellipsis, XCard, XDown } from '@/components'
-  import { sysOpLogPage, sysOpLogDelete, sysOpLogExport } from '@/api/modular/system/logManage'
-  import detailsOplog from './details'
+  import { sysExLogPage, sysOpLogDelete, sysOpLogExport } from '@/api/modular/system/logManage'
+  import detailsExlog from './details'
   import moment from 'moment'
   export default {
     components: {
@@ -99,7 +100,7 @@
       XCard,
       STable,
       Ellipsis,
-      detailsOplog
+      detailsExlog
     },
     data () {
       return {
@@ -109,33 +110,24 @@
         // 表头
         columns: [
           {
-            title: '请求内容',
+            title: '异常名称',
             dataIndex: 'name',
             scopedSlots: { customRender: 'name' }
           },
           {
-            title: '请求路径',
-            dataIndex: 'path',
-            scopedSlots: { customRender: 'path' }
+            title: '调用类',
+            dataIndex: 'className',
+            scopedSlots: { customRender: 'className' }
           },
           {
-            title: '请求方式',
-            dataIndex: 'requestMethod',
-            scopedSlots: { customRender: 'requestMethod' }
+            title: '调用方法',
+            dataIndex: 'methodName',
+            scopedSlots: { customRender: 'methodName' }
           },
           {
-            title: 'ip',
-            dataIndex: 'ip'
-          },
-          {
-            title: '执行结果',
-            dataIndex: 'success',
-            scopedSlots: { customRender: 'success' }
-          },
-          {
-            title: '操作时间',
-            dataIndex: 'operatingTime',
-            scopedSlots: { customRender: 'operatingTime' }
+            title: '异常时间',
+            dataIndex: 'exceptionTime',
+            scopedSlots: { customRender: 'exceptionTime' }
           },
           {
             title: '操作人',
@@ -149,7 +141,7 @@
         ],
         // 加载数据方法 必须为 Promise 对象
         loadData: parameter => {
-          return sysOpLogPage(Object.assign(parameter, this.switchingDate())).then((res) => {
+          return sysExLogPage(Object.assign(parameter, this.switchingDate())).then((res) => {
             return res.data
           })
         },
@@ -184,7 +176,7 @@
        */
       sysDictTypeDropDown () {
         // this.opTypeDict = this.$options.filters['dictData']('op_type')
-        this.successDict = this.$options.filters['dictData']('yes_or_no')
+        // this.successDict = this.$options.filters['dictData']('yes_or_no')
       },
       /**
        * 清空日志

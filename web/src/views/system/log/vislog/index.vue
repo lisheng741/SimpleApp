@@ -147,7 +147,6 @@
           {
             title: '详情',
             dataIndex: 'action',
-            width: '150px',
             scopedSlots: { customRender: 'action' }
           }
         ],

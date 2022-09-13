@@ -11,100 +11,91 @@
         <a-row :gutter="24">
           <a-col :md="12" :sm="24">
             <a-form-item
-              label="请求地址"
+              label="事件Id"
               :labelCol="labelCol"
               :wrapperCol="wrapperCol"
             >
-              <a-input v-decorator="['url']" />
+              <a-input v-decorator="['eventId']" />
             </a-form-item>
           </a-col>
           <a-col :md="12" :sm="24">
             <a-form-item
-              label="请求方式"
+              label="异常名称"
               :labelCol="labelCol"
               :wrapperCol="wrapperCol"
             >
-              <a-input v-decorator="['requestMethod']" />
-            </a-form-item>
-          </a-col>
-        </a-row>
-        <a-row :gutter="24">
-          <a-col :md="12" :sm="24">
-            <a-form-item
-              label="请求路径"
-              :labelCol="labelCol"
-              :wrapperCol="wrapperCol"
-            >
-              <a-input v-decorator="['path']" />
-            </a-form-item>
-          </a-col>
-          <a-col :md="12" :sm="24">
-            <a-form-item
-              label="操作人"
-              :labelCol="labelCol"
-              :wrapperCol="wrapperCol"
-            >
-              <a-input v-decorator="['account']" />
+              <a-input v-decorator="['name']" />
             </a-form-item>
           </a-col>
         </a-row>
         <a-row :gutter="24">
           <a-col :md="12" :sm="24">
             <a-form-item
-              label="浏览器"
+              label="异常消息"
               :labelCol="labelCol"
               :wrapperCol="wrapperCol"
             >
-              <a-input v-decorator="['browser']" />
+              <a-input v-decorator="['message']" />
             </a-form-item>
           </a-col>
           <a-col :md="12" :sm="24">
             <a-form-item
-              label="操作系统"
+              label="异常源"
               :labelCol="labelCol"
               :wrapperCol="wrapperCol"
             >
-              <a-input v-decorator="['operatingSystem']" />
-            </a-form-item>
-          </a-col>
-        </a-row>
-        <a-row :gutter="24">
-          <a-col :md="12" :sm="24">
-            <a-form-item
-              label="执行结果"
-              :labelCol="labelCol"
-              :wrapperCol="wrapperCol"
-            >
-              <a-input :rows="4" v-decorator="['success']" />
-            </a-form-item>
-          </a-col>
-          <a-col :md="12" :sm="24">
-            <a-form-item
-              label="具体消息"
-              :labelCol="labelCol"
-              :wrapperCol="wrapperCol"
-            >
-              <a-input :rows="4" v-decorator="['message']"/>
+              <a-input v-decorator="['exceptionSource']" />
             </a-form-item>
           </a-col>
         </a-row>
         <a-row :gutter="24">
           <a-col :md="12" :sm="24">
             <a-form-item
-              label="请求body"
+              label="调用类"
               :labelCol="labelCol"
               :wrapperCol="wrapperCol"
             >
-              <a-textarea :rows="4" v-decorator="['body']"/>
+              <a-input v-decorator="['className']" />
             </a-form-item>
           </a-col>
           <a-col :md="12" :sm="24">
             <a-form-item
-              label="返回结果"
+              label="调用方法"
               :labelCol="labelCol"
               :wrapperCol="wrapperCol"
             >
-              <a-textarea :rows="4" v-decorator="['result']"/>
+              <a-input v-decorator="['methodName']" />
+            </a-form-item>
+          </a-col>
+        </a-row>
+        <a-row :gutter="24">
+          <a-col :md="12" :sm="24">
+            <a-form-item
+              label="参数"
+              :labelCol="labelCol"
+              :wrapperCol="wrapperCol"
+            >
+              <a-input :rows="4" v-decorator="['parameters']"/>
+            </a-form-item>
+          </a-col>
+          <a-col :md="12" :sm="24">
+            <a-form-item
+              label="异常时间"
+              :labelCol="labelCol"
+              :wrapperCol="wrapperCol"
+            >
+              <a-input :rows="4" v-decorator="['exceptionTime']"/>
+            </a-form-item>
+          </a-col>
+        </a-row>
+        <a-row :gutter="24">
+          <a-col :md="24" :sm="24">
+            <a-form-item
+              label="堆栈信息"
+              :labelCol="{ span: 2 }"
+              :wrapperCol="{ span: 21 }"
+            >
+              <a-textarea :rows="8" v-decorator="['stackTrace']"/>
             </a-form-item>
           </a-col>
         </a-row>
@@ -136,16 +127,15 @@
         setTimeout(() => {
           this.form.setFieldsValue(
             {
-              url: record.url,
-              path: record.path,
-              requestMethod: record.requestMethod,
-              account: record.account,
-              browser: record.browser,
-              operatingSystem: record.operatingSystem,
-              success: record.success,
-              body: record.body,
-              result: record.result,
-              message: record.message
+              eventId: record.eventId,
+              name: record.name,
+              message: record.message,
+              exceptionSource: record.exceptionSource,
+              className: record.className,
+              methodName: record.methodName,
+              parameters: record.parameters,
+              exceptionTime: record.exceptionTime,
+              stackTrace: record.stackTrace
             }
           )
         }, 100)

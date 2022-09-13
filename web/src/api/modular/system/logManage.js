@@ -29,6 +29,18 @@ export function sysOpLogPage (parameter) {
 }
 
 /**
+ * 查询异常日志
+ *
+ */
+export function sysExLogPage (parameter) {
+  return axios({
+    url: '/sysExLog/page',
+    method: 'get',
+    params: parameter
+  })
+}
+
+/**
  * 清空访问日志
  *
  * @author yubaoshan
