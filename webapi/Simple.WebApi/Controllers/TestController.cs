@@ -1,11 +1,13 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Simple.Common.EventBus;
+using Simple.Common.Filters;
 
 namespace Simple.WebApi.Controllers
 {
     [Route("api/[controller]/[action]")]
     [ApiController]
+    [DisabledRequestRecord]
     public class TestController : ControllerBase
     {
         private readonly TestService _testService;

@@ -25,6 +25,7 @@ public class RequestEventHandler : IEventHandler<RequestEvent>
             Name = @event.Name,
             IsSuccess = @event.IsSuccess,
             Message = @event.Message,
+            Result = @event.Result,
             Browser = @event.Browser,
             OperatingSystem = @event.OperatingSystem,
             Ip = @event.Ip,

@@ -48,25 +48,36 @@ public static class AppSettings
     }
 
     /// <summary>
-    /// 是否记录操作日志
+    /// 记录请求
     /// </summary>
-    public static bool IsRecordRequestLog => Configuration.GetValue<bool>("IsRecordRequestLog");
+    public static class RecordRequest
+    {
+        public static bool IsEnabled => Configuration.GetValue<bool>("RecordRequest:IsEnabled");
+        public static bool IsSkipGetMethod => Configuration.GetValue<bool>("RecordRequest:IsSkipGetMethod");
+    }
 
     /// <summary>
     /// 允许跨域请求列表
     /// </summary>
     public static string[] AllowCors => Configuration.GetSection("AllowCors").Get<string[]>();
 
-    #region Jwt 配置
-    public static string JwtSecretKey => Configuration["Jwt:SecretKey"];
-    public static string JwtIssuer => Configuration["Jwt:Issuer"];
-    public static string JwtAudience => Configuration["Jwt:Audience"];
-    #endregion
+    /// <summary>
+    /// Jwt 配置
+    /// </summary>
+    public static class Jwt
+    {
+        public static string SecretKey => Configuration["Jwt:SecretKey"];
+        public static string Issuer => Configuration["Jwt:Issuer"];
+        public static string Audience => Configuration["Jwt:Audience"];
+    }
 
-
-    #region Redis
-    public static bool RedisEnabled => Configuration.GetValue<bool>("Redis:Enabled");
-    public static string RedisConnectionString => Configuration["Redis:ConnectionString"];
-    public static string RedisInstance => Configuration["Redis:Instance"] ?? "Default";
-    #endregion
+    /// <summary>
+    /// Redis 配置
+    /// </summary>
+    public static class Redis
+    {
+        public static bool Enabled => Configuration.GetValue<bool>("Redis:Enabled");
+        public static string ConnectionString => Configuration["Redis:ConnectionString"];
+        public static string Instance => Configuration["Redis:Instance"] ?? "Default";
+    }
 }

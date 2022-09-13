@@ -10,12 +10,12 @@ public static class CacheServiceCollectionExtensions
     public static IServiceCollection AddSimpleCache(this IServiceCollection services)
     {
         // 根据情况，启用 Redis 或 DistributedMemoryCache
-        if (AppSettings.RedisEnabled)
+        if (AppSettings.Redis.Enabled)
         {
             services.AddStackExchangeRedisCache(options =>
             {
-                options.Configuration = AppSettings.RedisConnectionString;
-                options.InstanceName = AppSettings.RedisInstance;
+                options.Configuration = AppSettings.Redis.ConnectionString;
+                options.InstanceName = AppSettings.Redis.Instance;
             });
         }
         else

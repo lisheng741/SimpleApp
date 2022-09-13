@@ -4,13 +4,16 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Controllers;
 using Microsoft.AspNetCore.Mvc.Filters;
 using UAParser;
+using static Simple.Common.Configuration.AppSettings;
 
 namespace Simple.Common.Filters;
 
-public class RequestActionFilter : IAsyncActionFilter
+public class RequestActionFilter : IAsyncActionFilter, IOrderedFilter
 {
     private readonly IEventPublisher _publisher;
     private readonly ICurrentUserService _currentUser;
+
+    public int Order { get; set; } = -8000;
 
     public RequestActionFilter(IEventPublisher publisher, ICurrentUserService currentUser)
     {
@@ -20,17 +23,37 @@ public class RequestActionFilter : IAsyncActionFilter
 
     public async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
     {
+        bool isSkipRecord = false;
         var httpContext = context.HttpContext;
         var request = context.HttpContext.Request;
         var headers = request.Headers;
         var actionDescriptor = context.ActionDescriptor as ControllerActionDescriptor;
 
-        //request.EnableBuffering(); // 允许多次读取 Body
-        request.Body.Position = 0;
+        // 判断是否需要跳过
+        if (!AppSettings.RecordRequest.IsEnabled) isSkipRecord = true;
+        if (actionDescriptor == null) isSkipRecord = true;
+        if (AppSettings.RecordRequest.IsSkipGetMethod && request.Method.ToUpper() == "GET") isSkipRecord = true;
+
+        foreach (var metadata in actionDescriptor!.EndpointMetadata)
+        {
+            if (metadata is DisabledRequestRecordAttribute)
+            {
+                isSkipRecord = true;
+            }
+        }
+
+        // 进入管道的下一个过滤器，并跳过剩下动作
+        if (isSkipRecord)
+        {
+            await next();
+            return;
+        }
+
+        //request.Body.Position = 0;
+        request.Body.Seek(0, SeekOrigin.Begin);
         var reader = new StreamReader(request.Body, Encoding.UTF8);
         string body = await reader.ReadToEndAsync();
         request.Body.Seek(0, SeekOrigin.Begin);
-        //request.Body.Position = 0;
 
         var sw = new Stopwatch();
         sw.Start();
@@ -43,25 +66,28 @@ public class RequestActionFilter : IAsyncActionFilter
 
         string result = "";
         string message = "";
-        if(actionContext.Exception is AppResultException appResultException)
-        {
-            // 如果是 AppResultException 说明是统一返回
-            result = JsonHelper.Serialize(appResultException.AppResult);
-            message = appResultException.AppResult.Message ?? "";
-        }
-        else if (actionContext.Result is ObjectResult objectResult)
+
+        // 目前只处理 ObjectResult
+        if (actionContext.Result is ObjectResult objectResult)
         {
             // 正常接口都是 ObjectResult
             result = JsonHelper.Serialize(objectResult.Value);
-            if(objectResult.Value is AppResult appResult)
+            if (objectResult.Value is AppResult appResult)
             {
                 message = appResult.Message ?? "";
             }
         }
-        else if (actionContext.Result is JsonResult jsonResult)
-        {
-            result = JsonHelper.Serialize(jsonResult.Value);
-        }
+
+        //if(actionContext.Exception is AppResultException appResultException)
+        //{
+        //    // 如果是 AppResultException 说明是统一返回
+        //    result = JsonHelper.Serialize(appResultException.AppResult);
+        //    message = appResultException.AppResult.Message ?? "";
+        //}
+        //else if (actionContext.Result is JsonResult jsonResult)
+        //{
+        //    result = JsonHelper.Serialize(jsonResult.Value);
+        //}
 
         var @event = new RequestEvent()
         {

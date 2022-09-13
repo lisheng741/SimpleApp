@@ -1,10 +1,12 @@
-﻿namespace Simple.Repository.Models.System;
+﻿namespace Simple.Services;
 
-/// <summary>
-/// 操作日志表
-/// </summary>
-public class SysLogOperating : EntityBase<Guid>
+public class LogOperatingModel : ModelBase
 {
+    /// <summary>
+    /// 主键
+    /// </summary>
+    public Guid? Id { get; set; }
+
     /// <summary>
     /// 操作人
     /// </summary>
@@ -18,9 +20,9 @@ public class SysLogOperating : EntityBase<Guid>
     public string Name { get; set; } = "";
 
     /// <summary>
-    /// 是否执行成功
+    /// 是否执行成功（Y/N）
     /// </summary>
-    public bool IsSuccess { get; set; }
+    public string Success { get; set; } = "N";
 
     /// <summary>
     /// 具体消息
@@ -92,5 +94,18 @@ public class SysLogOperating : EntityBase<Guid>
     /// <summary>
     /// 操作时间
     /// </summary>
-    public DateTimeOffset OperatingTime { get; set; }
+    public DateTime OperatingTime { get; set; }
+
+
+    public override void ConfigureMapper(Profile profile)
+    {
+        profile.CreateMap<SysLogOperating, LogOperatingModel>()
+            .ForMember(d => d.OperatingTime, options => options.MapFrom(s => s.OperatingTime.LocalDateTime))
+            .ForMember(d => d.Success, options => options.MapFrom(s => s.IsSuccess ? "Y" : "N"));
+
+        profile.CreateMap<LogOperatingModel, SysLogOperating>()
+            .ForMember(d => d.Id, options => options.Ignore())
+            .ForMember(d => d.OperatingTime, options => options.MapFrom(s => s.OperatingTime))
+            .ForMember(d => d.IsSuccess, options => options.MapFrom(s => s.Success == "Y"));
+    }
 }

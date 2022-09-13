@@ -91,5 +91,5 @@ public class RequestEvent : EventModel
     /// <summary>
     /// 操作时间
     /// </summary>
-    public DateTimeOffset? OperatingTime { get; set; }
+    public DateTimeOffset OperatingTime { get; set; }
 }

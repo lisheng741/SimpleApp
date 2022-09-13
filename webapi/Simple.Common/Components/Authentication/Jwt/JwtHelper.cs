@@ -14,9 +14,9 @@ public static class JwtHelper
     public static string Create(JwtTokenModel tokenModel)
     {
         // 获取配置
-        string issuer = AppSettings.JwtIssuer;
-        string audience = AppSettings.JwtAudience;
-        string secret = AppSettings.JwtSecretKey;
+        string issuer = AppSettings.Jwt.Issuer;
+        string audience = AppSettings.Jwt.Audience;
+        string secret = AppSettings.Jwt.SecretKey;
 
         var claims = new List<Claim>()
         {

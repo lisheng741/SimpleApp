@@ -13,9 +13,9 @@ public static class JwtServiceCollectionExtensions
         if (services == null) throw new ArgumentNullException(nameof(services));
 
         // 读取配置
-        var symmetricKeyAsBase64 = AppSettings.JwtSecretKey;
-        var issuer = AppSettings.JwtIssuer;
-        var audience = AppSettings.JwtAudience;
+        var symmetricKeyAsBase64 = AppSettings.Jwt.SecretKey;
+        var issuer = AppSettings.Jwt.Issuer;
+        var audience = AppSettings.Jwt.Audience;
 
         // 获取密钥
         var keyByteArray = Encoding.UTF8.GetBytes(symmetricKeyAsBase64);

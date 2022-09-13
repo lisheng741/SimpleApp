@@ -1,10 +1,12 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Authorization;
+using Simple.Common.Filters;
 
 namespace Simple.WebApi.Controllers;
 
 [Route("api/[controller]/[action]")]
 [ApiController]
+[DisabledRequestRecord]
 public class AccountController : ControllerBase
 {
     private readonly AccountService _accountService;
