@@ -9,13 +9,13 @@ public class SysPosition : BusinessEntityBase<Guid>
     /// 编码
     /// </summary>
     [MaxLength(128)]
-    public string Code { get; set; }
+    public string Code { get; set; } = "";
 
     /// <summary>
     /// 名称
     /// </summary>
     [MaxLength(128)]
-    public string Name { get; set; }
+    public string Name { get; set; } = "";
 
     /// <summary>
     /// 排序
@@ -33,9 +33,7 @@ public class SysPosition : BusinessEntityBase<Guid>
     /// </summary>
     public bool IsEnabled { get; set; } = true;
 
-    public SysPosition(string code, string name)
+    public SysPosition()
     {
-        Code = code;
-        Name = name;
     }
 }

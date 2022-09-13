@@ -4,6 +4,7 @@ using System.Reflection;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Simple.Repository.DataSeed;
 
 namespace Simple.Repository;
 
@@ -112,6 +113,9 @@ public class SimpleDbContext : DbContext
             {
                 entityConfigure.ConfigureEntity(builder);
             }
+
+            // 配置种子数据
+            builder.ConfigureDataSeed(Assembly.GetExecutingAssembly());
         }
     }
 

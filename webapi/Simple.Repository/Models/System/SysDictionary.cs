@@ -9,13 +9,13 @@ public class SysDictionary : BusinessEntityBase<Guid>
     /// 编码
     /// </summary>
     [MaxLength(128)]
-    public string Code { get; set; }
+    public string Code { get; set; } = "";
 
     /// <summary>
     /// 名称
     /// </summary>
     [MaxLength(128)]
-    public string Name { get; set; }
+    public string Name { get; set; } = "";
 
     /// <summary>
     /// 排序
@@ -38,9 +38,7 @@ public class SysDictionary : BusinessEntityBase<Guid>
     /// </summary>
     public List<SysDictionaryItem> DictionaryItems { get; set; } = new List<SysDictionaryItem>();
 
-    public SysDictionary(string code, string name)
+    public SysDictionary()
     {
-        Code = code;
-        Name = name;
     }
 }
