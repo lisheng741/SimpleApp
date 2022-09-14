@@ -80,6 +80,10 @@
 - 数据验证：[模型验证（Model validation）](https://docs.microsoft.com/zh-cn/aspnet/core/mvc/models/validation)
 - 对象映射：AutoMapper
 
+## 项目亮点
+
+- [EF Core 自动迁移脚本](./webapi/migrations.sh)
+
 ## 一些Q&A
 
 #### 为什么把 IServices 这些接口层给干掉了，仅留下实现层？
