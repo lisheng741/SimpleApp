@@ -51,8 +51,8 @@ internal class DefaultDataSeed : IConfigureDataSeed
                 Password = "e10adc3949ba59abbe56e057f20f883e",
                 Name = "超级管理员",
                 Gender = GenderType.Male,
-                PositionId =  new Guid("08da7eb0-c4a6-4bd5-81da-9698273a18ea"),
-                OrganizationId = new Guid("08da7df0-d44a-4332-8a5c-7921cdc25450"),
+                //PositionId =  new Guid("08da7eb0-c4a6-4bd5-81da-9698273a18ea"),
+                //OrganizationId = new Guid("08da7df0-d44a-4332-8a5c-7921cdc25450"),
                 IsEnabled = true,
                 AdminType = AdminType.SuperAdmin,
             },
@@ -327,13 +327,13 @@ internal class DefaultDataSeed : IConfigureDataSeed
                 ParentId = new Guid("08da8413-552c-48e7-8a8b-accf58bca8c6"),
                 Type = MenuType.Button, Application = "system", Component = "", Icon = null, OpenType = MenuOpenType.None,IsEnabled = true, Redirect = "", Router = "", Sort = 100, Visible = "Y",
             },
-            new SysMenu()
-            {
-                Id = new Guid("08da9606-4316-497e-8b51-b439fdc75371"),
-                Name = "用户修改密码", Code = "sys_user_mgr_update_pwd", Permission = "sysuser:updatepwd",
-                ParentId = new Guid("08da8413-552c-48e7-8a8b-accf58bca8c6"),
-                Type = MenuType.Button, Application = "system", Component = "", Icon = null, OpenType = MenuOpenType.None,IsEnabled = true, Redirect = "", Router = "", Sort = 100, Visible = "Y",
-            },
+            //new SysMenu()
+            //{
+            //    Id = new Guid("08da9606-4316-497e-8b51-b439fdc75371"),
+            //    Name = "用户修改密码", Code = "sys_user_mgr_update_pwd", Permission = "sysuser:updatepwd",
+            //    ParentId = new Guid("08da8413-552c-48e7-8a8b-accf58bca8c6"),
+            //    Type = MenuType.Button, Application = "system", Component = "", Icon = null, OpenType = MenuOpenType.None,IsEnabled = true, Redirect = "", Router = "", Sort = 100, Visible = "Y",
+            //},
             new SysMenu()
             {
                 Id = new Guid("08da9606-4316-4b52-82ca-dcdce86adba3"),
@@ -722,24 +722,24 @@ internal class DefaultDataSeed : IConfigureDataSeed
                 Type = MenuType.Directory,
                 Visible = "Y",
             },
-            new SysMenu()
-            {
-                Id = new Guid("08da9540-55c6-477d-8226-88e8d9c2f501"),
-                Application = "system",
-                Code = "sys_log_mgr_vis_log",
-                Component = "system/log/vislog/index",
-                Icon = null,
-                IsEnabled = true,
-                Name = "访问日志",
-                OpenType = MenuOpenType.Component,
-                ParentId = new Guid("08da9540-3f8d-4a70-8a3c-71a969a0f819"),
-                Permission = "",
-                Redirect = "",
-                Router = "/vislog",
-                Sort = 6,
-                Type = MenuType.Menu,
-                Visible = "Y",
-            },
+            //new SysMenu()
+            //{
+            //    Id = new Guid("08da9540-55c6-477d-8226-88e8d9c2f501"),
+            //    Application = "system",
+            //    Code = "sys_log_mgr_vis_log",
+            //    Component = "system/log/vislog/index",
+            //    Icon = null,
+            //    IsEnabled = true,
+            //    Name = "访问日志",
+            //    OpenType = MenuOpenType.Component,
+            //    ParentId = new Guid("08da9540-3f8d-4a70-8a3c-71a969a0f819"),
+            //    Permission = "",
+            //    Redirect = "",
+            //    Router = "/vislog",
+            //    Sort = 6,
+            //    Type = MenuType.Menu,
+            //    Visible = "Y",
+            //},
             new SysMenu()
             {
                 Id = new Guid("08da9540-6a12-4af7-85b2-4e47577b1adb"),

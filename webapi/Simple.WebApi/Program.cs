@@ -1,7 +1,6 @@
 ﻿global using Microsoft.AspNetCore.Http;
 global using Microsoft.AspNetCore.Mvc;
 global using Simple.Common;
-global using Simple.Common.Configuration;
 global using Simple.Common.Helpers;
 global using Simple.Services;
 using Microsoft.Extensions.DependencyInjection.Extensions;
@@ -92,7 +91,7 @@ try
 
     var app = builder.Build();
 
-    // 配置 HTTP 请求管道
+    // 配置 HTTP 请求管道 --------------------------
 
     app.Use((context, next) =>
     {

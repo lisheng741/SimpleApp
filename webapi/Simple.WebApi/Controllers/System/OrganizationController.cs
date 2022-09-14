@@ -3,6 +3,9 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Simple.WebApi.Controllers.System;
 
+/// <summary>
+/// 机构管理
+/// </summary>
 [Route("api/SysOrg/[action]")]
 [ApiController]
 public class OrganizationController : ControllerBase
@@ -14,6 +17,10 @@ public class OrganizationController : ControllerBase
         _organizationService = organizationService;
     }
 
+    /// <summary>
+    /// 机构列表
+    /// </summary>
+    /// <returns></returns>
     [HttpGet]
     public async Task<AppResult> List()
     {
@@ -21,6 +28,11 @@ public class OrganizationController : ControllerBase
         return AppResult.Status200OK(data: data);
     }
 
+    /// <summary>
+    /// 机构查询
+    /// </summary>
+    /// <param name="model"></param>
+    /// <returns></returns>
     [HttpGet]
     public async Task<AppResult> Page([FromQuery] OrganizationPageInputModel model)
     {
@@ -28,6 +40,10 @@ public class OrganizationController : ControllerBase
         return AppResult.Status200OK(data: data);
     }
 
+    /// <summary>
+    /// 机构树
+    /// </summary>
+    /// <returns></returns>
     [HttpGet]
     public async Task<AppResult> Tree()
     {
@@ -35,6 +51,11 @@ public class OrganizationController : ControllerBase
         return AppResult.Status200OK(data: data);
     }
 
+    /// <summary>
+    /// 机构增加
+    /// </summary>
+    /// <param name="model"></param>
+    /// <returns></returns>
     [HttpPost]
     public async Task<AppResult> Add([FromBody] OrganizationModel model)
     {
@@ -42,6 +63,11 @@ public class OrganizationController : ControllerBase
         return AppResult.Status200OK("新增成功");
     }
 
+    /// <summary>
+    /// 机构编辑
+    /// </summary>
+    /// <param name="model"></param>
+    /// <returns></returns>
     [HttpPost]
     public async Task<AppResult> Edit([FromBody] OrganizationModel model)
     {
@@ -49,6 +75,11 @@ public class OrganizationController : ControllerBase
         return AppResult.Status200OK("更新成功");
     }
 
+    /// <summary>
+    /// 机构删除
+    /// </summary>
+    /// <param name="models"></param>
+    /// <returns></returns>
     [HttpPost]
     public async Task<AppResult> Delete([FromBody] List<IdInputModel> models)
     {

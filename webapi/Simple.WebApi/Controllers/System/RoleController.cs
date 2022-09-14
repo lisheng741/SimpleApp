@@ -4,6 +4,9 @@ using Simple.Services;
 
 namespace Simple.WebApi.Controllers.System;
 
+/// <summary>
+/// 角色管理
+/// </summary>
 [Route("api/SysRole/[action]")]
 [ApiController]
 public class RoleController : ControllerBase
@@ -15,6 +18,10 @@ public class RoleController : ControllerBase
         _roleService = roleService;
     }
 
+    /// <summary>
+    /// 角色列表
+    /// </summary>
+    /// <returns></returns>
     [HttpGet]
     public async Task<AppResult> List()
     {
@@ -22,6 +29,11 @@ public class RoleController : ControllerBase
         return AppResult.Status200OK(data: data);
     }
 
+    /// <summary>
+    /// 角色查询
+    /// </summary>
+    /// <param name="model"></param>
+    /// <returns></returns>
     [HttpGet]
     public async Task<AppResult> Page([FromQuery] PageInputModel model)
     {
@@ -29,6 +41,11 @@ public class RoleController : ControllerBase
         return AppResult.Status200OK(data: data);
     }
 
+    /// <summary>
+    /// 角色增加
+    /// </summary>
+    /// <param name="model"></param>
+    /// <returns></returns>
     [HttpPost]
     public async Task<AppResult> Add([FromBody] RoleModel model)
     {
@@ -36,6 +53,11 @@ public class RoleController : ControllerBase
         return AppResult.Status200OK("新增成功");
     }
 
+    /// <summary>
+    /// 角色编辑
+    /// </summary>
+    /// <param name="model"></param>
+    /// <returns></returns>
     [HttpPost]
     public async Task<AppResult> Edit([FromBody] RoleModel model)
     {
@@ -43,6 +65,11 @@ public class RoleController : ControllerBase
         return AppResult.Status200OK("更新成功");
     }
 
+    /// <summary>
+    /// 角色删除
+    /// </summary>
+    /// <param name="models"></param>
+    /// <returns></returns>
     [HttpPost]
     public async Task<AppResult> Delete([FromBody] IdInputModel models)
     {
@@ -50,6 +77,11 @@ public class RoleController : ControllerBase
         return AppResult.Status200OK("删除成功");
     }
 
+    /// <summary>
+    /// 角色拥有菜单
+    /// </summary>
+    /// <param name="id"></param>
+    /// <returns></returns>
     [HttpGet]
     public async Task<AppResult> OwnMenu(Guid id)
     {
@@ -57,6 +89,11 @@ public class RoleController : ControllerBase
         return AppResult.Status200OK(data: data);
     }
 
+    /// <summary>
+    /// 角色授权菜单
+    /// </summary>
+    /// <param name="input"></param>
+    /// <returns></returns>
     [HttpPost]
     public async Task<AppResult> GrantMenu(RoleGrantMenuInputModel input)
     {
@@ -64,6 +101,11 @@ public class RoleController : ControllerBase
         return AppResult.Status200OK("授权成功");
     }
 
+    /// <summary>
+    /// 角色拥有数据
+    /// </summary>
+    /// <param name="id"></param>
+    /// <returns></returns>
     [HttpGet]
     public async Task<AppResult> OwnData(Guid id)
     {
@@ -71,6 +113,11 @@ public class RoleController : ControllerBase
         return AppResult.Status200OK(data: data);
     }
 
+    /// <summary>
+    /// 角色授权数据
+    /// </summary>
+    /// <param name="input"></param>
+    /// <returns></returns>
     [HttpPost]
     public async Task<AppResult> GrantData(RoleGrantDataScopeInputModel input)
     {

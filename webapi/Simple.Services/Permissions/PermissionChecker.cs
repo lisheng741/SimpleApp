@@ -32,8 +32,11 @@ public class PermissionChecker : IPermissionChecker
             var request = _simpleService.HttpContext.Request;
 
             // 路径形如：/api/sysMenu/add 转化为 api:sysMenu:add，下面这两句是等价的
-            //var route = request.Path.Value?.Substring(1).ToLower().Replace("/", ":");
-            permission = request.Path.Value?[1..].ToLower().Replace("/", ":") ?? "";
+            //permission = request.Path.Value?.Substring(1).ToLower().Replace("/", ":");
+            //permission = request.Path.Value?[1..].ToLower().Replace("/", ":") ?? "";
+
+            // 路径形如：/api/sysMenu/add 转化为 sysmenu:add
+            permission = request.Path.Value?.ToLower().Replace("/api/", "").Replace("/", ":") ?? "";
         }
 
         if (string.IsNullOrEmpty(permission)) return false;

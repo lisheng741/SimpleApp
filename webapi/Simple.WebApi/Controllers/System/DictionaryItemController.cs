@@ -3,6 +3,9 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Simple.WebApi.Controllers.System;
 
+/// <summary>
+/// 字典值
+/// </summary>
 [Route("api/SysDictData/[action]")]
 [ApiController]
 public class DictionaryItemController : ControllerBase
@@ -14,6 +17,10 @@ public class DictionaryItemController : ControllerBase
         _dictionaryItemService = dictionaryItemService;
     }
 
+    /// <summary>
+    /// 字典值列表
+    /// </summary>
+    /// <returns></returns>
     [HttpGet]
     public async Task<AppResult> List()
     {
@@ -21,6 +28,11 @@ public class DictionaryItemController : ControllerBase
         return AppResult.Status200OK(data: data);
     }
 
+    /// <summary>
+    /// 字典值查询
+    /// </summary>
+    /// <param name="model"></param>
+    /// <returns></returns>
     [HttpGet]
     public async Task<AppResult> Page([FromQuery] DictionaryItemPageInputModel model)
     {
@@ -28,6 +40,11 @@ public class DictionaryItemController : ControllerBase
         return AppResult.Status200OK(data: data);
     }
 
+    /// <summary>
+    /// 字典值增加
+    /// </summary>
+    /// <param name="model"></param>
+    /// <returns></returns>
     [HttpPost]
     public async Task<AppResult> Add([FromBody] DictionaryItemModel model)
     {
@@ -35,6 +52,11 @@ public class DictionaryItemController : ControllerBase
         return AppResult.Status200OK("新增成功");
     }
 
+    /// <summary>
+    /// 字典值编辑
+    /// </summary>
+    /// <param name="model"></param>
+    /// <returns></returns>
     [HttpPost]
     public async Task<AppResult> Edit([FromBody] DictionaryItemModel model)
     {
@@ -42,6 +64,11 @@ public class DictionaryItemController : ControllerBase
         return AppResult.Status200OK("更新成功");
     }
 
+    /// <summary>
+    /// 字典值删除
+    /// </summary>
+    /// <param name="model"></param>
+    /// <returns></returns>
     [HttpPost]
     public async Task<AppResult> Delete([FromBody] IdInputModel model)
     {

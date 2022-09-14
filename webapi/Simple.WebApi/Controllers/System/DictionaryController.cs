@@ -3,6 +3,9 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Simple.WebApi.Controllers.System;
 
+/// <summary>
+/// 字典管理
+/// </summary>
 [Route("api/SysDictType/[action]")]
 [ApiController]
 public class DictionaryController : ControllerBase
@@ -14,6 +17,10 @@ public class DictionaryController : ControllerBase
         _dictionaryService = dictionaryService;
     }
 
+    /// <summary>
+    /// 字典类型列表
+    /// </summary>
+    /// <returns></returns>
     [HttpGet]
     public async Task<AppResult> List()
     {
@@ -21,6 +28,11 @@ public class DictionaryController : ControllerBase
         return AppResult.Status200OK(data: data);
     }
 
+    /// <summary>
+    /// 字典类型查询
+    /// </summary>
+    /// <param name="model"></param>
+    /// <returns></returns>
     [HttpGet]
     public async Task<AppResult> Page([FromQuery] PageInputModel model)
     {
@@ -28,6 +40,11 @@ public class DictionaryController : ControllerBase
         return AppResult.Status200OK(data: data);
     }
 
+    /// <summary>
+    /// 字典类型增加
+    /// </summary>
+    /// <param name="model"></param>
+    /// <returns></returns>
     [HttpPost]
     public async Task<AppResult> Add([FromBody] DictionaryModel model)
     {
@@ -35,6 +52,11 @@ public class DictionaryController : ControllerBase
         return AppResult.Status200OK("新增成功");
     }
 
+    /// <summary>
+    /// 字典类型编辑
+    /// </summary>
+    /// <param name="model"></param>
+    /// <returns></returns>
     [HttpPost]
     public async Task<AppResult> Edit([FromBody] DictionaryModel model)
     {
@@ -42,6 +64,11 @@ public class DictionaryController : ControllerBase
         return AppResult.Status200OK("更新成功");
     }
 
+    /// <summary>
+    /// 字典类型删除
+    /// </summary>
+    /// <param name="models"></param>
+    /// <returns></returns>
     [HttpPost]
     public async Task<AppResult> Delete([FromBody] List<IdInputModel> models)
     {
@@ -49,6 +76,11 @@ public class DictionaryController : ControllerBase
         return AppResult.Status200OK("删除成功");
     }
 
+    /// <summary>
+    /// 字典类型下拉
+    /// </summary>
+    /// <param name="code"></param>
+    /// <returns></returns>
     [HttpGet]
     public async Task<AppResult> DropDown(string code)
     {
@@ -56,6 +88,10 @@ public class DictionaryController : ControllerBase
         return AppResult.Status200OK(data: items);
     }
 
+    /// <summary>
+    /// 字典树
+    /// </summary>
+    /// <returns></returns>
     [HttpGet]
     public async Task<AppResult> Tree()
     {

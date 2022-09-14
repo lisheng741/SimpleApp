@@ -3,6 +3,9 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Simple.WebApi.Controllers.System;
 
+/// <summary>
+/// 菜单管理
+/// </summary>
 [Route("api/SysMenu/[action]")]
 [ApiController]
 public class MenuController : ControllerBase
@@ -14,6 +17,11 @@ public class MenuController : ControllerBase
         _menuService = menuService;
     }
 
+    /// <summary>
+    /// 菜单列表
+    /// </summary>
+    /// <param name="input"></param>
+    /// <returns></returns>
     [HttpGet]
     public async Task<AppResult> List([FromQuery] MenuInputModel input)
     {
@@ -21,6 +29,11 @@ public class MenuController : ControllerBase
         return AppResult.Status200OK(data: data);
     }
 
+    /// <summary>
+    /// 菜单查询
+    /// </summary>
+    /// <param name="model"></param>
+    /// <returns></returns>
     [HttpGet]
     public async Task<AppResult> Page([FromQuery] PageInputModel model)
     {
@@ -28,6 +41,10 @@ public class MenuController : ControllerBase
         return AppResult.Status200OK(data: data);
     }
 
+    /// <summary>
+    /// 菜单树
+    /// </summary>
+    /// <returns></returns>
     [HttpGet]
     public async Task<AppResult> Tree()
     {
@@ -35,6 +52,10 @@ public class MenuController : ControllerBase
         return AppResult.Status200OK(data: data);
     }
 
+    /// <summary>
+    /// 菜单授权树
+    /// </summary>
+    /// <returns></returns>
     [HttpGet]
     public async Task<AppResult> TreeForGrant()
     {
@@ -42,6 +63,11 @@ public class MenuController : ControllerBase
         return AppResult.Status200OK(data: data);
     }
 
+    /// <summary>
+    /// 菜单增加
+    /// </summary>
+    /// <param name="model"></param>
+    /// <returns></returns>
     [HttpPost]
     public async Task<AppResult> Add([FromBody] MenuModel model)
     {
@@ -49,6 +75,11 @@ public class MenuController : ControllerBase
         return AppResult.Status200OK("新增成功");
     }
 
+    /// <summary>
+    /// 菜单编辑
+    /// </summary>
+    /// <param name="model"></param>
+    /// <returns></returns>
     [HttpPost]
     public async Task<AppResult> Edit([FromBody] MenuModel model)
     {
@@ -56,6 +87,11 @@ public class MenuController : ControllerBase
         return AppResult.Status200OK("更新成功");
     }
 
+    /// <summary>
+    /// 菜单删除
+    /// </summary>
+    /// <param name="model"></param>
+    /// <returns></returns>
     [HttpPost]
     public async Task<AppResult> Delete([FromBody] IdInputModel model)
     {

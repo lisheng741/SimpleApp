@@ -3,6 +3,9 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Simple.WebApi.Controllers.System;
 
+/// <summary>
+/// 岗位管理
+/// </summary>
 [Route("api/SysPos/[action]")]
 [ApiController]
 public class PositionController : ControllerBase
@@ -14,6 +17,10 @@ public class PositionController : ControllerBase
         _positionService = positionService;
     }
 
+    /// <summary>
+    /// 岗位列表
+    /// </summary>
+    /// <returns></returns>
     [HttpGet]
     public async Task<AppResult> List()
     {
@@ -21,6 +28,11 @@ public class PositionController : ControllerBase
         return AppResult.Status200OK(data: data);
     }
 
+    /// <summary>
+    /// 岗位查询
+    /// </summary>
+    /// <param name="model"></param>
+    /// <returns></returns>
     [HttpGet]
     public async Task<AppResult> Page([FromQuery] PageInputModel model)
     {
@@ -28,6 +40,11 @@ public class PositionController : ControllerBase
         return AppResult.Status200OK(data: data);
     }
 
+    /// <summary>
+    /// 岗位增加
+    /// </summary>
+    /// <param name="model"></param>
+    /// <returns></returns>
     [HttpPost]
     public async Task<AppResult> Add([FromBody] PositionModel model)
     {
@@ -35,6 +52,11 @@ public class PositionController : ControllerBase
         return AppResult.Status200OK("新增成功");
     }
 
+    /// <summary>
+    /// 岗位编辑
+    /// </summary>
+    /// <param name="model"></param>
+    /// <returns></returns>
     [HttpPost]
     public async Task<AppResult> Edit([FromBody] PositionModel model)
     {
@@ -42,6 +64,11 @@ public class PositionController : ControllerBase
         return AppResult.Status200OK("更新成功");
     }
 
+    /// <summary>
+    /// 岗位删除
+    /// </summary>
+    /// <param name="models"></param>
+    /// <returns></returns>
     [HttpPost]
     public async Task<AppResult> Delete([FromBody] List<IdInputModel> models)
     {
