@@ -58,6 +58,13 @@ public class UserController : ControllerBase
     }
 
     [HttpPost]
+    public async Task<AppResult> UpdatePwd(UserChangePasswordInputModel input)
+    {
+        await _userService.UpdatePasswordAsync(input.Id, input.Password, input.NewPassword);
+        return AppResult.Status200OK("修改成功");
+    }
+
+    [HttpPost]
     public async Task<AppResult> ResetPwd(IdInputModel input)
     {
         var data = await _userService.SetPasswordAsync(input.Id);

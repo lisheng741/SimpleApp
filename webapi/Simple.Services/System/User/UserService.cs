@@ -128,6 +128,25 @@ public class UserService
         return await _context.SaveChangesAsync();
     }
 
+    public async Task<int> UpdatePasswordAsync(Guid id, string password, string newPassword = "123456")
+    {
+        string passwordHash = HashHelper.Md5(password);
+
+        var user = await _context.Set<SysUser>()
+            .Where(u => u.Id == id)
+            .Where(u => u.Password == passwordHash)
+            .FirstOrDefaultAsync();
+
+        if (user == null)
+        {
+            throw AppResultException.Status404NotFound("用户不存在或密码不匹配");
+        }
+
+        user.SetPassword(newPassword);
+        _context.Update(user);
+        return await _context.SaveChangesAsync();
+    }
+
     public async Task<int> SetPasswordAsync(Guid id, string password = "123456")
     {
         var user = await _context.Set<SysUser>()
