@@ -9,7 +9,7 @@
     }
   },
   "profiles": {
-    "Simple.Host": {
+    "Simple.WebApi": {
       "commandName": "Project",
       "dotnetRunMessages": true,
       "launchBrowser": true,
