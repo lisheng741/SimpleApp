@@ -25,7 +25,7 @@ export default {
   props: {
     title: {
       type: String,
-      default: 'Snowy',
+      default: 'SimpleApp',
       required: false
     },
     showTitle: {
