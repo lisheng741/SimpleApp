@@ -1,6 +1,6 @@
 <template>
   <div>
-    <x-card v-if="hasPerm('sysOpLog:page')">
+    <x-card v-if="hasPerm('sysoplog:page')">
       <div slot="content" class="table-page-search-wrapper">
         <a-form layout="inline">
           <a-row :gutter="48">

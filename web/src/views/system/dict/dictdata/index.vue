@@ -6,7 +6,7 @@
     :footer="null"
     @cancel="handleCancel"
   >
-    <x-card v-if="hasPerm('sysDictData:page')">
+    <x-card v-if="hasPerm('sysdictdata:page')">
       <div slot="content" class="table-page-search-wrapper" >
         <a-form layout="inline">
           <a-row :gutter="48">
@@ -38,16 +38,16 @@
         :alert="false"
         :rowKey="(record) => record.code"
       >
-        <template slot="operator" v-if="hasPerm('sysDictData:add')" >
-          <a-button @click="$refs.addForm.add(typeId)" icon="plus" type="primary" v-if="hasPerm('sysDictData:add')">新增数据</a-button>
+        <template slot="operator" v-if="hasPerm('sysdictdata:add')" >
+          <a-button @click="$refs.addForm.add(typeId)" icon="plus" type="primary" v-if="hasPerm('sysdictdata:add')">新增数据</a-button>
         </template>
         <span slot="status" slot-scope="text">
           {{ statusFilter(text) }}
         </span>
         <span slot="action" slot-scope="text, record">
-          <a v-if="hasPerm('sysDictData:edit')" @click="$refs.editForm.edit(record)">编辑</a>
-          <a-divider type="vertical" v-if="hasPerm('sysDictData:edit') & hasPerm('sysDictData:delete')"/>
-          <a-popconfirm v-if="hasPerm('sysDictData:delete')" placement="topRight" title="确认删除？" @confirm="() => sysDictDataDelete(record)">
+          <a v-if="hasPerm('sysdictdata:edit')" @click="$refs.editForm.edit(record)">编辑</a>
+          <a-divider type="vertical" v-if="hasPerm('sysdictdata:edit') & hasPerm('sysdictdata:delete')"/>
+          <a-popconfirm v-if="hasPerm('sysdictdata:delete')" placement="topRight" title="确认删除？" @confirm="() => sysDictDataDelete(record)">
             <a>删除</a>
           </a-popconfirm>
         </span>
@@ -113,7 +113,7 @@
     },
     created () {
       this.sysDictTypeDropDown()
-      if (this.hasPerm('sysDictData:edit') || this.hasPerm('sysDictData:delete')) {
+      if (this.hasPerm('sysdictdata:edit') || this.hasPerm('sysdictdata:delete')) {
         this.columns.push({
           title: '操作',
           width: '150px',

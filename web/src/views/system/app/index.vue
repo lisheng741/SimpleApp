@@ -1,7 +1,7 @@
 /* eslint-disable eqeqeq */
 <template>
   <div>
-    <x-card v-if="hasPerm('sysApp:page')">
+    <x-card v-if="hasPerm('sysapp:page')">
       <div slot="content" class="table-page-search-wrapper">
         <a-form layout="inline">
           <a-row :gutter="48">
@@ -34,8 +34,8 @@
           :alert="false"
           :rowKey="(record) => record.id"
         >
-          <template slot="operator" v-if="hasPerm('sysApp:add')">
-            <a-button @click="$refs.addForm.add()" icon="plus" type="primary" v-if="hasPerm('sysApp:add')">新增应用</a-button>
+          <template slot="operator" v-if="hasPerm('sysapp:add')">
+            <a-button @click="$refs.addForm.add()" icon="plus" type="primary" v-if="hasPerm('sysapp:add')">新增应用</a-button>
           </template>
           <span slot="active" slot-scope="text">
             {{ activeFilter(text) }}
@@ -44,13 +44,13 @@
             {{ statusFilter(text) }}
           </span>
           <span slot="action" slot-scope="text, record">
-            <a v-if="hasPerm('sysApp:edit')" @click="$refs.editForm.edit(record)">编辑</a>
-            <a-divider type="vertical" v-if="hasPerm('sysApp:edit') & hasPerm('sysApp:delete')" />
-            <a-popconfirm v-if="hasPerm('sysApp:delete')" placement="topRight" title="确认删除？" @confirm="() => sysAppDelete(record)">
+            <a v-if="hasPerm('sysapp:edit')" @click="$refs.editForm.edit(record)">编辑</a>
+            <a-divider type="vertical" v-if="hasPerm('sysapp:edit') & hasPerm('sysapp:delete')" />
+            <a-popconfirm v-if="hasPerm('sysapp:delete')" placement="topRight" title="确认删除？" @confirm="() => sysAppDelete(record)">
               <a>删除</a>
             </a-popconfirm>
-            <a-divider type="vertical" v-if="hasPerm('sysApp:setAsDefault') & hasPerm('sysApp:delete') & record.active == 'N' || hasPerm('sysApp:edit') & hasPerm('sysApp:setAsDefault') & record.active == 'N'" />
-            <a-popconfirm v-if="hasPerm('sysApp:setAsDefault') & record.active == 'N'" placement="topRight" title="设置为默认应用？" @confirm="() => sysDefault(record)">
+            <a-divider type="vertical" v-if="hasPerm('sysapp:setasdefault') & hasPerm('sysapp:delete') & record.active == 'N' || hasPerm('sysapp:edit') & hasPerm('sysapp:setasdefault') & record.active == 'N'" />
+            <a-popconfirm v-if="hasPerm('sysapp:setasdefault') & record.active == 'N'" placement="topRight" title="设置为默认应用？" @confirm="() => sysDefault(record)">
               <a>设为默认</a>
             </a-popconfirm>
           </span>
@@ -114,7 +114,7 @@
     },
     created () {
       this.sysDictTypeDropDown()
-      if (this.hasPerm('sysApp:edit') || this.hasPerm('sysApp:delete') || this.hasPerm('sysApp:setAsDefault')) {
+      if (this.hasPerm('sysapp:edit') || this.hasPerm('sysapp:delete') || this.hasPerm('sysapp:setasdefault')) {
         this.columns.push({
           title: '操作',
           width: '200px',

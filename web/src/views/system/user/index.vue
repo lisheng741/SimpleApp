@@ -17,7 +17,7 @@
       </a-card>
     </a-col>
     <a-col :md="19" :sm="24">
-      <x-card v-if="hasPerm('sysUser:page')">
+      <x-card v-if="hasPerm('sysuser:page')">
         <div slot="content" class="table-page-search-wrapper">
           <a-form layout="inline">
             <a-row :gutter="48">
@@ -51,8 +51,8 @@
           :rowSelection="options.rowSelection"
         >
           <template slot="operator">
-            <a-button type="primary" v-if="hasPerm('sysUser:add')" icon="plus" @click="$refs.addForm.add()">新增用户</a-button>
-            <a-button type="danger" :disabled="selectedRowKeys.length < 1" v-if="hasPerm('sysUser:delete')" @click="batchDelete"><a-icon type="delete"/>批量删除</a-button>
+            <a-button type="primary" v-if="hasPerm('sysuser:add')" icon="plus" @click="$refs.addForm.add()">新增用户</a-button>
+            <a-button type="danger" :disabled="selectedRowKeys.length < 1" v-if="hasPerm('sysuser:delete')" @click="batchDelete"><a-icon type="delete"/>批量删除</a-button>
             <x-down
               style="display:none"
               v-if="hasPerm('sysUser:export')"
@@ -63,7 +63,7 @@
           <span slot="sex" slot-scope="text">
             {{ sexFilter(text) }}
           </span>
-          <span slot="status" slot-scope="text,record" v-if="hasPerm('sysUser:changeStatus')">
+          <span slot="status" slot-scope="text,record" v-if="hasPerm('sysuser:changestatus')">
             <a-popconfirm placement="top" :title="text===0? '确定启用该用户？':'确定禁用该用户？'" @confirm="() => editUserStatus(text,record)">
               <a>{{ statusFilter(text) }}</a>
             </a-popconfirm>
@@ -72,25 +72,25 @@
             {{ statusFilter(text) }}
           </span>
           <span slot="action" slot-scope="text, record">
-            <a v-if="hasPerm('sysUser:edit')" @click="$refs.editForm.edit(record)">编辑</a>
-            <a-divider type="vertical" v-if="hasPerm('sysUser:edit')" />
-            <a-dropdown v-if="hasPerm('sysUser:resetPwd') || hasPerm('sysUser:grantRole') || hasPerm('sysUser:grantData') || hasPerm('sysUser:delete')">
+            <a v-if="hasPerm('sysuser:edit')" @click="$refs.editForm.edit(record)">编辑</a>
+            <a-divider type="vertical" v-if="hasPerm('sysuser:edit')" />
+            <a-dropdown v-if="hasPerm('sysuser:resetpwd') || hasPerm('sysuser:grantrole') || hasPerm('sysuser:grantdata') || hasPerm('sysuser:delete')">
               <a class="ant-dropdown-link">
                 更多 <a-icon type="down" />
               </a>
               <a-menu slot="overlay">
-                <a-menu-item v-if="hasPerm('sysUser:resetPwd')">
+                <a-menu-item v-if="hasPerm('sysuser:resetpwd')">
                   <a-popconfirm placement="topRight" title="确认重置密码？" @confirm="() => resetPwd(record)">
                     <a>重置密码</a>
                   </a-popconfirm>
                 </a-menu-item>
-                <a-menu-item v-if="hasPerm('sysUser:grantRole')">
+                <a-menu-item v-if="hasPerm('sysuser:grantrole')">
                   <a @click="$refs.userRoleForm.userRole(record)">授权角色</a>
                 </a-menu-item>
-                <a-menu-item v-if="hasPerm('sysUser:grantData')">
+                <a-menu-item v-if="hasPerm('sysuser:grantdata')">
                   <a @click="$refs.userOrgForm.userOrg(record)">授权数据</a>
                 </a-menu-item>
-                <a-menu-item v-if="hasPerm('sysUser:delete')">
+                <a-menu-item v-if="hasPerm('sysuser:delete')">
                   <a-popconfirm placement="topRight" title="确认删除？" @confirm="() => singleDelete(record)">
                     <a>删除</a>
                   </a-popconfirm>
@@ -199,7 +199,7 @@
         }
       })
       this.sysDictTypeDropDown()
-      if (this.hasPerm('sysUser:edit') || this.hasPerm('sysUser:resetPwd') || this.hasPerm('sysUser:grantRole') || this.hasPerm('sysUser:grantData') || this.hasPerm('sysUser:delete')) {
+      if (this.hasPerm('sysuser:edit') || this.hasPerm('sysuser:resetpwd') || this.hasPerm('sysuser:grantrole') || this.hasPerm('sysuser:grantdata') || this.hasPerm('sysuser:delete')) {
         this.columns.push({
           title: '操作',
           width: '150px',

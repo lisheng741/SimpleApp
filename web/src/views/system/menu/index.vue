@@ -1,7 +1,7 @@
 /* eslint-disable */
 <template>
   <div>
-    <x-card v-if="hasPerm('sysMenu:list')">
+    <x-card v-if="hasPerm('sysmenu:list')">
       <div slot="content" class="table-page-search-wrapper">
         <a-form layout="inline">
           <a-row :gutter="48">
@@ -38,7 +38,7 @@
         :expandRowByClick="true"
       >
         <template slot="operator">
-          <a-button type="primary" v-if="hasPerm('sysMenu:add')" icon="plus" @click="$refs.addForm.add()">新增菜单</a-button>
+          <a-button type="primary" v-if="hasPerm('sysmenu:add')" icon="plus" @click="$refs.addForm.add()">新增菜单</a-button>
         </template>
         <span slot="type" slot-scope="text">
           <a-tag color="cyan" v-if="text === 0">
@@ -58,9 +58,9 @@
         </span>
         <span slot="action" slot-scope="text, record">
           <template>
-            <a v-if="hasPerm('sysMenu:edit')" @click="$refs.editForm.edit(record)">编辑</a>
-            <a-divider type="vertical" v-if="hasPerm('sysMenu:edit') & hasPerm('sysMenu:delete')"/>
-            <a-popconfirm v-if="hasPerm('sysMenu:delete')" placement="topRight" title="删除本菜单与下级？" @confirm="() => handleDel(record)">
+            <a v-if="hasPerm('sysmenu:edit')" @click="$refs.editForm.edit(record)">编辑</a>
+            <a-divider type="vertical" v-if="hasPerm('sysmenu:edit') & hasPerm('sysmenu:delete')"/>
+            <a-popconfirm v-if="hasPerm('sysmenu:delete')" placement="topRight" title="删除本菜单与下级？" @confirm="() => handleDel(record)">
               <a>删除</a>
             </a-popconfirm>
           </template>
@@ -136,7 +136,7 @@ export default {
     ...mapGetters(['userInfo'])
   },
   created () {
-    if (this.hasPerm('sysMenu:edit') || this.hasPerm('sysMenu:delete')) {
+    if (this.hasPerm('sysmenu:edit') || this.hasPerm('sysmenu:delete')) {
       this.columns.push({
         title: '操作',
         dataIndex: 'action',

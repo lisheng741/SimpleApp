@@ -18,7 +18,7 @@
       </a-card>
     </a-col>
     <a-col :md="19" :sm="24">
-      <x-card v-if="hasPerm('sysOrg:page')">
+      <x-card v-if="hasPerm('sysorg:page')">
         <div slot="content" class="table-page-search-wrapper">
           <a-form layout="inline">
             <a-row :gutter="48">
@@ -45,7 +45,7 @@
           :rowSelection="options.rowSelection"
         >
           <template slot="operator">
-            <a-button @click="$refs.addForm.add()" icon="plus" type="primary" v-if="hasPerm('sysOrg:add')">新增机构</a-button>
+            <a-button @click="$refs.addForm.add()" icon="plus" type="primary" v-if="hasPerm('sysorg:add')">新增机构</a-button>
             <a-button type="danger" :disabled="selectedRowKeys.length < 1" v-if="hasPerm('sysPos:delete')" @click="batchDelete"><a-icon type="delete"/>批量删除</a-button>
             <x-down
               style="display:none"
@@ -55,9 +55,9 @@
             />
           </template>
           <span slot="action" slot-scope="text, record">
-            <a v-if="hasPerm('sysOrg:edit')" @click="$refs.editForm.edit(record)">编辑</a>
-            <a-divider type="vertical" v-if="hasPerm('sysOrg:edit') & hasPerm('sysOrg:delete')"/>
-            <a-popconfirm v-if="hasPerm('sysOrg:delete')" placement="topRight" title="确认删除？" @confirm="() => singleDelete(record)">
+            <a v-if="hasPerm('sysorg:edit')" @click="$refs.editForm.edit(record)">编辑</a>
+            <a-divider type="vertical" v-if="hasPerm('sysorg:edit') & hasPerm('sysorg:delete')"/>
+            <a-popconfirm v-if="hasPerm('sysorg:delete')" placement="topRight" title="确认删除？" @confirm="() => singleDelete(record)">
               <a>删除</a>
             </a-popconfirm>
           </span>
@@ -135,7 +135,7 @@
     },
     created () {
       this.getOrgTree()
-      if (this.hasPerm('sysOrg:edit') || this.hasPerm('sysOrg:delete')) {
+      if (this.hasPerm('sysorg:edit') || this.hasPerm('sysorg:delete')) {
         this.columns.push({
           title: '操作',
           width: '150px',

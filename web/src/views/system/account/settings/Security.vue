@@ -35,7 +35,7 @@
       }
     },
     created () {
-      if (this.hasPerm('sysUser:updatePwd')) {
+      if (this.hasPerm('sysuser:updatepwd')) {
         const updPwdMenu = {
           title: '账户密码',
           description: '当前密码强度',

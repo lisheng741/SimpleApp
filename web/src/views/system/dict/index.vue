@@ -1,6 +1,6 @@
 <template>
   <div>
-    <x-card v-if="hasPerm('sysDictType:page')">
+    <x-card v-if="hasPerm('sysdicttype:page')">
       <div slot="content" class="table-page-search-wrapper">
         <a-form layout="inline">
           <a-row :gutter="48">
@@ -10,7 +10,7 @@
               </a-form-item>
             </a-col>
             <a-col :md="8" :sm="24">
-              <a-form-item label="唯一编码" v-if="hasPerm('sysDictType:page')">
+              <a-form-item label="唯一编码" v-if="hasPerm('sysdicttype:page')">
                 <a-input v-model="queryParam.code" allow-clear placeholder="请输入唯一编码"/>
               </a-form-item>
             </a-col>
@@ -32,24 +32,24 @@
         :alert="false"
         :rowKey="(record) => record.code"
       >
-        <template slot="operator" v-if="hasPerm('sysDictType:add')">
-          <a-button @click="$refs.addForm.add()" icon="plus" type="primary" v-if="hasPerm('sysDictType:add')">新增类型</a-button>
+        <template slot="operator" v-if="hasPerm('sysdicttype:add')">
+          <a-button @click="$refs.addForm.add()" icon="plus" type="primary" v-if="hasPerm('sysdicttype:add')">新增类型</a-button>
         </template>
         <span slot="status" slot-scope="text">
           {{ statusFilter(text) }}
         </span>
         <span slot="action" slot-scope="text, record">
           <a @click="$refs.dataIndex.index(record)">字典</a>
-          <a-divider type="vertical" v-if="hasPerm('sysDictType:edit') || hasPerm('sysDictType:delete')"/>
-          <a-dropdown v-if="hasPerm('sysDictType:edit') || hasPerm('sysDictType:delete')">
+          <a-divider type="vertical" v-if="hasPerm('sysdicttype:edit') || hasPerm('sysdicttype:delete')"/>
+          <a-dropdown v-if="hasPerm('sysdicttype:edit') || hasPerm('sysdicttype:delete')">
             <a class="ant-dropdown-link">
               更多 <a-icon type="down" />
             </a>
             <a-menu slot="overlay">
-              <a-menu-item v-if="hasPerm('sysDictType:edit')">
+              <a-menu-item v-if="hasPerm('sysdicttype:edit')">
                 <a @click="$refs.editForm.edit(record)">编辑</a>
               </a-menu-item>
-              <a-menu-item v-if="hasPerm('sysDictType:delete')">
+              <a-menu-item v-if="hasPerm('sysdicttype:delete')">
                 <a-popconfirm placement="topRight" title="确认删除？" @confirm="() => sysDictTypeDelete(record)">
                   <a>删除</a>
                 </a-popconfirm>

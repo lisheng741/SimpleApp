@@ -1,6 +1,6 @@
 <template>
   <div>
-    <x-card v-if="hasPerm('sysPos:page')">
+    <x-card v-if="hasPerm('syspos:page')">
       <div slot="content" class="table-page-search-wrapper">
         <a-form layout="inline">
           <a-row :gutter="48">
@@ -31,8 +31,8 @@
         :rowKey="(record) => record.id"
         :rowSelection="options.rowSelection"
       >
-        <template slot="operator" v-if="hasPerm('sysPos:add')">
-          <a-button @click="$refs.addForm.add()" icon="plus" type="primary" v-if="hasPerm('sysPos:add')">新增职位</a-button>
+        <template slot="operator" v-if="hasPerm('syspos:add')">
+          <a-button @click="$refs.addForm.add()" icon="plus" type="primary" v-if="hasPerm('syspos:add')">新增职位</a-button>
           <a-button type="danger" :disabled="selectedRowKeys.length < 1" v-if="hasPerm('sysPos:delete')" @click="batchDelete"><a-icon type="delete"/>批量删除</a-button>
           <x-down
             style="display:none"
