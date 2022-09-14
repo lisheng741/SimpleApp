@@ -443,7 +443,7 @@ internal class DefaultDataSeed : IConfigureDataSeed
             },
             new SysMenu()
             {
-                Id = new Guid("08da960a-62be-4cff-8b05-8017c2d2d657"),
+                Id = new Guid("08da960a-62bf-4cff-8b05-8017c2d2d658"),
                 Name = "应用删除", Code = "sys_app_mgr_delete", Permission = "sysapp:delete",
                 ParentId = new Guid("08da8413-ad1f-4e73-87b2-a17113b1a85a"),
                 Type = MenuType.Button, Application = "system", Component = "", Icon = null, OpenType = MenuOpenType.None,IsEnabled = true, Redirect = "", Router = "", Sort = 100, Visible = "Y",
