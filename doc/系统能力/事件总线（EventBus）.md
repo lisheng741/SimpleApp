@@ -1,16 +1,10 @@
 # 事件总线（EventBus）
 
-
-
-发布/订阅
-
-
-
-集成了本地（Local）、Redis、RabbitMQ三种方式
+集成了本地（Local）、Redis、RabbitMQ三种发布/订阅方式
 
 
 
-## 启用事件总线
+## 1 启用事件总线
 
 在 Program.cs 中，添加事件总线服务：
 
@@ -32,7 +26,7 @@ builder.Services.AddEventBusRedis(options =>
 
 
 
-## 添加消费者
+## 2 添加消费者
 
 添加消费者需先准备事件模型（EventModel）和处理程序（EventHandler）
 
@@ -86,7 +80,7 @@ eventBusBuilder.AddSubscriber(subscribers =>
 
 
 
-## 发布事件
+## 3 发布事件
 
 使用 IEventPublisher.PublishAsync() 发布事件：
 
@@ -95,3 +89,4 @@ var @event = new TestEventModel();
 await _eventPublisher.PublishAsync(@event);
 ```
 
+发布以后，对应的消费者处理程序，将会处理
