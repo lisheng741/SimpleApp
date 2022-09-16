@@ -43,6 +43,7 @@ public class AccountController : ControllerBase
     /// </summary>
     /// <returns></returns>
     [HttpGet]
+    [Authorize]
     public async Task<AppResult> GetUserInfo()
     {
         var data = await _accountService.GetUserInfoAsync();

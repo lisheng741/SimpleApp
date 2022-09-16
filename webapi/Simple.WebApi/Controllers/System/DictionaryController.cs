@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Simple.WebApi.Controllers.System;
@@ -8,6 +9,7 @@ namespace Simple.WebApi.Controllers.System;
 /// </summary>
 [Route("api/SysDictType/[action]")]
 [ApiController]
+[Authorize]
 public class DictionaryController : ControllerBase
 {
     private readonly DictionaryService _dictionaryService;

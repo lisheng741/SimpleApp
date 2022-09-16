@@ -1,4 +1,5 @@
-﻿using Simple.Common.Filters;
+﻿using Microsoft.AspNetCore.Authorization;
+using Simple.Common.Filters;
 
 namespace Simple.WebApi.Controllers.System;
 
@@ -7,6 +8,7 @@ namespace Simple.WebApi.Controllers.System;
 /// </summary>
 [Route("api/sysExLog/[action]")]
 [ApiController]
+[Authorize]
 [DisabledRequestRecord]
 public class LogExceptionController : ControllerBase
 {

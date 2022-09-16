@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Simple.Services;
 
@@ -9,6 +10,7 @@ namespace Simple.WebApi.Controllers.System;
 /// </summary>
 [Route("api/SysUser/[action]")]
 [ApiController]
+[Authorize]
 public class UserController : ControllerBase
 {
     private readonly UserService _userService;
