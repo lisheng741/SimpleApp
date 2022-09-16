@@ -83,7 +83,7 @@ public class CurrentUserService : ICurrentUserService
         }
     }
 
-    public virtual bool IsSuperAdmin => FindClaimValue(SimpleClaimTypes.AdminType) == "1";
+    public virtual bool IsSuperAdmin => FindClaimValue(SimpleClaimTypes.AdminType) == "SuperAdmin";
 
     public virtual bool IsInRole(string roleName)
     {
