@@ -2,9 +2,9 @@
 
 public static class SimpleClaimTypes
 {
-    public const string UserName = "uname";
+    public const string UserName = "un";
 
-    public const string Role = "role";
+    public const string Role = "rol";
 
 
     public const string JwtId = "jti";
@@ -22,7 +22,7 @@ public static class SimpleClaimTypes
 
     public const string UserId = "uid";
 
-    public const string Name = "name";
+    public const string Name = "nam";
 
     public const string Email = "email";
 
