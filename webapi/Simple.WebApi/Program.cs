@@ -39,16 +39,10 @@ try
         {
             options.ResultFactory = resultException =>
             {
-                // Api 结果
-                IActionResult result = new ContentResult()
-                {
-                    // AppResultException 都返回 200 状态码
-                    StatusCode = StatusCodes.Status200OK,
-                    ContentType = "application/json; charset=utf-8",
-                    Content = JsonHelper.Serialize(resultException.AppResult)
-                };
-
-                return result;
+                // AppResultException 都返回 200 状态码
+                var objectResult = new ObjectResult(resultException.AppResult);
+                objectResult.StatusCode = StatusCodes.Status200OK;
+                return objectResult;
             };
         });
     builder.Services.AddEndpointsApiExplorer();
@@ -93,14 +87,8 @@ try
 
     // 配置 HTTP 请求管道 --------------------------
 
-    app.Use((context, next) =>
-    {
-        context.Request.EnableBuffering();
-        return next(context);
-    });
-
-    // 全局异常处理
-    app.UseApiException();
+    // 添加自定义中间件（包含：Body重复读取、异常处理）
+    app.UseSimplePipeline();
 
     if (app.Environment.IsDevelopment())
     {

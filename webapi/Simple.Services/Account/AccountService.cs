@@ -141,7 +141,11 @@ public class AccountService
         SysUser? user = BuildCurrentUser();
         if (user == null)
         {
-            throw AppResultException.Status401Unauthorized("用户不存在");
+            // 如果是在权限过滤器中抛出，将不会被处理为返回结果，因为 AuthorizationFilter 先于 ActionFilter
+            //throw AppResultException.Status401Unauthorized("用户不存在");
+
+            // 直接返回空结果，表示没有任何权限
+            return new List<UserInfoApplicationModel>();
         }
 
         // 获取结果
@@ -285,7 +289,11 @@ public class AccountService
         SysUser? user = BuildCurrentUser();
         if (user == null)
         {
-            throw AppResultException.Status401Unauthorized("用户不存在");
+            // 如果是在权限过滤器中抛出，将不会被处理为返回结果，因为 AuthorizationFilter 先于 ActionFilter
+            //throw AppResultException.Status401Unauthorized("用户不存在");
+
+            // 直接返回空结果，表示没有任何权限
+            return new List<UserInfoMenuModel>();
         }
 
         // 获取结果
@@ -420,7 +428,11 @@ public class AccountService
         SysUser? user = BuildCurrentUser();
         if (user == null)
         {
-            throw AppResultException.Status401Unauthorized("用户不存在");
+            // 如果是在权限过滤器中抛出，将不会被处理为返回结果，因为 AuthorizationFilter 先于 ActionFilter
+            //throw AppResultException.Status401Unauthorized("用户不存在");
+
+            // 直接返回空结果，表示没有任何权限
+            return new List<string>();
         }
 
         // 获取结果

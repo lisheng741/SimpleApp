@@ -11,7 +11,9 @@ public class ApiExceptionMiddleware
     private readonly ILogger _logger;
     private readonly IEventPublisher _publisher;
 
-    public ApiExceptionMiddleware(RequestDelegate next, ILogger<ApiExceptionMiddleware> logger, IEventPublisher publisher)
+    public ApiExceptionMiddleware(RequestDelegate next, 
+                                  ILogger<ApiExceptionMiddleware> logger, 
+                                  IEventPublisher publisher)
     {
         _next = next;
         _logger = logger;
