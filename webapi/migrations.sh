@@ -12,6 +12,12 @@ set -e
 # dotnet ef database update -s ../Simple.WebApi
 
 
+# issue: https://gitee.com/lisheng741/simpleapp/issues/I5RXRV
+# 参考：https://learn.microsoft.com/zh-cn/dotnet/core/tools/global-tools#install-a-local-tool
+# 恢复本地工具。本地工具列表存于根目录 /.config/dotnet-tools.json
+dotnet tool restore
+
+
 # 设置
 settings=" -s ../Simple.WebApi "
 
