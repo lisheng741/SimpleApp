@@ -4,7 +4,7 @@ namespace Simple.WebApi.Controllers.System;
 
 [Route("api/sysTimers/[action]")]
 [ApiController]
-// [Authorize]
+[Authorize]
 public class JobController
 {
     private readonly IJobService _jobService;
