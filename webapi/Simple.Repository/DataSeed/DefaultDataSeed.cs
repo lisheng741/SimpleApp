@@ -703,6 +703,80 @@ internal class DefaultDataSeed : IConfigureDataSeed
                 ParentId = new Guid("08da8414-6676-4f0a-8eb4-2bc4c51e07f0"),
                 Type = MenuType.Button, Application = "system", Component = "", Icon = null, OpenType = MenuOpenType.None,IsEnabled = true, Redirect = "", Router = "", Sort = 100, Visible = "Y",
             },
+            new SysMenu()
+            {
+                Id = new Guid("08da9ddf-423a-4723-8974-8a6fd2f06d0f"),
+                Application = "system",
+                Code = "sys_timers_mgr",
+                Component = "system/timers/index",
+                Icon = null,
+                IsEnabled = true,
+                Name = "定时任务",
+                OpenType = MenuOpenType.Component,
+                ParentId = new Guid("08da8414-4deb-4f62-83b6-e2c3bcd4c311"),
+                Permission = "",
+                Redirect = "",
+                Router = "/timers",
+                Sort = 6,
+                Type = MenuType.Menu,
+                Visible = "Y",
+            },
+            new SysMenu()
+            {
+                Id = new Guid("08da9ddf-423d-4eb4-89b8-daed743423b6"),
+                Name = "定时任务查询", Code = "sys_timers_mgr_page", Permission = "systimers:page",
+                ParentId = new Guid("08da9ddf-423a-4723-8974-8a6fd2f06d0f"),
+                Type = MenuType.Button, Application = "system", Component = "", Icon = null, OpenType = MenuOpenType.None,IsEnabled = true, Redirect = "", Router = "", Sort = 100, Visible = "Y",
+            },
+            new SysMenu()
+            {
+                Id = new Guid("08da9ddf-423e-4161-869c-a563b21745b2"),
+                Name = "定时任务列表", Code = "sys_timers_mgr_list", Permission = "systimers:list",
+                ParentId = new Guid("08da9ddf-423a-4723-8974-8a6fd2f06d0f"),
+                Type = MenuType.Button, Application = "system", Component = "", Icon = null, OpenType = MenuOpenType.None,IsEnabled = true, Redirect = "", Router = "", Sort = 100, Visible = "Y",
+            },
+            new SysMenu()
+            {
+                Id = new Guid("08da9de0-2c91-48d7-844e-9f5b36ee92bb"),
+                Name = "定时任务增加", Code = "sys_timers_mgr_add", Permission = "systimers:add",
+                ParentId = new Guid("08da9ddf-423a-4723-8974-8a6fd2f06d0f"),
+                Type = MenuType.Button, Application = "system", Component = "", Icon = null, OpenType = MenuOpenType.None,IsEnabled = true, Redirect = "", Router = "", Sort = 100, Visible = "Y",
+            },
+            new SysMenu()
+            {
+                Id = new Guid("08da9de0-2c91-493a-8256-6096b717876f"),
+                Name = "定时任务编辑", Code = "sys_timers_mgr_edit", Permission = "systimers:edit",
+                ParentId = new Guid("08da9ddf-423a-4723-8974-8a6fd2f06d0f"),
+                Type = MenuType.Button, Application = "system", Component = "", Icon = null, OpenType = MenuOpenType.None,IsEnabled = true, Redirect = "", Router = "", Sort = 100, Visible = "Y",
+            },
+            new SysMenu()
+            {
+                Id = new Guid("08da9de0-2c92-422e-87c7-0237cd8cb20a"),
+                Name = "定时任务删除", Code = "sys_timers_mgr_delete", Permission = "systimers:delete",
+                ParentId = new Guid("08da9ddf-423a-4723-8974-8a6fd2f06d0f"),
+                Type = MenuType.Button, Application = "system", Component = "", Icon = null, OpenType = MenuOpenType.None,IsEnabled = true, Redirect = "", Router = "", Sort = 100, Visible = "Y",
+            },
+            new SysMenu()
+            {
+                Id = new Guid("08da9de0-95da-4037-8b36-9847286a5831"),
+                Name = "定时任务启动", Code = "sys_timers_mgr_start", Permission = "systimers:start",
+                ParentId = new Guid("08da9ddf-423a-4723-8974-8a6fd2f06d0f"),
+                Type = MenuType.Button, Application = "system", Component = "", Icon = null, OpenType = MenuOpenType.None,IsEnabled = true, Redirect = "", Router = "", Sort = 100, Visible = "Y",
+            },
+            new SysMenu()
+            {
+                Id = new Guid("08da9de0-95da-4085-8d30-075e59d17647"),
+                Name = "定时任务暂停", Code = "sys_timers_mgr_stop", Permission = "systimers:stop",
+                ParentId = new Guid("08da9ddf-423a-4723-8974-8a6fd2f06d0f"),
+                Type = MenuType.Button, Application = "system", Component = "", Icon = null, OpenType = MenuOpenType.None,IsEnabled = true, Redirect = "", Router = "", Sort = 100, Visible = "Y",
+            },
+            new SysMenu()
+            {
+                Id = new Guid("08da9de0-95da-4139-8b08-4e15dfb33309"),
+                Name = "定时任务可执行列表", Code = "sys_timers_mgr_get_action_classes", Permission = "systimers:getactionclasses",
+                ParentId = new Guid("08da9ddf-423a-4723-8974-8a6fd2f06d0f"),
+                Type = MenuType.Button, Application = "system", Component = "", Icon = null, OpenType = MenuOpenType.None,IsEnabled = true, Redirect = "", Router = "", Sort = 100, Visible = "Y",
+            },
 
             new SysMenu()
             {
@@ -868,6 +942,15 @@ internal class DefaultDataSeed : IConfigureDataSeed
                 Name = "数据范围类型",
                 Sort = 100,
                 Remark = "数据范围类型",
+                IsEnabled = true,
+            },
+            new SysDictionary()
+            {
+                Id = new Guid("08da9de1-43b7-4ab6-81a0-4de197655980"),
+                Code = "run_status",
+                Name = "运行状态",
+                Sort = 100,
+                Remark = "定时任务运行状态",
                 IsEnabled = true,
             },
         });
@@ -1081,6 +1164,40 @@ internal class DefaultDataSeed : IConfigureDataSeed
                 Remark = "",
                 IsEnabled = true,
             },
+            new SysDictionaryItem()
+            {
+                Id = new Guid("08da9de1-43b7-4c3b-8fc4-64e6ced7330a"),
+                DictionaryId = new Guid("08da9de1-43b7-4ab6-81a0-4de197655980"),
+                Code = "1",
+                Name = "运行",
+                Sort = 100,
+                Remark = "",
+                IsEnabled = true,
+            },
+            new SysDictionaryItem()
+            {
+                Id = new Guid("08da9de1-43b7-4c53-8a65-f2ef5168f0b1"),
+                DictionaryId = new Guid("08da9de1-43b7-4ab6-81a0-4de197655980"),
+                Code = "2",
+                Name = "停止",
+                Sort = 100,
+                Remark = "",
+                IsEnabled = true,
+            },
+        });
+
+        // SysJob
+        builder.Entity<SysJob>().HasData(new SysJob[]
+        {
+            new SysJob()
+            {
+                Name = "控制台定时打印（测试）",
+                ActionClass = "Simple.Services.Jobs.TestJob",
+                Cron = "0/5 * * * * ?",
+                Remark = "控制台定时打印（测试）",
+                IsEnabled = false,
+                Sort = -1,
+            }
         });
     }
 }
