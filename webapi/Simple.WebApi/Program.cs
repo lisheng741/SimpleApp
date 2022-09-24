@@ -94,8 +94,10 @@ try
         };
     });
 
-    // 演示环境替换服务
+    // 演示环境替换服务 Begin -----------
+    // 如果要正常使用系统功能（如：定时任务的功能），请将这部分注释
     builder.Services.Replace(new ServiceDescriptor(typeof(IJobService), typeof(DemoJobService), ServiceLifetime.Transient));
+    // 演示环境替换服务 End -----------
 
     var app = builder.Build();
 
