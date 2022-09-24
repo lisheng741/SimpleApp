@@ -1191,6 +1191,7 @@ internal class DefaultDataSeed : IConfigureDataSeed
         {
             new SysJob()
             {
+                Id = new Guid("08da9e05-bd8b-4454-83dc-817372689e3e"),
                 Name = "控制台定时打印（测试）",
                 ActionClass = "Simple.Services.Jobs.TestJob",
                 Cron = "0/5 * * * * ?",
