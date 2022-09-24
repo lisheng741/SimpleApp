@@ -2,6 +2,9 @@
 
 namespace Simple.WebApi.Controllers.System;
 
+/// <summary>
+/// 定时任务
+/// </summary>
 [Route("api/sysTimers/[action]")]
 [ApiController]
 [Authorize]
@@ -14,7 +17,10 @@ public class JobController
         _jobService = jobService;
     }
 
-
+    /// <summary>
+    /// 定时任务列表
+    /// </summary>
+    /// <returns></returns>
     [HttpGet]
     public async Task<AppResult> List()
     {
@@ -22,7 +28,11 @@ public class JobController
         return AppResult.Status200OK(data: data);
     }
 
-
+    /// <summary>
+    /// 定时任务查询
+    /// </summary>
+    /// <param name="model"></param>
+    /// <returns></returns>
     [HttpGet]
     public async Task<AppResult> Page([FromQuery] JobPageInputModel model)
     {
@@ -30,7 +40,11 @@ public class JobController
         return AppResult.Status200OK(data: data);
     }
 
-
+    /// <summary>
+    /// 定时任务增加
+    /// </summary>
+    /// <param name="model"></param>
+    /// <returns></returns>
     [HttpPost]
     public async Task<AppResult> Add([FromBody] JobModel model)
     {
@@ -38,7 +52,11 @@ public class JobController
         return AppResult.Status200OK("新增成功");
     }
 
-
+    /// <summary>
+    /// 定时任务编辑
+    /// </summary>
+    /// <param name="model"></param>
+    /// <returns></returns>
     [HttpPost]
     public async Task<AppResult> Edit([FromBody] JobModel model)
     {
@@ -46,7 +64,11 @@ public class JobController
         return AppResult.Status200OK("更新成功");
     }
 
-
+    /// <summary>
+    /// 定时任务删除
+    /// </summary>
+    /// <param name="model"></param>
+    /// <returns></returns>
     [HttpPost]
     public async Task<AppResult> Delete([FromBody] IdInputModel model)
     {
@@ -54,7 +76,11 @@ public class JobController
         return AppResult.Status200OK("删除成功");
     }
 
-
+    /// <summary>
+    /// 定时任务启动
+    /// </summary>
+    /// <param name="model"></param>
+    /// <returns></returns>
     [HttpPost]
     public async Task<AppResult> Start([FromBody] IdInputModel model)
     {
@@ -62,7 +88,11 @@ public class JobController
         return AppResult.Status200OK("启动成功");
     }
 
-
+    /// <summary>
+    /// 定时任务暂停
+    /// </summary>
+    /// <param name="model"></param>
+    /// <returns></returns>
     [HttpPost]
     public async Task<AppResult> Stop([FromBody] IdInputModel model)
     {
@@ -70,6 +100,10 @@ public class JobController
         return AppResult.Status200OK("停止成功");
     }
 
+    /// <summary>
+    /// 定时任务可执行列表
+    /// </summary>
+    /// <returns></returns>
     [HttpGet]
     public async Task<AppResult> GetActionClasses()
     {

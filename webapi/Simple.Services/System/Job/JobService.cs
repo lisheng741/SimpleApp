@@ -6,6 +6,9 @@ using static Quartz.Logging.OperationName;
 
 namespace Simple.Services;
 
+/// <summary>
+/// 定时任务服务
+/// </summary>
 public class JobService : IJobService
 {
     private readonly SimpleDbContext _context;
