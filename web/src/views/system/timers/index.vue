@@ -1,6 +1,6 @@
 <template>
   <div>
-    <x-card v-if="hasPerm('sysTimers:page')">
+    <x-card v-if="hasPerm('systimers:page')">
       <div slot="content" class="table-page-search-wrapper">
         <a-form layout="inline">
           <a-row :gutter="48">
@@ -12,7 +12,7 @@
             <a-col :md="8" :sm="24">
               <a-form-item label="任务状态">
                 <a-select v-model="queryParam.jobStatus" placeholder="请选择状态" >
-                  <a-select-option v-for="(item,index) in jobStatusDictTypeDropDown" :key="index" :value="item.code" >{{ item.value }}</a-select-option>
+                  <a-select-option v-for="(item,index) in jobStatusDictTypeDropDown" :key="index" :value="item.code" >{{ item.name }}</a-select-option>
                 </a-select>
               </a-form-item>
             </a-col>
@@ -32,8 +32,8 @@
         :alert="false"
         :rowKey="(record) => record.id"
       >
-        <template slot="operator" v-if="hasPerm('sysTimers:add')">
-          <a-button @click="$refs.addForm.add()" icon="plus" type="primary" v-if="hasPerm('sysTimers:add')">新增定时器</a-button>
+        <template slot="operator" v-if="hasPerm('systimers:add')">
+          <a-button @click="$refs.addForm.add()" icon="plus" type="primary" v-if="hasPerm('systimers:add')">新增定时器</a-button>
         </template>
         <span slot="actionClass" slot-scope="text">
           <ellipsis :length="10" tooltip>{{ text }}</ellipsis>
@@ -41,7 +41,7 @@
         <span slot="remark" slot-scope="text">
           <ellipsis :length="10" tooltip>{{ text }}</ellipsis>
         </span>
-        <span slot="jobStatus" slot-scope="text,record" v-if="hasPerm('sysTimers:start') || hasPerm('sysTimers:stop')">
+        <span slot="jobStatus" slot-scope="text,record" v-if="hasPerm('systimers:start') || hasPerm('systimers:stop')">
           <a-popconfirm placement="top" :title="text===1? '确定停止该任务？':'确定启动该任务？'" @confirm="() => editjobStatusStatus(text,record)">
             <a-badge :status="text===1? 'processing':'default'" />
             <a>{{ 'run_status' | dictType(text) }}</a>
@@ -52,9 +52,9 @@
           {{ 'run_status' | dictType(text) }}
         </span>
         <span slot="action" slot-scope="text, record">
-          <a v-if="hasPerm('sysTimers:edit')" @click="$refs.editForm.edit(record)">编辑</a>
-          <a-divider type="vertical" v-if="hasPerm('sysTimers:edit') & hasPerm('sysTimers:delete')"/>
-          <a-popconfirm v-if="hasPerm('sysTimers:delete')" placement="topRight" title="确认删除？" @confirm="() => sysTimersDelete(record)">
+          <a v-if="hasPerm('systimers:edit')" @click="$refs.editForm.edit(record)">编辑</a>
+          <a-divider type="vertical" v-if="hasPerm('systimers:edit') & hasPerm('systimers:delete')"/>
+          <a-popconfirm v-if="hasPerm('systimers:delete')" placement="topRight" title="确认删除？" @confirm="() => sysTimersDelete(record)">
             <a>删除</a>
           </a-popconfirm>
         </span>
@@ -119,7 +119,7 @@
     },
     created () {
       this.sysDictTypeDropDown()// 注释掉
-      if (this.hasPerm('sysTimers:edit') || this.hasPerm('sysTimers:delete')) {
+      if (this.hasPerm('systimers:edit') || this.hasPerm('systimers:delete')) {
         this.columns.push({
           title: '操作',
           width: '150px',
