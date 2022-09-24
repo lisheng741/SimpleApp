@@ -71,7 +71,7 @@ try
     builder.Services.Replace(new ServiceDescriptor(typeof(IPermissionChecker), typeof(PermissionChecker), ServiceLifetime.Transient));
 
     // 对象映射 AutoMapper
-    var profileAssemblies = AssemblyHelper.GetAssemblies("Simple.Services");
+    var profileAssemblies = AssemblyHelper.GetAssemblies(); // 这里读取整个项目程序集，也可以选择只读指定程序集，如: "Simple.Services"
     builder.Services.AddAutoMapper(profileAssemblies, ServiceLifetime.Singleton);
 
     // 缓存
@@ -82,6 +82,20 @@ try
 
     // 跨域
     builder.Services.AddSimpleCors();
+
+    // 定时任务
+    builder.Services.AddJobScheduling(options =>
+    {
+        options.StartHandle = async sp =>
+        {
+            var jobService = sp.GetService<IJobService>();
+            if (jobService == null) return;
+            await jobService.StartAll();
+        };
+    });
+
+    // 演示环境替换服务
+    builder.Services.Replace(new ServiceDescriptor(typeof(IJobService), typeof(DemoJobService), ServiceLifetime.Transient));
 
     var app = builder.Build();
 

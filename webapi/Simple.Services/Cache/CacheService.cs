@@ -209,4 +209,23 @@ public class CacheService
         var key = $"{CacheKeyConst.Permission}{RoleCacheKey}{roleId}";
         await RemoveCacheAsync(key);
     }
+
+    #region ActionClass 缓存
+
+    public async Task<List<string>> GetActionClassAsync()
+    {
+        return await GetCacheItemsAsync<string>(CacheKeyConst.ActionClass);
+    }
+
+    public async Task SetActionClassAsync(List<string> actionClasss)
+    {
+        await SetCacheItemAsync<string>(CacheKeyConst.ActionClass, actionClasss);
+    }
+
+    public async Task RemoveActionClassAsync()
+    {
+        await RemoveCacheAsync(CacheKeyConst.ActionClass);
+    }
+
+    #endregion
 }

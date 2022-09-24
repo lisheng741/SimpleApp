@@ -4,7 +4,7 @@ namespace Simple.Common;
 
 public class AppResultOptions
 {
-    public Func<AppResultException, IActionResult> _resultFactory = default!;
+    private Func<AppResultException, IActionResult> _resultFactory = default!;
 
     public Func<AppResultException, IActionResult> ResultFactory
     {

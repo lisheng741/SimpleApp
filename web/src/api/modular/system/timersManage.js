@@ -93,7 +93,7 @@ export function sysTimersEdit (parameter) {
 export function sysTimersGetActionClasses (parameter) {
   return axios({
     url: '/sysTimers/getActionClasses',
-    method: 'post',
+    method: 'get',
     data: parameter
   })
 }
