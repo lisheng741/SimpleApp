@@ -33,7 +33,7 @@ public class SysRoleMenu : EntityBase
 
         // Index
         builder.Entity<SysRoleMenu>()
-            .HasIndex(e => new { e.MenuId, e.RoleId })
+            .HasIndex(e => new { e.MenuId })
             .IsUnique(false);
     }
 }

@@ -30,7 +30,7 @@ public class SysRoleDataScope : EntityBase
 
         // Index
         builder.Entity<SysRoleDataScope>()
-            .HasIndex(e => new { e.OrganizationId, e.RoleId })
+            .HasIndex(e => new { e.OrganizationId })
             .IsUnique(false);
 
         // 关系配置

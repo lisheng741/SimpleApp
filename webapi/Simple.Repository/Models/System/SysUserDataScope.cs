@@ -31,7 +31,7 @@ public class SysUserDataScope : EntityBase
 
         // Index
         builder.Entity<SysUserDataScope>()
-            .HasIndex(e => new { e.OrganizationId, e.UserId })
+            .HasIndex(e => new { e.OrganizationId })
             .IsUnique(false);
 
         // 关系配置

@@ -33,7 +33,7 @@ public class SysUserRole : EntityBase
 
         // 索引设置
         builder.Entity<SysUserRole>()
-            .HasIndex(e => new { e.RoleId, e.UserId })
+            .HasIndex(e => new { e.RoleId })
             .IsUnique(false);
     }
 }
