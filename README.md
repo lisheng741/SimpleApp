@@ -183,4 +183,7 @@ WebApi        # 表现层：完成程序配置；配置路由，提供API接口
 
 啊呸，我不喝咖啡，来杯可乐吧，啊哈哈哈。
 
+[赞助列表](https://lisheng741.gitee.io/blog/thanks/)
+
 ![image-20220916003303757](./doc/images/payforme.png)
+
