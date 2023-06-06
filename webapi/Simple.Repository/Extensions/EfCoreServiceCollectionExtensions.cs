@@ -25,4 +25,19 @@ public static class EfCoreServiceCollectionExtensions
 
         return services;
     }
+
+    //public static IServiceCollection AddMySqlRepository(this IServiceCollection services, string connectionString)
+    //{
+    //    services.AddDbContext<SimpleDbContext>(options =>
+    //    {
+    //        options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
+    //        options.ConfigureWarnings(builder =>
+    //        {
+    //            // 消除 https://go.microsoft.com/fwlink/?linkid=2131316
+    //            builder.Ignore(CoreEventId.PossibleIncorrectRequiredNavigationWithQueryFilterInteractionWarning);
+    //        });
+    //    });
+
+    //    return services;
+    //}
 }
