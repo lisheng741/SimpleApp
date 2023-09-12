@@ -1,23 +1,23 @@
-﻿using Simple.Common.Helpers;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace Simple.Services;
 
-public class UserModel : ModelBase
-{
-    /// <summary>
-    /// 主键
-    /// </summary>
+public class UserUpdateModel : ModelBase
+{/// <summary>
+ /// 主键
+ /// </summary>
     public Guid? Id { get; set; }
 
     /// <summary>
     /// 账号
     /// </summary>
+    [Required(ErrorMessage = "账号不能为空"),
+        MaxLength(64, ErrorMessage = "账号长度不能超过64个字符")]
     public string Account { get; set; } = "";
-
-    /// <summary>
-    /// 密码
-    /// </summary>
-    public string Password { get; set; } = "";
 
     /// <summary>
     /// 姓名
@@ -60,13 +60,7 @@ public class UserModel : ModelBase
 
     public override void ConfigureMapper(Profile profile)
     {
-        profile.CreateMap<SysUser, UserModel>()
-            .ForMember(d => d.Password, options => options.Ignore())
-            .ForMember(d => d.Account, options => options.MapFrom(s => s.UserName))
-            .ForMember(d => d.Sex, options => options.MapFrom(s => s.Gender))
-            .ForMember(d => d.Status, options => options.MapFrom(s => s.IsEnabled ? 1 : 0));
-
-        profile.CreateMap<UserModel, SysUser>()
+        profile.CreateMap<UserUpdateModel, SysUser>()
             .ForMember(d => d.Id, options => options.Ignore())
             .ForMember(d => d.Password, options => options.Ignore())
             .ForMember(d => d.UserName, options => options.MapFrom(s => s.Account))

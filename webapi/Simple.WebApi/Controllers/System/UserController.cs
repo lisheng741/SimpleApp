@@ -49,7 +49,7 @@ public class UserController : ControllerBase
     /// <param name="model"></param>
     /// <returns></returns>
     [HttpPost]
-    public async Task<AppResult> Add([FromBody] UserModel model)
+    public async Task<AppResult> Add([FromBody] UserAddModel model)
     {
         await _userService.AddAsync(model);
         return AppResult.Status200OK("新增成功");
@@ -61,7 +61,7 @@ public class UserController : ControllerBase
     /// <param name="model"></param>
     /// <returns></returns>
     [HttpPost]
-    public async Task<AppResult> Edit([FromBody] UserModel model)
+    public async Task<AppResult> Edit([FromBody] UserUpdateModel model)
     {
         await _userService.UpdateAsync(model);
         return AppResult.Status200OK("更新成功");
