@@ -148,7 +148,7 @@ export default {
       })
     },
     getSexData () {
-      this.sexData = this.$options.filters['dictData']('sex')
+      this.sexData = this.$options.filters['dictData']('gender')
     },
     setavatar (url) {
       this.option.img = process.env.VUE_APP_API_BASE_URL + '/sysFileInfo/preview?id=' + url

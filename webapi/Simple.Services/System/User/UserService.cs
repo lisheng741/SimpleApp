@@ -49,7 +49,7 @@ public class UserService
         return result;
     }
 
-    public async Task<int> AddAsync(UserModel model)
+    public async Task<int> AddAsync(UserAddModel model)
     {
         if (await _context.Set<SysUser>().AnyAsync(u => u.UserName == model.Account))
         {
@@ -63,7 +63,7 @@ public class UserService
         return await _context.SaveChangesAsync();
     }
 
-    public async Task<int> UpdateAsync(UserModel model)
+    public async Task<int> UpdateAsync(UserUpdateModel model)
     {
         if (await _context.Set<SysUser>().AnyAsync(u => u.Id != model.Id && u.UserName == model.Account))
         {
@@ -79,8 +79,7 @@ public class UserService
             throw AppResultException.Status404NotFound("找不到用户，更新失败");
         }
 
-        MapperHelper.Map<UserModel, SysUser>(model, user);
-        user.SetPassword(model.Password);
+        MapperHelper.Map<UserUpdateModel, SysUser>(model, user);
 
         _context.Update(user);
         int ret = await _context.SaveChangesAsync();
