@@ -30,6 +30,7 @@ public class MenuTreeNodeModel : MenuModel, ITreeNode
     public override void ConfigureMapper(Profile profile)
     {
         profile.CreateMap<SysMenu, MenuTreeNodeModel>()
+            .ForMember(d => d.Pid, options => options.MapFrom(s => s.ParentId))
             .ForMember(d => d.Status, options => options.MapFrom(s => s.IsEnabled ? 1 : 0));
 
         profile.CreateMap<MenuTreeNodeModel, SysMenu>()
