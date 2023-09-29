@@ -53,7 +53,7 @@ public class UserService
     {
         if (await _context.Set<SysUser>().AnyAsync(u => u.UserName == model.Account))
         {
-            throw AppResultException.Status409Conflict("存在相同用户名");
+            throw ResultHelper.Exception409Conflict("存在相同用户名");
         }
 
         var user = MapperHelper.Map<SysUser>(model);
@@ -67,7 +67,7 @@ public class UserService
     {
         if (await _context.Set<SysUser>().AnyAsync(u => u.Id != model.Id && u.UserName == model.Account))
         {
-            throw AppResultException.Status409Conflict("存在相同用户名");
+            throw ResultHelper.Exception409Conflict("存在相同用户名");
         }
 
         var user = await _context.Set<SysUser>()
@@ -76,7 +76,7 @@ public class UserService
 
         if (user == null)
         {
-            throw AppResultException.Status404NotFound("找不到用户，更新失败");
+            throw ResultHelper.Exception404NotFound("找不到用户，更新失败");
         }
 
         MapperHelper.Map<UserUpdateModel, SysUser>(model, user);
@@ -86,7 +86,7 @@ public class UserService
 
         if (ret == 0)
         {
-            throw AppResultException.Status200OK("更新记录数为0");
+            throw ResultHelper.Exception200OK("更新记录数为0");
         }
 
         return ret;
@@ -117,7 +117,7 @@ public class UserService
 
         if (user == null)
         {
-            throw AppResultException.Status404NotFound("找不到用户，更新失败");
+            throw ResultHelper.Exception404NotFound("找不到用户，更新失败");
         }
 
         // 更新状态
@@ -138,7 +138,7 @@ public class UserService
 
         if (user == null)
         {
-            throw AppResultException.Status404NotFound("用户不存在或密码不匹配");
+            throw ResultHelper.Exception404NotFound("用户不存在或密码不匹配");
         }
 
         user.SetPassword(newPassword);
@@ -154,7 +154,7 @@ public class UserService
 
         if (user == null)
         {
-            throw AppResultException.Status404NotFound("找不到用户，重置失败");
+            throw ResultHelper.Exception404NotFound("找不到用户，重置失败");
         }
 
         user.SetPassword(password);
@@ -183,7 +183,7 @@ public class UserService
 
         if (user == null)
         {
-            throw AppResultException.Status404NotFound("找不到用户，设置失败");
+            throw ResultHelper.Exception404NotFound("找不到用户，设置失败");
         }
 
         user.SetRole(roleIds);
@@ -213,7 +213,7 @@ public class UserService
 
         if (user == null)
         {
-            throw AppResultException.Status404NotFound("找不到用户，设置失败");
+            throw ResultHelper.Exception404NotFound("找不到用户，设置失败");
         }
 
         user.SetDataScope(organizationIds);

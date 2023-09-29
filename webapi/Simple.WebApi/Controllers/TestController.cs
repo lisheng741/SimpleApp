@@ -46,7 +46,7 @@ namespace Simple.WebApi.Controllers
         [HttpGet]
         public string Throw()
         {
-            throw new AppResultException(new AppResult(401, "测试401返回"));
+            throw new ApiResultException(new ApiResult(401, "测试401返回"));
             throw new Exception("测试异常");
         }
 

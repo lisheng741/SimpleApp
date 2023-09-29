@@ -25,11 +25,11 @@ public class AccountController : ControllerBase
     /// <param name="login"></param>
     /// <returns></returns>
     [HttpPost]
-    public async Task<AppResult> Login([FromBody] LoginModel login)
+    public async Task<string> Login([FromBody] LoginModel login)
     {
         string token = await _accountService.GetTokenAsync(login);
 
-        return AppResult.Status200OK("成功", token);
+        return token;
     }
 
     //[HttpGet]
@@ -44,9 +44,8 @@ public class AccountController : ControllerBase
     /// <returns></returns>
     [HttpGet]
     [Authorize]
-    public async Task<AppResult> GetUserInfo()
+    public async Task<UserInfoModel> GetUserInfo()
     {
-        var data = await _accountService.GetUserInfoAsync();
-        return AppResult.Status200OK(data: data);
+        return await _accountService.GetUserInfoAsync();
     }
 }

@@ -24,10 +24,10 @@ public class DictionaryItemController : ControllerBase
     /// </summary>
     /// <returns></returns>
     [HttpGet]
-    public async Task<AppResult> List()
+    public async Task<List<DictionaryItemModel>> List()
     {
         List<DictionaryItemModel> data = await _dictionaryItemService.GetAsync();
-        return AppResult.Status200OK(data: data);
+        return ResultHelper.Result200OK(data: data);
     }
 
     /// <summary>
@@ -36,10 +36,10 @@ public class DictionaryItemController : ControllerBase
     /// <param name="model"></param>
     /// <returns></returns>
     [HttpGet]
-    public async Task<AppResult> Page([FromQuery] DictionaryItemPageInputModel model)
+    public async Task<PageResultModel<DictionaryItemModel>> Page([FromQuery] DictionaryItemPageInputModel model)
     {
         PageResultModel<DictionaryItemModel> data = await _dictionaryItemService.GetPageAsync(model);
-        return AppResult.Status200OK(data: data);
+        return ResultHelper.Result200OK(data: data);
     }
 
     /// <summary>
@@ -48,10 +48,10 @@ public class DictionaryItemController : ControllerBase
     /// <param name="model"></param>
     /// <returns></returns>
     [HttpPost]
-    public async Task<AppResult> Add([FromBody] DictionaryItemModel model)
+    public async Task<int> Add([FromBody] DictionaryItemModel model)
     {
-        await _dictionaryItemService.AddAsync(model);
-        return AppResult.Status200OK("新增成功");
+        var data = await _dictionaryItemService.AddAsync(model);
+        return ResultHelper.Result200OK("新增成功", data);
     }
 
     /// <summary>
@@ -60,10 +60,10 @@ public class DictionaryItemController : ControllerBase
     /// <param name="model"></param>
     /// <returns></returns>
     [HttpPost]
-    public async Task<AppResult> Edit([FromBody] DictionaryItemModel model)
+    public async Task<int> Edit([FromBody] DictionaryItemModel model)
     {
-        await _dictionaryItemService.UpdateAsync(model);
-        return AppResult.Status200OK("更新成功");
+        var data = await _dictionaryItemService.UpdateAsync(model);
+        return ResultHelper.Result200OK("更新成功", data);
     }
 
     /// <summary>
@@ -72,9 +72,9 @@ public class DictionaryItemController : ControllerBase
     /// <param name="model"></param>
     /// <returns></returns>
     [HttpPost]
-    public async Task<AppResult> Delete([FromBody] IdInputModel model)
+    public async Task<int> Delete([FromBody] IdInputModel model)
     {
-        await _dictionaryItemService.DeleteAsync(model.Id);
-        return AppResult.Status200OK("删除成功");
+        var data = await _dictionaryItemService.DeleteAsync(model.Id);
+        return ResultHelper.Result200OK("删除成功", data);
     }
 }

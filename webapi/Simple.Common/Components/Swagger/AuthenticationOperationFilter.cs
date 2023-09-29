@@ -9,10 +9,15 @@ public class AuthenticationOperationFilter : IOperationFilter
 {
     public void Apply(OpenApiOperation operation, OperationFilterContext context)
     {
-        var authorizeAttributes = context.MethodInfo
-            .GetCustomAttributes(true)
-            .OfType<AuthorizeAttribute>()
-            .Distinct();
+        var actionAttributes = context.MethodInfo.GetCustomAttributes(true);
+        var declaringTypeAttributes = context.MethodInfo.DeclaringType?.GetCustomAttributes(true);
+
+        if(declaringTypeAttributes != null)
+        {
+            actionAttributes = actionAttributes.Concat(declaringTypeAttributes).ToArray();
+        }
+
+        var authorizeAttributes = actionAttributes.OfType<AuthorizeAttribute>();
 
         if (authorizeAttributes.Any())
         {

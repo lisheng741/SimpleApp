@@ -1,6 +1,8 @@
 ﻿using System.Runtime.ExceptionServices;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Features;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
 namespace Simple.Common.Middlewares;
@@ -9,14 +11,17 @@ public class ApiExceptionMiddleware
 {
     private readonly RequestDelegate _next;
     private readonly ILogger _logger;
+    private readonly IWebHostEnvironment _environment;
     private readonly IEventPublisher _publisher;
 
     public ApiExceptionMiddleware(RequestDelegate next, 
-                                  ILogger<ApiExceptionMiddleware> logger, 
+                                  ILogger<ApiExceptionMiddleware> logger,
+                                  IWebHostEnvironment environment,
                                   IEventPublisher publisher)
     {
         _next = next;
         _logger = logger;
+        _environment = environment;
         _publisher = publisher;
     }
 
@@ -30,6 +35,12 @@ public class ApiExceptionMiddleware
         }
         catch(Exception ex)
         {
+            // 测试环境下，继续抛出
+            if (_environment.IsDevelopment())
+            {
+                throw;
+            }
+
             // 捕获异常，但不在 catch 块中继续处理，因为这样不利于堆栈的使用
             edi = ExceptionDispatchInfo.Capture(ex);
         }
@@ -69,7 +80,7 @@ public class ApiExceptionMiddleware
         context.Response.Headers.ETag = default;
 
         // 响应
-        var result = AppResult.Status500InternalServerError($"系统异常，异常Id: {eventId}，请联系管理员");
+        var result = ApiResultHelper.Result500InternalServerError($"系统异常，异常Id: {eventId}，请联系管理员");
         await context.Response.WriteAsync(result);
     }
 

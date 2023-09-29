@@ -24,10 +24,9 @@ public class ApplicationController : ControllerBase
     /// </summary>
     /// <returns></returns>
     [HttpGet]
-    public async Task<AppResult> List()
+    public async Task<List<ApplicationModel>> List()
     {
-        List<ApplicationModel> data = await _applicationService.GetAsync();
-        return AppResult.Status200OK(data: data);
+        return await _applicationService.GetAsync();
     }
 
     /// <summary>
@@ -36,10 +35,9 @@ public class ApplicationController : ControllerBase
     /// <param name="model"></param>
     /// <returns></returns>
     [HttpGet]
-    public async Task<AppResult> Page([FromQuery] PageInputModel model)
+    public async Task<PageResultModel<ApplicationModel>> Page([FromQuery] PageInputModel model)
     {
-        PageResultModel<ApplicationModel> data = await _applicationService.GetPageAsync(model);
-        return AppResult.Status200OK(data: data);
+        return await _applicationService.GetPageAsync(model);
     }
 
     /// <summary>
@@ -48,10 +46,10 @@ public class ApplicationController : ControllerBase
     /// <param name="model"></param>
     /// <returns></returns>
     [HttpPost]
-    public async Task<AppResult> Add([FromBody] ApplicationModel model)
+    public async Task<int> Add([FromBody] ApplicationModel model)
     {
-        await _applicationService.AddAsync(model);
-        return AppResult.Status200OK("新增成功");
+        var data = await _applicationService.AddAsync(model);
+        return ResultHelper.Result200OK("新增成功", data);
     }
 
     /// <summary>
@@ -60,10 +58,10 @@ public class ApplicationController : ControllerBase
     /// <param name="model"></param>
     /// <returns></returns>
     [HttpPost]
-    public async Task<AppResult> Edit([FromBody] ApplicationModel model)
+    public async Task<int> Edit([FromBody] ApplicationModel model)
     {
-        await _applicationService.UpdateAsync(model);
-        return AppResult.Status200OK("更新成功");
+        var data = await _applicationService.UpdateAsync(model);
+        return ResultHelper.Result200OK("更新成功", data);
     }
 
     /// <summary>
@@ -72,10 +70,10 @@ public class ApplicationController : ControllerBase
     /// <param name="models"></param>
     /// <returns></returns>
     [HttpPost]
-    public async Task<AppResult> Delete([FromBody] List<IdInputModel> models)
+    public async Task<int> Delete([FromBody] List<IdInputModel> models)
     {
-        await _applicationService.DeleteAsync(models.Select(m => m.Id));
-        return AppResult.Status200OK("删除成功");
+        var data = await _applicationService.DeleteAsync(models.Select(m => m.Id));
+        return ResultHelper.Result200OK("删除成功", data);
     }
 
     /// <summary>
@@ -84,9 +82,9 @@ public class ApplicationController : ControllerBase
     /// <param name="id"></param>
     /// <returns></returns>
     [HttpPost]
-    public async Task<AppResult> SetAsDefault(IdInputModel id)
+    public async Task<int> SetAsDefault(IdInputModel id)
     {
-        await _applicationService.SetDefault(id.Id);
-        return AppResult.Status200OK("设置成功");
+        var data = await _applicationService.SetDefault(id.Id);
+        return ResultHelper.Result200OK("设置成功", data);
     }
 }

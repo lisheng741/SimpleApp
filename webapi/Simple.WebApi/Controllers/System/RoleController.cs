@@ -25,10 +25,10 @@ public class RoleController : ControllerBase
     /// </summary>
     /// <returns></returns>
     [HttpGet]
-    public async Task<AppResult> List()
+    public async Task<List<RoleModel>> List()
     {
         List<RoleModel> data = await _roleService.GetAsync();
-        return AppResult.Status200OK(data: data);
+        return ResultHelper.Result200OK(data: data);
     }
 
     /// <summary>
@@ -37,10 +37,10 @@ public class RoleController : ControllerBase
     /// <param name="model"></param>
     /// <returns></returns>
     [HttpGet]
-    public async Task<AppResult> Page([FromQuery] PageInputModel model)
+    public async Task<PageResultModel<RoleModel>> Page([FromQuery] PageInputModel model)
     {
         PageResultModel<RoleModel> data = await _roleService.GetPageAsync(model);
-        return AppResult.Status200OK(data: data);
+        return ResultHelper.Result200OK(data: data);
     }
 
     /// <summary>
@@ -49,10 +49,10 @@ public class RoleController : ControllerBase
     /// <param name="model"></param>
     /// <returns></returns>
     [HttpPost]
-    public async Task<AppResult> Add([FromBody] RoleModel model)
+    public async Task<int> Add([FromBody] RoleModel model)
     {
-        await _roleService.AddAsync(model);
-        return AppResult.Status200OK("新增成功");
+        var data = await _roleService.AddAsync(model);
+        return ResultHelper.Result200OK("新增成功", data);
     }
 
     /// <summary>
@@ -61,10 +61,10 @@ public class RoleController : ControllerBase
     /// <param name="model"></param>
     /// <returns></returns>
     [HttpPost]
-    public async Task<AppResult> Edit([FromBody] RoleModel model)
+    public async Task<int> Edit([FromBody] RoleModel model)
     {
-        await _roleService.UpdateAsync(model);
-        return AppResult.Status200OK("更新成功");
+        var data = await _roleService.UpdateAsync(model);
+        return ResultHelper.Result200OK("更新成功", data);
     }
 
     /// <summary>
@@ -73,10 +73,10 @@ public class RoleController : ControllerBase
     /// <param name="models"></param>
     /// <returns></returns>
     [HttpPost]
-    public async Task<AppResult> Delete([FromBody] IdInputModel models)
+    public async Task<int> Delete([FromBody] IdInputModel models)
     {
-        await _roleService.DeleteAsync(models.Id);
-        return AppResult.Status200OK("删除成功");
+        var data = await _roleService.DeleteAsync(models.Id);
+        return ResultHelper.Result200OK("删除成功", data);
     }
 
     /// <summary>
@@ -85,10 +85,10 @@ public class RoleController : ControllerBase
     /// <param name="id"></param>
     /// <returns></returns>
     [HttpGet]
-    public async Task<AppResult> OwnMenu(Guid id)
+    public async Task<List<Guid>> OwnMenu(Guid id)
     {
         var data = await _roleService.GetMenuIdsAsync(id);
-        return AppResult.Status200OK(data: data);
+        return ResultHelper.Result200OK(data: data);
     }
 
     /// <summary>
@@ -97,10 +97,10 @@ public class RoleController : ControllerBase
     /// <param name="input"></param>
     /// <returns></returns>
     [HttpPost]
-    public async Task<AppResult> GrantMenu(RoleGrantMenuInputModel input)
+    public async Task<int> GrantMenu(RoleGrantMenuInputModel input)
     {
-        await _roleService.SetMenuAsync(input.Id, input.GrantMenuIdList);
-        return AppResult.Status200OK("授权成功");
+        var data = await _roleService.SetMenuAsync(input.Id, input.GrantMenuIdList);
+        return ResultHelper.Result200OK("授权成功", data);
     }
 
     /// <summary>
@@ -109,10 +109,10 @@ public class RoleController : ControllerBase
     /// <param name="id"></param>
     /// <returns></returns>
     [HttpGet]
-    public async Task<AppResult> OwnData(Guid id)
+    public async Task<List<Guid>> OwnData(Guid id)
     {
         var data = await _roleService.GetDataScopeIdsAsync(id);
-        return AppResult.Status200OK(data: data);
+        return ResultHelper.Result200OK(data: data);
     }
 
     /// <summary>
@@ -121,9 +121,9 @@ public class RoleController : ControllerBase
     /// <param name="input"></param>
     /// <returns></returns>
     [HttpPost]
-    public async Task<AppResult> GrantData(RoleGrantDataScopeInputModel input)
+    public async Task<int> GrantData(RoleGrantDataScopeInputModel input)
     {
-        await _roleService.SetDataScopeAsync(input.Id, input.DataScopeType, input.GrantOrgIdList);
-        return AppResult.Status200OK("授权成功");
+        var data = await _roleService.SetDataScopeAsync(input.Id, input.DataScopeType, input.GrantOrgIdList);
+        return ResultHelper.Result200OK("授权成功", data);
     }
 }

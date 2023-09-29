@@ -25,9 +25,8 @@ public class LogExceptionController : ControllerBase
     /// <param name="model"></param>
     /// <returns></returns>
     [HttpGet]
-    public async Task<AppResult> Page([FromQuery] LogPageInputModel model)
+    public async Task<PageResultModel<LogExceptionModel>> Page([FromQuery] LogPageInputModel model)
     {
-        PageResultModel<LogExceptionModel> data = await _exceptionLogService.GetPageAsync(model);
-        return AppResult.Status200OK(data: data);
+        return await _exceptionLogService.GetPageAsync(model);
     }
 }

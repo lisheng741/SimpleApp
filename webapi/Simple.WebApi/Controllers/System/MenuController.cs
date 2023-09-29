@@ -25,10 +25,10 @@ public class MenuController : ControllerBase
     /// <param name="input"></param>
     /// <returns></returns>
     [HttpGet]
-    public async Task<AppResult> List([FromQuery] MenuInputModel input)
+    public async Task<List<MenuTreeNodeModel>> List([FromQuery] MenuInputModel input)
     {
         List<MenuTreeNodeModel> data = await _menuService.GetAsync(input);
-        return AppResult.Status200OK(data: data);
+        return ResultHelper.Result200OK(data: data);
     }
 
     /// <summary>
@@ -37,10 +37,10 @@ public class MenuController : ControllerBase
     /// <param name="model"></param>
     /// <returns></returns>
     [HttpGet]
-    public async Task<AppResult> Page([FromQuery] PageInputModel model)
+    public async Task<PageResultModel<MenuModel>> Page([FromQuery] PageInputModel model)
     {
         PageResultModel<MenuModel> data = await _menuService.GetPageAsync(model);
-        return AppResult.Status200OK(data: data);
+        return ResultHelper.Result200OK(data: data);
     }
 
     /// <summary>
@@ -48,10 +48,10 @@ public class MenuController : ControllerBase
     /// </summary>
     /// <returns></returns>
     [HttpGet]
-    public async Task<AppResult> Tree()
+    public async Task<List<AntTreeNode>> Tree()
     {
         List<AntTreeNode> data = await _menuService.GetTreeAsync(false);
-        return AppResult.Status200OK(data: data);
+        return ResultHelper.Result200OK(data: data);
     }
 
     /// <summary>
@@ -59,10 +59,10 @@ public class MenuController : ControllerBase
     /// </summary>
     /// <returns></returns>
     [HttpGet]
-    public async Task<AppResult> TreeForGrant()
+    public async Task<List<AntTreeNode>> TreeForGrant()
     {
         List<AntTreeNode> data = await _menuService.GetTreeAsync(true);
-        return AppResult.Status200OK(data: data);
+        return ResultHelper.Result200OK(data: data);
     }
 
     /// <summary>
@@ -71,10 +71,10 @@ public class MenuController : ControllerBase
     /// <param name="model"></param>
     /// <returns></returns>
     [HttpPost]
-    public async Task<AppResult> Add([FromBody] MenuModel model)
+    public async Task<int> Add([FromBody] MenuModel model)
     {
-        await _menuService.AddAsync(model);
-        return AppResult.Status200OK("新增成功");
+        var data = await _menuService.AddAsync(model);
+        return ResultHelper.Result200OK("新增成功", data);
     }
 
     /// <summary>
@@ -83,10 +83,10 @@ public class MenuController : ControllerBase
     /// <param name="model"></param>
     /// <returns></returns>
     [HttpPost]
-    public async Task<AppResult> Edit([FromBody] MenuModel model)
+    public async Task<int> Edit([FromBody] MenuModel model)
     {
-        await _menuService.UpdateAsync(model);
-        return AppResult.Status200OK("更新成功");
+        var data = await _menuService.UpdateAsync(model);
+        return ResultHelper.Result200OK("更新成功", data);
     }
 
     /// <summary>
@@ -95,9 +95,9 @@ public class MenuController : ControllerBase
     /// <param name="model"></param>
     /// <returns></returns>
     [HttpPost]
-    public async Task<AppResult> Delete([FromBody] IdInputModel model)
+    public async Task<int> Delete([FromBody] IdInputModel model)
     {
-        await _menuService.DeleteAsync(model.Id);
-        return AppResult.Status200OK("删除成功");
+        var data = await _menuService.DeleteAsync(model.Id);
+        return ResultHelper.Result200OK("删除成功", data);
     }
 }

@@ -1,6 +1,6 @@
-﻿namespace Simple.Common;
+﻿namespace Simple.Common.Result;
 
-public class AppResultMessage
+public class ApiResultMessage
 {
     public const string Status200OK = "成功";
     public const string Status400BadRequest = "错误的请求";

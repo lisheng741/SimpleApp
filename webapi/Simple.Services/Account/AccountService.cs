@@ -45,12 +45,12 @@ public class AccountService
 
         if(user == null)
         {
-            throw AppResultException.Status404NotFound("用户不存在或密码不匹配");
+            throw ResultHelper.Exception404NotFound("用户不存在或密码不匹配");
         }
 
         if (!user.IsEnabled)
         {
-            throw AppResultException.Status403Forbidden("该账号已被停用");
+            throw ResultHelper.Exception403Forbidden("该账号已被停用");
         }
 
         // 用户信息
@@ -78,7 +78,7 @@ public class AccountService
     {
         if (_currentUser.UserId == null)
         {
-            throw AppResultException.Status401Unauthorized();
+            throw ResultHelper.Exception401Unauthorized();
         }
 
         var result = new UserInfoModel();
@@ -92,7 +92,7 @@ public class AccountService
 
         if (user == null)
         {
-            throw AppResultException.Status404NotFound("???");
+            throw ResultHelper.Exception404NotFound("???");
         }
 
         // SysUser 映射为 UserInfoModel
@@ -142,7 +142,7 @@ public class AccountService
         if (user == null)
         {
             // 如果是在权限过滤器中抛出，将不会被处理为返回结果，因为 AuthorizationFilter 先于 ActionFilter
-            //throw AppResultException.Status401Unauthorized("用户不存在");
+            //throw ResultHelper.Status401Unauthorized("用户不存在");
 
             // 直接返回空结果，表示没有任何权限
             return new List<UserInfoApplicationModel>();
@@ -167,7 +167,7 @@ public class AccountService
 
         if (user == null)
         {
-            throw AppResultException.Status404NotFound("用户不存在");
+            throw ResultHelper.Exception404NotFound("用户不存在");
         }
 
         return await GetUserApplicationsAsync(user);
@@ -290,7 +290,7 @@ public class AccountService
         if (user == null)
         {
             // 如果是在权限过滤器中抛出，将不会被处理为返回结果，因为 AuthorizationFilter 先于 ActionFilter
-            //throw AppResultException.Status401Unauthorized("用户不存在");
+            //throw ResultHelper.Status401Unauthorized("用户不存在");
 
             // 直接返回空结果，表示没有任何权限
             return new List<UserInfoMenuModel>();
@@ -315,7 +315,7 @@ public class AccountService
 
         if (user == null)
         {
-            throw AppResultException.Status404NotFound("用户不存在");
+            throw ResultHelper.Exception404NotFound("用户不存在");
         }
 
         return await GetUserMenusAsync(user);
@@ -429,7 +429,7 @@ public class AccountService
         if (user == null)
         {
             // 如果是在权限过滤器中抛出，将不会被处理为返回结果，因为 AuthorizationFilter 先于 ActionFilter
-            //throw AppResultException.Status401Unauthorized("用户不存在");
+            //throw ResultHelper.Status401Unauthorized("用户不存在");
 
             // 直接返回空结果，表示没有任何权限
             return new List<string>();
@@ -454,7 +454,7 @@ public class AccountService
 
         if (user == null)
         {
-            throw AppResultException.Status404NotFound("用户不存在");
+            throw ResultHelper.Exception404NotFound("用户不存在");
         }
 
         return await GetUserPermissionsAsync(user);

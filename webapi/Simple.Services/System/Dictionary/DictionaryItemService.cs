@@ -53,7 +53,7 @@ public class DictionaryItemService
         if (await _context.Set<SysDictionaryItem>()
             .AnyAsync(di => di.Id != model.Id && di.DictionaryId == model.TypeId && di.Code == model.Code))
         {
-            throw AppResultException.Status409Conflict("存在相同编码");
+            throw ResultHelper.Exception409Conflict("存在相同编码");
         }
 
         var dictionaryItem = MapperHelper.Map<SysDictionaryItem>(model);
@@ -66,7 +66,7 @@ public class DictionaryItemService
         if (await _context.Set<SysDictionaryItem>()
             .AnyAsync(di => di.Id != model.Id && di.DictionaryId == model.TypeId && di.Code == model.Code))
         {
-            throw AppResultException.Status409Conflict("存在相同编码");
+            throw ResultHelper.Exception409Conflict("存在相同编码");
         }
 
         var dictionaryItem = await _context.Set<SysDictionaryItem>()
@@ -75,7 +75,7 @@ public class DictionaryItemService
 
         if (dictionaryItem == null)
         {
-            throw AppResultException.Status404NotFound("找不到字典子项，更新失败");
+            throw ResultHelper.Exception404NotFound("找不到字典子项，更新失败");
         }
 
         MapperHelper.Map<DictionaryItemModel, SysDictionaryItem>(model, dictionaryItem);
@@ -84,7 +84,7 @@ public class DictionaryItemService
 
         if (ret == 0)
         {
-            throw AppResultException.Status200OK("更新记录数为0");
+            throw ResultHelper.Exception200OK("更新记录数为0");
         }
 
         return ret;

@@ -27,7 +27,7 @@ public static class SimpleWebApplicationBuilderExtensions
         // 添加过滤器
         builder.Services.Configure<MvcOptions>(options =>
         {
-            options.Filters.Add<RequestActionFilter>();
+            options.Filters.Add<RequestActionFilter>(RequestActionFilter.FilterOrder);
         });
 
         return builder;

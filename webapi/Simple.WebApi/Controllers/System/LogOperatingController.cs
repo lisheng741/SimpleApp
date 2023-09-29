@@ -25,9 +25,8 @@ public class LogOperatingController : ControllerBase
     /// <param name="model"></param>
     /// <returns></returns>
     [HttpGet]
-    public async Task<AppResult> Page([FromQuery] LogPageInputModel model)
+    public async Task<PageResultModel<LogOperatingModel>> Page([FromQuery] LogPageInputModel model)
     {
-        PageResultModel<LogOperatingModel> data = await _logOperatingService.GetPageAsync(model);
-        return AppResult.Status200OK(data: data);
+        return await _logOperatingService.GetPageAsync(model);
     }
 }

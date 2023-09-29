@@ -25,10 +25,10 @@ public class UserController : ControllerBase
     /// </summary>
     /// <returns></returns>
     [HttpGet]
-    public async Task<AppResult> List()
+    public async Task<List<UserModel>> List()
     {
         List<UserModel> data = await _userService.GetAsync();
-        return AppResult.Status200OK(data: data);
+        return ResultHelper.Result200OK(data: data);
     }
 
     /// <summary>
@@ -37,10 +37,10 @@ public class UserController : ControllerBase
     /// <param name="model"></param>
     /// <returns></returns>
     [HttpGet]
-    public async Task<AppResult> Page([FromQuery] UserPageInputModel model)
+    public async Task<PageResultModel<UserModel>> Page([FromQuery] UserPageInputModel model)
     {
         PageResultModel<UserModel> data = await _userService.GetPageAsync(model);
-        return AppResult.Status200OK(data: data);
+        return ResultHelper.Result200OK(data: data);
     }
 
     /// <summary>
@@ -49,10 +49,10 @@ public class UserController : ControllerBase
     /// <param name="model"></param>
     /// <returns></returns>
     [HttpPost]
-    public async Task<AppResult> Add([FromBody] UserAddModel model)
+    public async Task<int> Add([FromBody] UserAddModel model)
     {
-        await _userService.AddAsync(model);
-        return AppResult.Status200OK("新增成功");
+        var data = await _userService.AddAsync(model);
+        return ResultHelper.Result200OK("新增成功", data);
     }
 
     /// <summary>
@@ -61,10 +61,10 @@ public class UserController : ControllerBase
     /// <param name="model"></param>
     /// <returns></returns>
     [HttpPost]
-    public async Task<AppResult> Edit([FromBody] UserUpdateModel model)
+    public async Task<int> Edit([FromBody] UserUpdateModel model)
     {
-        await _userService.UpdateAsync(model);
-        return AppResult.Status200OK("更新成功");
+        var data = await _userService.UpdateAsync(model);
+        return ResultHelper.Result200OK("更新成功", data);
     }
 
     /// <summary>
@@ -73,10 +73,10 @@ public class UserController : ControllerBase
     /// <param name="models"></param>
     /// <returns></returns>
     [HttpPost]
-    public async Task<AppResult> Delete([FromBody] List<IdInputModel> models)
+    public async Task<int> Delete([FromBody] List<IdInputModel> models)
     {
-        await _userService.DeleteAsync(models.Select(m => m.Id));
-        return AppResult.Status200OK("删除成功");
+        var data = await _userService.DeleteAsync(models.Select(m => m.Id));
+        return ResultHelper.Result200OK("删除成功", data);
     }
 
     /// <summary>
@@ -85,10 +85,10 @@ public class UserController : ControllerBase
     /// <param name="input"></param>
     /// <returns></returns>
     [HttpPost]
-    public async Task<AppResult> ChangeStatus([FromBody] UserChangeStatusInputModel input)
+    public async Task<int> ChangeStatus([FromBody] UserChangeStatusInputModel input)
     {
-        await _userService.SetEnabledAsync(input.Id, input.Status == 1);
-        return AppResult.Status200OK("更新成功");
+        var data = await _userService.SetEnabledAsync(input.Id, input.Status == 1);
+        return ResultHelper.Result200OK("更新成功", data);
     }
 
     /// <summary>
@@ -97,10 +97,10 @@ public class UserController : ControllerBase
     /// <param name="input"></param>
     /// <returns></returns>
     [HttpPost]
-    public async Task<AppResult> UpdatePwd(UserChangePasswordInputModel input)
+    public async Task<int> UpdatePwd(UserChangePasswordInputModel input)
     {
-        await _userService.UpdatePasswordAsync(input.Id, input.Password, input.NewPassword);
-        return AppResult.Status200OK("修改成功");
+        var data = await _userService.UpdatePasswordAsync(input.Id, input.Password, input.NewPassword);
+        return ResultHelper.Result200OK("修改成功", data);
     }
 
     /// <summary>
@@ -109,10 +109,10 @@ public class UserController : ControllerBase
     /// <param name="input"></param>
     /// <returns></returns>
     [HttpPost]
-    public async Task<AppResult> ResetPwd(IdInputModel input)
+    public async Task<int> ResetPwd(IdInputModel input)
     {
         var data = await _userService.SetPasswordAsync(input.Id);
-        return AppResult.Status200OK("重置成功");
+        return ResultHelper.Result200OK("重置成功", data);
     }
 
     /// <summary>
@@ -121,10 +121,10 @@ public class UserController : ControllerBase
     /// <param name="id"></param>
     /// <returns></returns>
     [HttpGet]
-    public async Task<AppResult> OwnRole(Guid id)
+    public async Task<List<Guid>> OwnRole(Guid id)
     {
         var data = await _userService.GetRoleIdsAsync(id);
-        return AppResult.Status200OK(data: data);
+        return ResultHelper.Result200OK(data: data);
     }
 
     /// <summary>
@@ -133,10 +133,10 @@ public class UserController : ControllerBase
     /// <param name="input"></param>
     /// <returns></returns>
     [HttpPost]
-    public async Task<AppResult> GrantRole(UserGrantRoleInputModel input)
+    public async Task<int> GrantRole(UserGrantRoleInputModel input)
     {
-        await _userService.SetRoleAsync(input.Id, input.GrantRoleIdList);
-        return AppResult.Status200OK("授权成功");
+        var data = await _userService.SetRoleAsync(input.Id, input.GrantRoleIdList);
+        return ResultHelper.Result200OK("授权成功", data);
     }
 
     /// <summary>
@@ -145,10 +145,10 @@ public class UserController : ControllerBase
     /// <param name="id"></param>
     /// <returns></returns>
     [HttpGet]
-    public async Task<AppResult> OwnData(Guid id)
+    public async Task<List<Guid>> OwnData(Guid id)
     {
         var data = await _userService.GetDataScopesAsync(id);
-        return AppResult.Status200OK(data: data);
+        return ResultHelper.Result200OK(data: data);
     }
 
     /// <summary>
@@ -157,9 +157,9 @@ public class UserController : ControllerBase
     /// <param name="input"></param>
     /// <returns></returns>
     [HttpPost]
-    public async Task<AppResult> GrantData(UserGrantDataScopeInputModel input)
+    public async Task<int> GrantData(UserGrantDataScopeInputModel input)
     {
-        await _userService.SetDataScopeAsync(input.Id, input.GrantOrgIdList);
-        return AppResult.Status200OK("授权成功");
+        var data = await _userService.SetDataScopeAsync(input.Id, input.GrantOrgIdList);
+        return ResultHelper.Result200OK("授权成功", data);
     }
 }

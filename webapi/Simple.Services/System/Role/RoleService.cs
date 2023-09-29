@@ -50,7 +50,7 @@ public class RoleService
     {
         if (await _context.Set<SysRole>().AnyAsync(r => r.Id != model.Id && r.Code == model.Code))
         {
-            throw AppResultException.Status409Conflict("存在相同编码");
+            throw ResultHelper.Exception409Conflict("存在相同编码");
         }
 
         var role = MapperHelper.Map<SysRole>(model);
@@ -62,7 +62,7 @@ public class RoleService
     {
         if (await _context.Set<SysRole>().AnyAsync(r => r.Id != model.Id && r.Code == model.Code))
         {
-            throw AppResultException.Status409Conflict("存在相同编码");
+            throw ResultHelper.Exception409Conflict("存在相同编码");
         }
 
         var role = await _context.Set<SysRole>()
@@ -71,7 +71,7 @@ public class RoleService
 
         if (role == null)
         {
-            throw AppResultException.Status404NotFound("找不到角色，更新失败");
+            throw ResultHelper.Exception404NotFound("找不到角色，更新失败");
         }
 
         MapperHelper.Map<RoleModel, SysRole>(model, role);
@@ -80,7 +80,7 @@ public class RoleService
 
         if (ret == 0)
         {
-            throw AppResultException.Status200OK("更新记录数为0");
+            throw ResultHelper.Exception200OK("更新记录数为0");
         }
 
         return ret;
@@ -117,7 +117,7 @@ public class RoleService
 
         if (role == null)
         {
-            throw AppResultException.Status404NotFound("找不到角色，设置失败");
+            throw ResultHelper.Exception404NotFound("找不到角色，设置失败");
         }
 
         role.SetMenu(menuIds);
@@ -152,7 +152,7 @@ public class RoleService
 
         if (role == null)
         {
-            throw AppResultException.Status404NotFound("找不到角色，设置失败");
+            throw ResultHelper.Exception404NotFound("找不到角色，设置失败");
         }
 
         role.DataScope = dataScope;

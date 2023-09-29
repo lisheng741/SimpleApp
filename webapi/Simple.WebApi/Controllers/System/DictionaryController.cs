@@ -24,10 +24,9 @@ public class DictionaryController : ControllerBase
     /// </summary>
     /// <returns></returns>
     [HttpGet]
-    public async Task<AppResult> List()
+    public async Task<List<DictionaryModel>> List()
     {
-        List<DictionaryModel> data = await _dictionaryService.GetAsync();
-        return AppResult.Status200OK(data: data);
+        return await _dictionaryService.GetAsync();
     }
 
     /// <summary>
@@ -36,10 +35,9 @@ public class DictionaryController : ControllerBase
     /// <param name="model"></param>
     /// <returns></returns>
     [HttpGet]
-    public async Task<AppResult> Page([FromQuery] PageInputModel model)
+    public async Task<PageResultModel<DictionaryModel>> Page([FromQuery] PageInputModel model)
     {
-        PageResultModel<DictionaryModel> data = await _dictionaryService.GetPageAsync(model);
-        return AppResult.Status200OK(data: data);
+        return await _dictionaryService.GetPageAsync(model);
     }
 
     /// <summary>
@@ -48,10 +46,10 @@ public class DictionaryController : ControllerBase
     /// <param name="model"></param>
     /// <returns></returns>
     [HttpPost]
-    public async Task<AppResult> Add([FromBody] DictionaryModel model)
+    public async Task<int> Add([FromBody] DictionaryModel model)
     {
-        await _dictionaryService.AddAsync(model);
-        return AppResult.Status200OK("新增成功");
+        var data = await _dictionaryService.AddAsync(model);
+        return ResultHelper.Result200OK("新增成功", data);
     }
 
     /// <summary>
@@ -60,10 +58,10 @@ public class DictionaryController : ControllerBase
     /// <param name="model"></param>
     /// <returns></returns>
     [HttpPost]
-    public async Task<AppResult> Edit([FromBody] DictionaryModel model)
+    public async Task<int> Edit([FromBody] DictionaryModel model)
     {
-        await _dictionaryService.UpdateAsync(model);
-        return AppResult.Status200OK("更新成功");
+        var data = await _dictionaryService.UpdateAsync(model);
+        return ResultHelper.Result200OK("更新成功", data);
     }
 
     /// <summary>
@@ -72,10 +70,10 @@ public class DictionaryController : ControllerBase
     /// <param name="models"></param>
     /// <returns></returns>
     [HttpPost]
-    public async Task<AppResult> Delete([FromBody] List<IdInputModel> models)
+    public async Task<int> Delete([FromBody] List<IdInputModel> models)
     {
-        await _dictionaryService.DeleteAsync(models.Select(m => m.Id));
-        return AppResult.Status200OK("删除成功");
+        var data = await _dictionaryService.DeleteAsync(models.Select(m => m.Id));
+        return ResultHelper.Result200OK("删除成功", data);
     }
 
     /// <summary>
@@ -84,10 +82,10 @@ public class DictionaryController : ControllerBase
     /// <param name="code"></param>
     /// <returns></returns>
     [HttpGet]
-    public async Task<AppResult> DropDown(string code)
+    public async Task<List<DictionaryItemModel>> DropDown(string code)
     {
         var items = await _dictionaryService.GetItemsAsync(code);
-        return AppResult.Status200OK(data: items);
+        return items;
     }
 
     /// <summary>
@@ -95,9 +93,8 @@ public class DictionaryController : ControllerBase
     /// </summary>
     /// <returns></returns>
     [HttpGet]
-    public async Task<AppResult> Tree()
+    public async Task<List<DictionaryTreeModel>> Tree()
     {
-        var data = await _dictionaryService.GetTreeAsync();
-        return AppResult.Status200OK(data: data);
+        return await _dictionaryService.GetTreeAsync();
     }
 }

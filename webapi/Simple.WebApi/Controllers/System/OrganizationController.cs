@@ -24,10 +24,10 @@ public class OrganizationController : ControllerBase
     /// </summary>
     /// <returns></returns>
     [HttpGet]
-    public async Task<AppResult> List()
+    public async Task<List<OrganizationModel>> List()
     {
         List<OrganizationModel> data = await _organizationService.GetAsync();
-        return AppResult.Status200OK(data: data);
+        return ResultHelper.Result200OK(data: data);
     }
 
     /// <summary>
@@ -36,10 +36,10 @@ public class OrganizationController : ControllerBase
     /// <param name="model"></param>
     /// <returns></returns>
     [HttpGet]
-    public async Task<AppResult> Page([FromQuery] OrganizationPageInputModel model)
+    public async Task<PageResultModel<OrganizationModel>> Page([FromQuery] OrganizationPageInputModel model)
     {
         PageResultModel<OrganizationModel> data = await _organizationService.GetPageAsync(model);
-        return AppResult.Status200OK(data: data);
+        return ResultHelper.Result200OK(data: data);
     }
 
     /// <summary>
@@ -47,10 +47,10 @@ public class OrganizationController : ControllerBase
     /// </summary>
     /// <returns></returns>
     [HttpGet]
-    public async Task<AppResult> Tree()
+    public async Task<List<AntTreeNode>> Tree()
     {
         List<AntTreeNode> data = await _organizationService.GetTreeAsync();
-        return AppResult.Status200OK(data: data);
+        return ResultHelper.Result200OK(data: data);
     }
 
     /// <summary>
@@ -59,10 +59,10 @@ public class OrganizationController : ControllerBase
     /// <param name="model"></param>
     /// <returns></returns>
     [HttpPost]
-    public async Task<AppResult> Add([FromBody] OrganizationModel model)
+    public async Task<int> Add([FromBody] OrganizationModel model)
     {
-        await _organizationService.AddAsync(model);
-        return AppResult.Status200OK("新增成功");
+        var data = await _organizationService.AddAsync(model);
+        return ResultHelper.Result200OK("新增成功", data);
     }
 
     /// <summary>
@@ -71,10 +71,10 @@ public class OrganizationController : ControllerBase
     /// <param name="model"></param>
     /// <returns></returns>
     [HttpPost]
-    public async Task<AppResult> Edit([FromBody] OrganizationModel model)
+    public async Task<int> Edit([FromBody] OrganizationModel model)
     {
-        await _organizationService.UpdateAsync(model);
-        return AppResult.Status200OK("更新成功");
+        var data = await _organizationService.UpdateAsync(model);
+        return ResultHelper.Result200OK("更新成功", data);
     }
 
     /// <summary>
@@ -83,9 +83,9 @@ public class OrganizationController : ControllerBase
     /// <param name="models"></param>
     /// <returns></returns>
     [HttpPost]
-    public async Task<AppResult> Delete([FromBody] List<IdInputModel> models)
+    public async Task<int> Delete([FromBody] List<IdInputModel> models)
     {
-        await _organizationService.DeleteAsync(models.Select(m => m.Id));
-        return AppResult.Status200OK("删除成功");
+        var data = await _organizationService.DeleteAsync(models.Select(m => m.Id));
+        return ResultHelper.Result200OK("删除成功", data);
     }
 }

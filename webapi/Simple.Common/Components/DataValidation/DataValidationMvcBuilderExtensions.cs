@@ -9,8 +9,9 @@ public static class DataValidationMvcBuilderExtensions
     /// 配置模型验证
     /// </summary>
     /// <param name="builder"></param>
+    /// <param name="filterOrder">结果过滤器排序</param>
     /// <returns></returns>
-    public static IMvcBuilder AddDataValidation(this IMvcBuilder builder)
+    public static IMvcBuilder AddDataValidation(this IMvcBuilder builder, int filterOrder = DataValidationFilter.FilterOrder)
     {
         builder.ConfigureApiBehaviorOptions(options =>
         {
@@ -21,27 +22,9 @@ public static class DataValidationMvcBuilderExtensions
         builder.AddMvcOptions(options =>
         {
             // 添加自定义模型验证过滤器
-            options.Filters.Add<DataValidationFilter>();
+            options.Filters.Add<DataValidationFilter>(filterOrder);
         });
 
         return builder;
     }
-
-    //// 配置模型验证
-    //public static IServiceCollection AddDataValidation(this IServiceCollection services)
-    //{
-    //    services.Configure<ApiBehaviorOptions>(options =>
-    //    {
-    //        // 禁用默认模型验证过滤器
-    //        options.SuppressModelStateInvalidFilter = true;
-    //    });
-
-    //    services.Configure<MvcOptions>(options =>
-    //    {
-    //        // 添加自定义模型验证过滤器
-    //        options.Filters.Add<DataValidationFilter>();
-    //    });
-
-    //    return services;
-    //}
 }

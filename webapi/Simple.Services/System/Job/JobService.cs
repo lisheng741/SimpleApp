@@ -62,13 +62,13 @@ public class JobService : IJobService
     {
         if (await _context.Set<SysJob>().AnyAsync(j => j.Id != model.Id && j.Name == model.TimerName))
         {
-            throw AppResultException.Status409Conflict("存在相同任务：任务名称不能重复");
+            throw ResultHelper.Exception409Conflict("存在相同任务：任务名称不能重复");
         }
 
         var jobType = Type.GetType(model.ActionClass);
         if (jobType == null)
         {
-            throw AppResultException.Status404NotFound("找不到任务类，添加失败");
+            throw ResultHelper.Exception404NotFound("找不到任务类，添加失败");
         }
 
         var job = MapperHelper.Map<SysJob>(model);
@@ -90,7 +90,7 @@ public class JobService : IJobService
     {
         if (await _context.Set<SysJob>().AnyAsync(j => j.Id != model.Id && j.Name == model.TimerName))
         {
-            throw AppResultException.Status409Conflict("存在相同任务：任务名称不能重复");
+            throw ResultHelper.Exception409Conflict("存在相同任务：任务名称不能重复");
         }
 
         var job = await _context.Set<SysJob>()
@@ -99,13 +99,13 @@ public class JobService : IJobService
 
         if (job == null)
         {
-            throw AppResultException.Status404NotFound("找不到定时任务，更新失败");
+            throw ResultHelper.Exception404NotFound("找不到定时任务，更新失败");
         }
 
         var jobType = Type.GetType(model.ActionClass);
         if (jobType == null)
         {
-            throw AppResultException.Status404NotFound("找不到任务类，更新失败");
+            throw ResultHelper.Exception404NotFound("找不到任务类，更新失败");
         }
 
         // 修改了任务名称，删除旧的任务，启动新的任务
@@ -128,7 +128,7 @@ public class JobService : IJobService
 
         if (ret == 0)
         {
-            throw AppResultException.Status200OK("更新记录数为0");
+            throw ResultHelper.Exception200OK("更新记录数为0");
         }
 
         return ret;
@@ -181,13 +181,13 @@ public class JobService : IJobService
 
         if (job == null)
         {
-            throw AppResultException.Status404NotFound("找不到定时任务");
+            throw ResultHelper.Exception404NotFound("找不到定时任务");
         }
 
         var jobType = Type.GetType(job.ActionClass);
         if (jobType == null)
         {
-            throw AppResultException.Status404NotFound("找不到任务类，启动失败");
+            throw ResultHelper.Exception404NotFound("找不到任务类，启动失败");
         }
 
         // 操作任务

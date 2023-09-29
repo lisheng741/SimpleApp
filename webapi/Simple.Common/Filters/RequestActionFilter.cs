@@ -4,16 +4,23 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Controllers;
 using Microsoft.AspNetCore.Mvc.Filters;
 using UAParser;
-using static Simple.Common.Configuration.AppSettings;
 
 namespace Simple.Common.Filters;
 
+/// <summary>
+/// 禁用请求记录过滤器
+/// </summary>
+[AttributeUsage(AttributeTargets.Class | AttributeTargets.Method)]
+public class DisabledRequestRecordAttribute : Attribute { }
+
 public class RequestActionFilter : IAsyncActionFilter, IOrderedFilter
 {
+    internal const int FilterOrder = -8000;
+
     private readonly IEventPublisher _publisher;
     private readonly ICurrentUserService _currentUser;
 
-    public int Order { get; set; } = -8000;
+    public int Order => FilterOrder;
 
     public RequestActionFilter(IEventPublisher publisher, ICurrentUserService currentUser)
     {
@@ -67,27 +74,16 @@ public class RequestActionFilter : IAsyncActionFilter, IOrderedFilter
         string result = "";
         string message = "";
 
-        // 目前只处理 ObjectResult
+        // 正常 API 都是 ObjectResult 目前只处理 ObjectResult
         if (actionContext.Result is ObjectResult objectResult)
         {
-            // 正常接口都是 ObjectResult
             result = JsonHelper.Serialize(objectResult.Value);
-            if (objectResult.Value is AppResult appResult)
+            if (objectResult.Value is ApiResult apiResult)
             {
-                message = appResult.Message ?? "";
+                isSuccess = apiResult.Success;
+                message = apiResult.Message ?? "";
             }
         }
-
-        //if(actionContext.Exception is AppResultException appResultException)
-        //{
-        //    // 如果是 AppResultException 说明是统一返回
-        //    result = JsonHelper.Serialize(appResultException.AppResult);
-        //    message = appResultException.AppResult.Message ?? "";
-        //}
-        //else if (actionContext.Result is JsonResult jsonResult)
-        //{
-        //    result = JsonHelper.Serialize(jsonResult.Value);
-        //}
 
         var @event = new RequestEvent()
         {

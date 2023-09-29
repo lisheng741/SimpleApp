@@ -89,7 +89,7 @@ public class MenuService
     {
         if (await _context.Set<SysMenu>().AnyAsync(m => m.Code == model.Code))
         {
-            throw AppResultException.Status409Conflict("存在相同编码的组织");
+            throw ResultHelper.Exception409Conflict("存在相同编码的组织");
         }
 
         var menu = MapperHelper.Map<SysMenu>(model);
@@ -101,7 +101,7 @@ public class MenuService
     {
         if (await _context.Set<SysMenu>().AnyAsync(m => m.Id != model.Id && m.Code == model.Code))
         {
-            throw AppResultException.Status409Conflict("存在相同编码的菜单");
+            throw ResultHelper.Exception409Conflict("存在相同编码的菜单");
         }
 
         var menu = await _context.Set<SysMenu>()
@@ -110,7 +110,7 @@ public class MenuService
 
         if (menu == null)
         {
-            throw AppResultException.Status404NotFound("找不到菜单，更新失败");
+            throw ResultHelper.Exception404NotFound("找不到菜单，更新失败");
         }
 
 
@@ -123,7 +123,7 @@ public class MenuService
 
         if (ret == 0)
         {
-            throw AppResultException.Status200OK("更新记录数为0");
+            throw ResultHelper.Exception200OK("更新记录数为0");
         }
 
         return ret;

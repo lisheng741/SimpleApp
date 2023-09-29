@@ -48,7 +48,7 @@ public class PositionService
     {
         if (await _context.Set<SysPosition>().AnyAsync(p => p.Id != model.Id && p.Code == model.Code))
         {
-            throw AppResultException.Status409Conflict("存在相同编码的岗位");
+            throw ResultHelper.Exception409Conflict("存在相同编码的岗位");
         }
 
         var position = MapperHelper.Map<SysPosition>(model);
@@ -60,7 +60,7 @@ public class PositionService
     {
         if (await _context.Set<SysPosition>().AnyAsync(p => p.Id != model.Id && p.Code == model.Code))
         {
-            throw AppResultException.Status409Conflict("存在相同编码的岗位");
+            throw ResultHelper.Exception409Conflict("存在相同编码的岗位");
         }
 
         var position = await _context.Set<SysPosition>()
@@ -69,7 +69,7 @@ public class PositionService
 
         if (position == null)
         {
-            throw AppResultException.Status404NotFound("找不到岗位，更新失败");
+            throw ResultHelper.Exception404NotFound("找不到岗位，更新失败");
         }
 
         MapperHelper.Map<PositionModel, SysPosition>(model, position);
@@ -78,7 +78,7 @@ public class PositionService
 
         if (ret == 0)
         {
-            throw AppResultException.Status200OK("更新记录数为0");
+            throw ResultHelper.Exception200OK("更新记录数为0");
         }
 
         return ret;

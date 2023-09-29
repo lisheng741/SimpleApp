@@ -11,6 +11,7 @@ using Simple.Common.Authorization;
 using Simple.Common.Models;
 using Simple.Services.EventHandlers;
 using Simple.Services.Permissions;
+using Simple.WebApi;
 
 var logger = NLog.LogManager.Setup().LoadConfigurationFromAppSettings().GetCurrentClassLogger();
 logger.Debug("启动中……");
@@ -34,17 +35,8 @@ try
 
     // API
     builder.Services.AddControllers()
-        .AddDataValidation()
-        .AddAppResult(options =>
-        {
-            options.ResultFactory = resultException =>
-            {
-                // AppResultException 都返回 200 状态码
-                var objectResult = new ObjectResult(resultException.AppResult);
-                objectResult.StatusCode = StatusCodes.Status200OK;
-                return objectResult;
-            };
-        });
+                    .AddDataValidation()
+                    .AddApiResult<CustomApiResultProvider>();
     builder.Services.AddEndpointsApiExplorer();
 
     // Swagger

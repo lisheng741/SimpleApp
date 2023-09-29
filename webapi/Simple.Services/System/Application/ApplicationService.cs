@@ -64,7 +64,7 @@ public class ApplicationService
     {
         if (await _context.Set<SysApplication>().AnyAsync(a => a.Id != model.Id && a.Code == model.Code))
         {
-            throw AppResultException.Status409Conflict("存在相同编码");
+            throw ResultHelper.Exception409Conflict("存在相同编码");
         }
 
         var application = MapperHelper.Map<SysApplication>(model);
@@ -76,7 +76,7 @@ public class ApplicationService
     {
         if (await _context.Set<SysApplication>().AnyAsync(a => a.Id != model.Id && a.Code == model.Code))
         {
-            throw AppResultException.Status409Conflict("存在相同编码");
+            throw ResultHelper.Exception409Conflict("存在相同编码");
         }
 
         var application = await _context.Set<SysApplication>()
@@ -85,7 +85,7 @@ public class ApplicationService
 
         if (application == null)
         {
-            throw AppResultException.Status404NotFound("找不到应用，更新失败");
+            throw ResultHelper.Exception404NotFound("找不到应用，更新失败");
         }
 
         MapperHelper.Map<ApplicationModel, SysApplication>(model, application);
@@ -97,7 +97,7 @@ public class ApplicationService
 
         if (ret == 0)
         {
-            throw AppResultException.Status200OK("更新记录数为0");
+            throw ResultHelper.Exception200OK("更新记录数为0");
         }
 
         return ret;
@@ -128,7 +128,7 @@ public class ApplicationService
         var applications = await _context.Set<SysApplication>().ToListAsync();
         if (!applications.Any(a => a.Id == id))
         {
-            throw AppResultException.Status404NotFound("找不到该应用，设置失败");
+            throw ResultHelper.Exception404NotFound("找不到该应用，设置失败");
         }
 
         foreach(var application in applications)

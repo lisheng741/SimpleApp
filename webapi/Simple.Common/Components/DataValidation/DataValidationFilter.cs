@@ -6,9 +6,9 @@ namespace Simple.Common.Filters;
 
 public class DataValidationFilter : IActionFilter, IOrderedFilter
 {
-    internal const int FilterOrder = -2000;
+    public const int FilterOrder = -2000;
 
-    public int Order => FilterOrder;
+    public int Order { get; set; } = FilterOrder;
 
     public void OnActionExecuting(ActionExecutingContext context)
     {
@@ -28,7 +28,7 @@ public class DataValidationFilter : IActionFilter, IOrderedFilter
                                .ToArray();
 
         // 统一返回
-        var result = AppResult.Status400BadRequest("数据验证不通过！", errors);
+        var result = ApiResultHelper.Result400BadRequest("数据验证不通过！", errors);
 
         // 设置结果
         context.Result = new BadRequestObjectResult(result); // ObjectResult(result);

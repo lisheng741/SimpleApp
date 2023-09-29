@@ -24,10 +24,10 @@ public class PositionController : ControllerBase
     /// </summary>
     /// <returns></returns>
     [HttpGet]
-    public async Task<AppResult> List()
+    public async Task<List<PositionModel>> List()
     {
         List<PositionModel> data = await _positionService.GetAsync();
-        return AppResult.Status200OK(data: data);
+        return ResultHelper.Result200OK(data: data);
     }
 
     /// <summary>
@@ -36,10 +36,10 @@ public class PositionController : ControllerBase
     /// <param name="model"></param>
     /// <returns></returns>
     [HttpGet]
-    public async Task<AppResult> Page([FromQuery] PageInputModel model)
+    public async Task<PageResultModel<PositionModel>> Page([FromQuery] PageInputModel model)
     {
         PageResultModel<PositionModel> data = await _positionService.GetPageAsync(model);
-        return AppResult.Status200OK(data: data);
+        return ResultHelper.Result200OK(data: data);
     }
 
     /// <summary>
@@ -48,10 +48,10 @@ public class PositionController : ControllerBase
     /// <param name="model"></param>
     /// <returns></returns>
     [HttpPost]
-    public async Task<AppResult> Add([FromBody] PositionModel model)
+    public async Task<int> Add([FromBody] PositionModel model)
     {
-        await _positionService.AddAsync(model);
-        return AppResult.Status200OK("新增成功");
+        var data = await _positionService.AddAsync(model);
+        return ResultHelper.Result200OK("新增成功", data);
     }
 
     /// <summary>
@@ -60,10 +60,10 @@ public class PositionController : ControllerBase
     /// <param name="model"></param>
     /// <returns></returns>
     [HttpPost]
-    public async Task<AppResult> Edit([FromBody] PositionModel model)
+    public async Task<int> Edit([FromBody] PositionModel model)
     {
-        await _positionService.UpdateAsync(model);
-        return AppResult.Status200OK("更新成功");
+        var data = await _positionService.UpdateAsync(model);
+        return ResultHelper.Result200OK("更新成功", data);
     }
 
     /// <summary>
@@ -72,9 +72,9 @@ public class PositionController : ControllerBase
     /// <param name="models"></param>
     /// <returns></returns>
     [HttpPost]
-    public async Task<AppResult> Delete([FromBody] List<IdInputModel> models)
+    public async Task<int> Delete([FromBody] List<IdInputModel> models)
     {
-        await _positionService.DeleteAsync(models.Select(m => m.Id));
-        return AppResult.Status200OK("删除成功");
+        var data = await _positionService.DeleteAsync(models.Select(m => m.Id));
+        return ResultHelper.Result200OK("删除成功", data);
     }
 }

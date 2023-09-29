@@ -61,7 +61,7 @@ public class OrganizationService
     {
         if (await _context.Set<SysOrganization>().AnyAsync(o => o.Code == model.Code))
         {
-            throw AppResultException.Status409Conflict("存在相同编码的组织");
+            throw ResultHelper.Exception409Conflict("存在相同编码的组织");
         }
 
         var organization = MapperHelper.Map<SysOrganization>(model);
@@ -73,7 +73,7 @@ public class OrganizationService
     {
         if (await _context.Set<SysOrganization>().AnyAsync(o => o.Id != model.Id && o.Code == model.Code))
         {
-            throw AppResultException.Status409Conflict("存在相同编码的组织");
+            throw ResultHelper.Exception409Conflict("存在相同编码的组织");
         }
 
         var organization = await _context.Set<SysOrganization>()
@@ -82,7 +82,7 @@ public class OrganizationService
 
         if (organization == null)
         {
-            throw AppResultException.Status404NotFound("找不到组织，更新失败");
+            throw ResultHelper.Exception404NotFound("找不到组织，更新失败");
         }
 
         MapperHelper.Map<OrganizationModel, SysOrganization>(model, organization);
@@ -91,7 +91,7 @@ public class OrganizationService
 
         if (ret == 0)
         {
-            throw AppResultException.Status200OK("更新记录数为0");
+            throw ResultHelper.Exception200OK("更新记录数为0");
         }
 
         return ret;
