@@ -42,8 +42,4 @@ public class SysDictionaryItem : EntityBase<Guid>
     /// 字典
     /// </summary>
     public SysDictionary Dictionary { get; set; } = default!;
-
-    public override void ConfigureEntity(ModelBuilder builder)
-    {
-    }
 }

@@ -13,6 +13,9 @@ namespace Simple.Common.Filters;
 [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method)]
 public class DisabledRequestRecordAttribute : Attribute { }
 
+/// <summary>
+/// 请求过滤器
+/// </summary>
 public class RequestActionFilter : IAsyncActionFilter, IOrderedFilter
 {
     internal const int FilterOrder = -8000;

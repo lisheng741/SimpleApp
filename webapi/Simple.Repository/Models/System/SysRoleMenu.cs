@@ -24,16 +24,4 @@ public class SysRoleMenu : EntityBase
     /// 菜单
     /// </summary>
     public SysMenu? Menu { get; set; }
-
-    public override void ConfigureEntity(ModelBuilder builder)
-    {
-        // 复合主键
-        builder.Entity<SysRoleMenu>()
-            .HasKey(e => new { e.RoleId, e.MenuId });
-
-        // Index
-        builder.Entity<SysRoleMenu>()
-            .HasIndex(e => new { e.MenuId })
-            .IsUnique(false);
-    }
 }

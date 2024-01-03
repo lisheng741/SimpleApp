@@ -48,7 +48,7 @@ public class UserInfoMenuModel : ModelBase
     public bool Hidden { get; set; } = false;
 
 
-    public override void ConfigureMapper(Profile profile)
+    public override void Configure(Profile profile)
     {
         profile.CreateMap<SysMenu, UserInfoMenuModel>()
             .ForMember(d => d.Pid, options => options.MapFrom(s => s.ParentId))

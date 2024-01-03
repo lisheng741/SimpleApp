@@ -39,7 +39,7 @@ public class JobModel : ModelBase
     public int JobStatus { get; set; } = 1;
 
 
-    public override void ConfigureMapper(Profile profile)
+    public override void Configure(Profile profile)
     {
         profile.CreateMap<SysJob, JobModel>()
             .ForMember(d => d.TimerName, options => options.MapFrom(s => s.Name))

@@ -21,26 +21,4 @@ public class SysRoleDataScope : EntityBase
     /// 组织
     /// </summary>
     public SysOrganization? Organization { get; set; }
-
-    public override void ConfigureEntity(ModelBuilder builder)
-    {
-        // 复合主键
-        builder.Entity<SysRoleDataScope>()
-            .HasKey(e => new { e.RoleId, e.OrganizationId });
-
-        // Index
-        builder.Entity<SysRoleDataScope>()
-            .HasIndex(e => new { e.OrganizationId })
-            .IsUnique(false);
-
-        // 关系配置
-        builder.Entity<SysRoleDataScope>()
-            .HasOne(rd => rd.Role)
-            .WithMany(r => r.RoleDataScopes)
-            .IsRequired();
-        builder.Entity<SysRoleDataScope>()
-            .HasOne(rd => rd.Organization)
-            .WithMany()
-            .IsRequired();
-    }
 }

@@ -1,8 +1,8 @@
 ﻿namespace Simple.Services;
 
-public abstract class ModelBase : IConfigureMapper
+public abstract class ModelBase : IMapperConfiguration
 {
-    public virtual void ConfigureMapper(Profile profile)
+    public virtual void Configure(Profile profile)
     {
     }
 }

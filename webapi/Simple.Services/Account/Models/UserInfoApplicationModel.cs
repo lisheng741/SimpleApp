@@ -30,7 +30,7 @@ public class UserInfoApplicationModel : ModelBase
     public int Sort { get; set; }
 
 
-    public override void ConfigureMapper(Profile profile)
+    public override void Configure(Profile profile)
     {
         profile.CreateMap<SysApplication, UserInfoApplicationModel>()
             .ForMember(d => d.Active, options => options.MapFrom(s => s.IsActive));

@@ -46,7 +46,7 @@ public class ApplicationModel : ModelBase
     public string Active { get; set; } = "Y";
 
 
-    public override void ConfigureMapper(Profile profile)
+    public override void Configure(Profile profile)
     {
         profile.CreateMap<SysApplication, ApplicationModel>()
             .ForMember(d => d.Status, options => options.MapFrom(s => s.IsEnabled ? 1 : 0))

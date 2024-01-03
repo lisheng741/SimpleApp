@@ -177,21 +177,4 @@ public class SysUser : BusinessEntityBase<Guid>, IConcurrency
         RemoveDataScope(removeOrganizationIds.ToArray());
         AddDataScope(addOrganizationIds.ToArray());
     }
-
-
-    public override void ConfigureEntity(ModelBuilder builder)
-    {
-        // 配置关系：组织/岗位的删除，不能影响用户表
-        builder.Entity<SysUser>()
-            .HasOne(u => u.Organization)
-            .WithMany()
-            .OnDelete(DeleteBehavior.SetNull);
-        builder.Entity<SysUser>()
-            .HasOne(u => u.Position)
-            .WithMany()
-            .OnDelete(DeleteBehavior.SetNull);
-
-        // AdminType 默认值 3
-        builder.Entity<SysUser>().Property(r => r.AdminType).HasDefaultValue(AdminType.None);
-    }
 }

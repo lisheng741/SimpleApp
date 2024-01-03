@@ -25,9 +25,12 @@ public static class SimpleWebApplicationBuilderExtensions
         builder.Services.AddEventBusDefault();
 
         // 添加过滤器
+        // 进入触发顺序：RequestActionFilter(-8000) >> AppResultActionFilter(-6000) >> EFCoreActionFilter(2000)
+        // 返回触发顺序：RequestActionFilter << AppResultActionFilter << EFCoreActionFilter
         builder.Services.Configure<MvcOptions>(options =>
         {
             options.Filters.Add<RequestActionFilter>(RequestActionFilter.FilterOrder);
+            options.Filters.Add<EFCoreActionFilter>(EFCoreActionFilter.FilterOrder);
         });
 
         return builder;

@@ -61,7 +61,7 @@ public class LogExceptionModel : ModelBase
     public DateTime ExceptionTime { get; set; }
 
 
-    public override void ConfigureMapper(Profile profile)
+    public override void Configure(Profile profile)
     {
         profile.CreateMap<SysLogException, LogExceptionModel>()
             .ForMember(d => d.ExceptionTime, options => options.MapFrom(s => s.ExceptionTime.LocalDateTime));

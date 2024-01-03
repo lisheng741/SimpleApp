@@ -32,8 +32,4 @@ public class SysPosition : BusinessEntityBase<Guid>
     /// 启用状态
     /// </summary>
     public bool IsEnabled { get; set; } = true;
-
-    public SysPosition()
-    {
-    }
 }

@@ -51,7 +51,7 @@ public class OrganizationModel : ModelBase
         Name = name;
     }
 
-    public override void ConfigureMapper(Profile profile)
+    public override void Configure(Profile profile)
     {
         profile.CreateMap<SysOrganization, OrganizationModel>()
             .ForMember(d => d.Pid, options => options.MapFrom(s => s.ParentId));

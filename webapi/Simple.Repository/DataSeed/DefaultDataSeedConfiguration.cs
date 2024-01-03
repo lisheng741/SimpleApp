@@ -1,8 +1,10 @@
-﻿namespace Simple.Repository.DataSeed;
+﻿using Simple.Common.EFCore;
 
-internal class DefaultDataSeed : IConfigureDataSeed
+namespace Simple.Repository.DataSeed;
+
+internal class DefaultDataSeedConfiguration : IEntityConfiguration
 {
-    public void ConfigureDataSeed(ModelBuilder builder)
+    public void Configure(ModelBuilder builder)
     {
         // SysOrganization
         builder.Entity<SysOrganization>().HasData(new SysOrganization[]

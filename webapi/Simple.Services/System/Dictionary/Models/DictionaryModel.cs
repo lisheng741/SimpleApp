@@ -39,7 +39,7 @@ public class DictionaryModel : ModelBase
     public int Status { get; set; } = 1;
 
 
-    public override void ConfigureMapper(Profile profile)
+    public override void Configure(Profile profile)
     {
         profile.CreateMap<SysDictionary, DictionaryModel>()
             .ForMember(d => d.Status, options => options.MapFrom(s => s.IsEnabled ? 1 : 0));

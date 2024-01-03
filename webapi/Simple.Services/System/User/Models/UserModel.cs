@@ -58,7 +58,7 @@ public class UserModel : ModelBase
     public int Status { get; set; } = 1;
 
 
-    public override void ConfigureMapper(Profile profile)
+    public override void Configure(Profile profile)
     {
         profile.CreateMap<SysUser, UserModel>()
             .ForMember(d => d.Password, options => options.Ignore())

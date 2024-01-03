@@ -10,7 +10,7 @@ public class ApiResultProvider : IApiResultProvider
         // 只处理 ObjectResult
         if (actionResult is ObjectResult objectResult)
         {
-            // 已经包装成统一返回结果，直接返回
+            // 已经是统一返回结果，直接返回
             if(objectResult.Value is ApiResult)
             {
                 return actionResult;

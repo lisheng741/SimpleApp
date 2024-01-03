@@ -14,6 +14,6 @@ public class MapperProfile : Profile
         CreateMap<SysMenu, TreeNode>();
 
         // 专有配置
-        this.ConfigureMapper();
+        this.ApplyMapperConfigurations();
     }
 }

@@ -44,7 +44,7 @@ public class DictionaryItemModel : ModelBase
     public int Status { get; set; } = 1;
 
 
-    public override void ConfigureMapper(Profile profile)
+    public override void Configure(Profile profile)
     {
         profile.CreateMap<SysDictionaryItem, DictionaryItemModel>()
             .ForMember(d => d.Value, options => options.MapFrom(s => s.Name))

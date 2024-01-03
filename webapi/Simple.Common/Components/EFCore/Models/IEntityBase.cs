@@ -1,11 +1,15 @@
-﻿namespace Simple.Repository.Models;
+﻿namespace Simple.Common.EFCore.Models;
+
+public interface IEntity
+{
+}
 
 public interface ISoftDelete
 {
     public bool IsDeleted { get; set; }
 }
 
-public interface ITenant
+public interface IMultiTenant
 {
     public Guid TenantId { get; set; }
 }

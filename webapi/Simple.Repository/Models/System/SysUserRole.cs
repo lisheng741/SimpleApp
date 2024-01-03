@@ -24,16 +24,4 @@ public class SysUserRole : EntityBase
     /// 角色
     /// </summary>
     public SysRole? Role { get; set; }
-
-    public override void ConfigureEntity(ModelBuilder builder)
-    {
-        // 复合主键设置
-        builder.Entity<SysUserRole>()
-            .HasKey(e => new { e.UserId, e.RoleId });
-
-        // 索引设置
-        builder.Entity<SysUserRole>()
-            .HasIndex(e => new { e.RoleId })
-            .IsUnique(false);
-    }
 }

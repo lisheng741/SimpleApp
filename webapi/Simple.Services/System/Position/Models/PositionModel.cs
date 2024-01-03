@@ -46,7 +46,7 @@ public class PositionModel : ModelBase
         Name = name;
     }
 
-    public override void ConfigureMapper(Profile profile)
+    public override void Configure(Profile profile)
     {
         profile.CreateMap<SysPosition, PositionModel>();
 

@@ -7,14 +7,6 @@ namespace Simple.Common.Helpers;
 /// </summary>
 public static class HashHelper
 {
-    //public static string Create(string input)
-    //{
-    //    using var md5 = MD5.Create();
-    //    var result = md5.ComputeHash(Encoding.UTF8.GetBytes(input));
-    //    var strResult = BitConverter.ToString(result);
-    //    return strResult.Replace("-", "").ToLower();
-    //}
-
     public static string Md5(string input, string format = "x2")
     {
         var hash = MD5.Create();

@@ -97,7 +97,7 @@ public class LogOperatingModel : ModelBase
     public DateTime OperatingTime { get; set; }
 
 
-    public override void ConfigureMapper(Profile profile)
+    public override void Configure(Profile profile)
     {
         profile.CreateMap<SysLogOperating, LogOperatingModel>()
             .ForMember(d => d.OperatingTime, options => options.MapFrom(s => s.OperatingTime.LocalDateTime))

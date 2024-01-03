@@ -18,7 +18,7 @@ public class UserInfoRoleModel : ModelBase
     public string Name { get; set; } = "";
 
 
-    public override void ConfigureMapper(Profile profile)
+    public override void Configure(Profile profile)
     {
         profile.CreateMap<SysRole, UserInfoRoleModel>();
     }

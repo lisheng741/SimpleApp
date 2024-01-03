@@ -146,11 +146,4 @@ public class SysRole : BusinessEntityBase<Guid>, IConcurrency
         RemoveDataScope(removeOrganizationIds.ToArray());
         AddDataScope(addOrganizationIds.ToArray());
     }
-
-
-    public override void ConfigureEntity(ModelBuilder builder)
-    {
-        // DataScope 默认值 1
-        builder.Entity<SysRole>().Property(r => r.DataScope).HasDefaultValue(DataScopeType.All);
-    }
 }

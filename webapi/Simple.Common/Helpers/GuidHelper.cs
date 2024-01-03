@@ -25,8 +25,8 @@ public enum SequentialGuidType
 
 public static class GuidHelper
 {
-    private const byte Rfc4122Version4 = (byte)4;
-    private const byte Rfc4122Variant = (byte)8;
+    private const byte Rfc4122Version4 = 4;
+    private const byte Rfc4122Variant = 8;
     private const byte FilterHighBit = 0b00001111;
     private const byte FilterLowBit = 0b11110000;
     private static readonly RandomNumberGenerator _randomNumberGenerator = RandomNumberGenerator.Create();
@@ -56,15 +56,15 @@ public static class GuidHelper
         var randomBytes = new byte[8];
         _randomNumberGenerator.GetBytes(randomBytes);
 
-        long timestamp = DateTime.UtcNow.Ticks;
+        var timestamp = DateTime.UtcNow.Ticks;
 
-        byte[] timestampBytes = BitConverter.GetBytes(timestamp);
+        var timestampBytes = BitConverter.GetBytes(timestamp);
         if (BitConverter.IsLittleEndian)
         {
             Array.Reverse(timestampBytes);
         }
 
-        byte[] guidBytes = new byte[16];
+        var guidBytes = new byte[16];
 
         switch (guidType)
         {
@@ -116,15 +116,15 @@ public static class GuidHelper
         var randomBytes = new byte[8];
         _randomNumberGenerator.GetBytes(randomBytes);
 
-        long timestamp = DateTimeOffset.UtcNow.Ticks;
+        var timestamp = DateTimeOffset.UtcNow.Ticks;
 
-        byte[] timestampBytes = BitConverter.GetBytes(timestamp);
+        var timestampBytes = BitConverter.GetBytes(timestamp);
         if (BitConverter.IsLittleEndian)
         {
             Array.Reverse(timestampBytes);
         }
 
-        byte[] guidBytes = new byte[16];
+        var guidBytes = new byte[16];
 
         switch (guidType)
         {
@@ -136,11 +136,11 @@ public static class GuidHelper
                 // dddddddd-dddd : 时间戳前6个字节，共48位
                 Buffer.BlockCopy(timestampBytes, 0, guidBytes, 0, 6);
                 // Md : 高4位为版本 | 低4位取时间戳序号[6]的元素的高4位
-                guidBytes[6] = (byte)((Rfc4122Version4 << 4) | ((timestampBytes[6] & FilterLowBit) >> 4));
+                guidBytes[6] = (byte)(Rfc4122Version4 << 4 | (timestampBytes[6] & FilterLowBit) >> 4);
                 // dd : 高4位取：[6]低4位 | 低4位取：[7]高4位
-                guidBytes[7] = (byte)(((timestampBytes[6] & FilterHighBit) << 4) | ((timestampBytes[7] & FilterLowBit) >> 4));
+                guidBytes[7] = (byte)((timestampBytes[6] & FilterHighBit) << 4 | (timestampBytes[7] & FilterLowBit) >> 4);
                 // Nd : 高4位为：变体 | 低4位取：[7]低4位
-                guidBytes[8] = (byte)((Rfc4122Variant << 4) | (timestampBytes[7] & FilterHighBit));
+                guidBytes[8] = (byte)(Rfc4122Variant << 4 | timestampBytes[7] & FilterHighBit);
                 // rr-rrrrrrrrrrrr : 余下7个字节由随机数组填充
                 Buffer.BlockCopy(randomBytes, 0, guidBytes, 9, 7);
 
@@ -166,13 +166,13 @@ public static class GuidHelper
                 // rrrrrrrr-rrrr
                 Buffer.BlockCopy(randomBytes, 0, guidBytes, 0, 6);
                 // Mx : 高4位为版本 | 低4位取：全0
-                guidBytes[6] = (byte)(Rfc4122Version4 << 4);
+                guidBytes[6] = Rfc4122Version4 << 4;
                 // dr : 高4位为：时间戳[7]低4位 | 低4位取：随机数
-                guidBytes[7] = (byte)(((timestampBytes[7] & FilterHighBit) << 4) | (randomBytes[7] & FilterHighBit));
+                guidBytes[7] = (byte)((timestampBytes[7] & FilterHighBit) << 4 | randomBytes[7] & FilterHighBit);
                 // Nd : 高4位为：变体 | 低4位取：时间戳[6]高4位
-                guidBytes[8] = (byte)((Rfc4122Variant << 4) | ((timestampBytes[6] & FilterLowBit) >> 4));
+                guidBytes[8] = (byte)(Rfc4122Variant << 4 | (timestampBytes[6] & FilterLowBit) >> 4);
                 // dd : 高4位为：时间戳[6]低4位 | 低4位取：时间戳[7]高4位
-                guidBytes[9] = (byte)(((timestampBytes[6] & FilterHighBit) << 4) | ((timestampBytes[7] & FilterLowBit) >> 4));
+                guidBytes[9] = (byte)((timestampBytes[6] & FilterHighBit) << 4 | (timestampBytes[7] & FilterLowBit) >> 4);
                 // dddddddddddd : 时间戳前6个字节
                 Buffer.BlockCopy(timestampBytes, 0, guidBytes, 10, 6);
 

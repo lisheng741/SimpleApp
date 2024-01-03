@@ -7,7 +7,7 @@ public class DictionaryTreeModel : ModelBase
 
     public List<DictionaryTreeModel> Children { get; set; } = new List<DictionaryTreeModel>();
 
-    public override void ConfigureMapper(Profile profile)
+    public override void Configure(Profile profile)
     {
         profile.CreateMap<SysDictionaryItem, DictionaryTreeModel>();
         profile.CreateMap<SysDictionary, DictionaryTreeModel>()

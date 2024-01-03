@@ -118,7 +118,7 @@ public class UserInfoModel : ModelBase
     public List<Guid> DataScopes { get; set; } = new List<Guid>();
 
 
-    public override void ConfigureMapper(Profile profile)
+    public override void Configure(Profile profile)
     {
         profile.CreateMap<SysUser, UserInfoModel>()
             .ForMember(d => d.Account, options => options.MapFrom(s => s.UserName))

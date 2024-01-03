@@ -1,4 +1,6 @@
-﻿namespace Microsoft.Extensions.Caching.Distributed;
+﻿using System.Text.Json;
+
+namespace Microsoft.Extensions.Caching.Distributed;
 
 public static class DistributedCacheEextensions
 {

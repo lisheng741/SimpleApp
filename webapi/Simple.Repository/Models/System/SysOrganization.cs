@@ -37,9 +37,4 @@ public class SysOrganization : BusinessEntityBase<Guid>
     /// </summary>
     [MaxLength(2048)] 
     public string? Remark { get; set; }
-
-    public SysOrganization()
-    {
-
-    }
 }

@@ -27,7 +27,7 @@ public class MenuTreeNodeModel : MenuModel, ITreeNode
         return new TreeBuilder<MenuTreeNodeModel>(nodes);
     }
 
-    public override void ConfigureMapper(Profile profile)
+    public override void Configure(Profile profile)
     {
         profile.CreateMap<SysMenu, MenuTreeNodeModel>()
             .ForMember(d => d.Pid, options => options.MapFrom(s => s.ParentId))

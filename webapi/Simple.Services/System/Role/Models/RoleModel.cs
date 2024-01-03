@@ -48,7 +48,7 @@ public class RoleModel : ModelBase
         Name = name;
     }
 
-    public override void ConfigureMapper(Profile profile)
+    public override void Configure(Profile profile)
     {
         profile.CreateMap<SysRole, RoleModel>()
             .ForMember(d => d.DataScopeType, options => options.MapFrom(s => s.DataScope));

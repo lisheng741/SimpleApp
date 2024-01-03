@@ -59,16 +59,16 @@ public static class AppSettings
     /// <summary>
     /// 允许跨域请求列表
     /// </summary>
-    public static string[] AllowCors => Configuration.GetSection("AllowCors").Get<string[]>();
+    public static string[] AllowCors => CheckHelper.NotNull(Configuration.GetSection("AllowCors").Get<string[]>(), "AllowCors");
 
     /// <summary>
     /// Jwt 配置
     /// </summary>
     public static class Jwt
     {
-        public static string SecretKey => Configuration["Jwt:SecretKey"];
-        public static string Issuer => Configuration["Jwt:Issuer"];
-        public static string Audience => Configuration["Jwt:Audience"];
+        public static string SecretKey => CheckHelper.NotNull(Configuration["Jwt:SecretKey"], "Jwt:SecretKey");
+        public static string Issuer => CheckHelper.NotNull(Configuration["Jwt:Issuer"], "Jwt:Issuer");
+        public static string Audience => CheckHelper.NotNull(Configuration["Jwt:Audience"], "Jwt:Audience");
     }
 
     /// <summary>
@@ -77,7 +77,7 @@ public static class AppSettings
     public static class Redis
     {
         public static bool Enabled => Configuration.GetValue<bool>("Redis:Enabled");
-        public static string ConnectionString => Configuration["Redis:ConnectionString"];
+        public static string ConnectionString => CheckHelper.NotNull(Configuration["Redis:ConnectionString"], "Redis:ConnectionString");
         public static string Instance => Configuration["Redis:Instance"] ?? "Default";
     }
 }

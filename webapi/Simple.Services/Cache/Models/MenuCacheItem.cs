@@ -94,7 +94,7 @@ public class MenuCacheItem : ModelBase
     public bool IsEnabled { get; set; } = true;
 
 
-    public override void ConfigureMapper(Profile profile)
+    public override void Configure(Profile profile)
     {
         profile.CreateMap<SysMenu, MenuCacheItem>();
     }

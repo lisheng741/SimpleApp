@@ -43,7 +43,7 @@ public static class ApiResultMvcBuilderExtensions
         builder.AddMvcOptions(options =>
         {
             // 过滤器管道（先进后出）顺序：Middleware >> ExceptionFilter >> ActionFilter
-            // 异常触发顺序：ActionFilter >> ExceptionFilter
+            // 异常触发顺序：ActionFilter 先于 ExceptionFilter
             // 因为要配合 RequestActionFilter 的使用，所以不能用 ExceptionFilter
             // 先配置 RequestActionFilter(Order=-8000) 再配置 AppResultActionFilter(Order=-6000)
             options.Filters.Add<ApiResultActionFilter>(filterOrder);

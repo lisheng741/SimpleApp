@@ -106,7 +106,7 @@ public class MenuModel : ModelBase
     public int Status { get; set; } = 1;
 
 
-    public override void ConfigureMapper(Profile profile)
+    public override void Configure(Profile profile)
     {
         profile.CreateMap<SysMenu, MenuModel>()
             .ForMember(d => d.Pid, options => options.MapFrom(s => s.ParentId))

@@ -37,8 +37,4 @@ public class SysDictionary : BusinessEntityBase<Guid>
     /// 字典明细列表
     /// </summary>
     public List<SysDictionaryItem> DictionaryItems { get; set; } = new List<SysDictionaryItem>();
-
-    public SysDictionary()
-    {
-    }
 }
