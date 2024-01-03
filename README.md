@@ -14,7 +14,7 @@ QQ交流群：694414280（欢迎广大 .NET 开发者加入）
 
 这个项目，期望实现让业务的开发，变成简单的三步走：创建实体 >> 业务开发 >> 路由配置。
 
-希望有兴趣的小伙伴加入这个项目的完善。
+希望有兴趣的小伙伴加入这个项目的完善（如：VS模板制作、审批流、分库分表、分布式配置、分布式日志、分布式文件上传、服务发现等）。
 
 ## 项目概述
 
@@ -54,17 +54,7 @@ node 16.13.2
 
 注：排名不分先后。
 
-[小诺 snowy](https://gitee.com/xiaonuobase/snowy)
-
-[Admin.NET](https://gitee.com/zuohuaijun/Admin.NET)
-
-[Blog.Core](https://gitee.com/laozhangIsPhi/Blog.Core)
-
-[Adnc](https://github.com/AlphaYu/Adnc)
-
-[Furion](https://gitee.com/dotnetchina/Furion)
-
-[ABP](https://github.com/abpframework/abp)
+[小诺 snowy](https://gitee.com/xiaonuobase/snowy)、[Admin.NET](https://gitee.com/zuohuaijun/Admin.NET)、[Blog.Core](https://gitee.com/laozhangIsPhi/Blog.Core)、[Adnc](https://github.com/AlphaYu/Adnc)、[Furion](https://gitee.com/dotnetchina/Furion)、[ABP](https://github.com/abpframework/abp)
 
 感谢这些优秀的开源项目！
 
