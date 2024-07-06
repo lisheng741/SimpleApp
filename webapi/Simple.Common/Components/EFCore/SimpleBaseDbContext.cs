@@ -27,12 +27,6 @@ public abstract class SimpleBaseDbContext : DbContext
         Initialize();
     }
 
-    ~SimpleBaseDbContext()
-    {
-        ChangeTracker.Tracked -= ChangeTracker_Tracked;
-        ChangeTracker.StateChanged -= ChangeTracker_StateChanged;
-    }
-
     protected virtual void Initialize()
     {
         ChangeTracker.Tracked += ChangeTracker_Tracked;
