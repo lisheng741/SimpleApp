@@ -49,6 +49,7 @@ jobs:
         working-directory: web
         env:
           NODE_ENV: production
+          NODE_OPTIONS: --openssl-legacy-provider
 
       - name: Upload backend artifact
         uses: actions/upload-artifact@v4
